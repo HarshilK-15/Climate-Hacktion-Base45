@@ -1,5 +1,19 @@
+<<<<<<< HEAD
+# Environment secrets
+.env
+
+# Python cache & virtual environments
+__pycache__/
+*.pyc
+.venv/
+env/
+
+# OS metadata
+.DS_Store
+=======
 __pycache__/
 *.pyc
 data/shipless.db
 .env
 received.jsonl
+>>>>>>> origin/main

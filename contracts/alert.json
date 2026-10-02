@@ -1,0 +1,7 @@
+{
+  "alert_id": "alt_101",
+  "timestamp": "2026-10-02T14:30:00Z",
+  "severity": "CRITICAL",
+  "rule": "gen_low_load",
+  "message": "Generator running below 30% load for over 2 hours."
+}

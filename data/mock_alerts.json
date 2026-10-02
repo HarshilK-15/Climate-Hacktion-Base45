@@ -1,0 +1,16 @@
+[
+  {
+    "alert_id": "alt_001",
+    "timestamp": "2026-10-02T14:00:00Z",
+    "severity": "WARNING",
+    "rule": "gen_low_load",
+    "message": "Generator running at 22% capacity for 120 mins."
+  },
+  {
+    "alert_id": "alt_002",
+    "timestamp": "2026-10-02T14:15:00Z",
+    "severity": "CRITICAL",
+    "rule": "unusual_spike",
+    "message": "Demand spike detected: 34.2 kW (3.1x weekly median)."
+  }
+]

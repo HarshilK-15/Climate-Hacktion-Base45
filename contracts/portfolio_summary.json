@@ -1,0 +1,8 @@
+{
+  "total_islands": 6,
+  "total_capex_aud": 2500000,
+  "total_p90_diesel_saved_liters": 270000,
+  "total_co2_saved_kg": 723600,
+  "total_annual_savings_aud": 567000,
+  "islands": ["funafuti", "suva", "nukualofa", "port_vila", "tarawa", "apia"]
+}

@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-10-02T12:00:00Z",
+  "device_id": "generator_01",
+  "power_kw": 12.5,
+  "voltage_v": 230.0,
+  "current_a": 54.3,
+  "frequency_hz": 50.0
+}

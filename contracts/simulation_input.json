@@ -1,0 +1,7 @@
+{
+  "island_id": "funafuti",
+  "solar_capacity_kw": 150,
+  "battery_capacity_kwh": 300,
+  "generator_capacity_kw": 100,
+  "diesel_cost_per_liter": 2.10
+}

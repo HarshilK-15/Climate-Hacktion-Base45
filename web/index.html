@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shipless: island power, measured</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vendor/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="bar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true"></span>
+      <div>
+        <strong>Shipless</strong>
+        <span class="tagline">Power that doesn't wait for the boat</span>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="live" aria-selected="true">Live power</button>
+      <button role="tab" data-tab="plan" aria-selected="false">Plan an island</button>
+      <button role="tab" data-tab="map" aria-selected="false">Pacific map</button>
+      <button role="tab" data-tab="alerts" aria-selected="false">Alerts <span id="alert-count" class="count" hidden></span></button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- LIVE -->
+    <section id="tab-live" class="tab" role="tabpanel">
+      <div class="live-grid">
+        <div class="readout">
+          <p class="status" id="live-status"><span class="dot"></span><span id="live-status-text">Waiting for the sensor</span></p>
+          <p class="watts"><span id="live-watts">–</span><span class="unit">W</span></p>
+          <p class="sub"><span id="live-amps">–</span> A on the generator cable</p>
+          <dl class="mini">
+            <div><dt>Lowest</dt><dd id="live-min">–</dd></div>
+            <div><dt>Highest</dt><dd id="live-max">–</dd></div>
+            <div><dt>Energy</dt><dd id="live-kwh">–</dd></div>
+          </dl>
+          <p class="device" id="live-device"></p>
+        </div>
+        <div class="chart-box">
+          <div class="chart-head">
+            <h2>Last <span id="live-window">15</span> minutes</h2>
+            <select id="live-minutes" aria-label="Time window">
+              <option value="5">5 min</option><option value="15" selected>15 min</option>
+              <option value="60">1 hour</option><option value="720">12 hours</option>
+            </select>
+          </div>
+          <div class="chart-wrap"><canvas id="live-chart"></canvas></div>
+        </div>
+      </div>
+      <p class="explain">This is the clip-on sensor reading in real time. On an island it sits on the diesel
+        generator's cable: a week of these readings tells us exactly how much power the island uses, hour by hour,
+        so the solar and battery plan is built on measurements instead of guesses.</p>
+    </section>
+
+    <!-- PLAN -->
+    <section id="tab-plan" class="tab" role="tabpanel" hidden>
+      <div class="plan-grid">
+        <form id="plan-form" class="plan-form">
+          <h2>Tell us about the island</h2>
+          <label for="describe">Describe it in your own words</label>
+          <textarea id="describe" rows="4" placeholder="e.g. We have 60 houses, a clinic with a vaccine fridge and a school. Our 40 kW generator uses 2,500 litres of diesel a month at $2.10 a litre."></textarea>
+          <button type="button" id="describe-btn" class="secondary">Fill in the form from my description</button>
+          <p class="hint" id="describe-note"></p>
+
+          <label for="site">Location (for real sunshine data)</label>
+          <select id="site"></select>
+          <div class="two">
+            <div><label for="households">Homes</label><input id="households" type="number" min="0"></div>
+            <div><label for="generator_kw">Generator size (kW)</label><input id="generator_kw" type="number" min="0" step="any"></div>
+          </div>
+          <div class="two">
+            <div><label for="diesel_litres_per_month">Diesel per month (litres)</label><input id="diesel_litres_per_month" type="number" min="0" placeholder="optional"></div>
+            <div><label for="diesel_price_per_litre">Diesel price (USD per litre)</label><input id="diesel_price_per_litre" type="number" min="0" step="0.01"></div>
+          </div>
+          <div class="two">
+            <div><label for="other_kw">Other daytime load (kW)</label><input id="other_kw" type="number" min="0" step="any"></div>
+            <div class="checks">
+              <label><input id="has_clinic" type="checkbox"> Clinic</label>
+              <label><input id="has_school" type="checkbox"> School</label>
+            </div>
+          </div>
+          <label class="live-toggle"><input id="use_live_shape" type="checkbox"> Use the daily pattern measured by the live sensor</label>
+          <button type="submit" id="plan-btn">Simulate 20 years of weather</button>
+        </form>
+
+        <div class="plan-out" id="plan-out">
+          <div class="empty">
+            <h2>Your plan appears here</h2>
+            <p>Pick a location, check the numbers, then run the simulation. It tests over a hundred
+              solar and battery sizes against every hour of real weather and picks the cheapest one that keeps the lights on.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAP -->
+    <section id="tab-map" class="tab" role="tabpanel" hidden>
+      <div class="map-grid">
+        <div id="map" aria-label="Map of islands"></div>
+        <aside class="totals" id="totals"><p>Calculating every island…</p></aside>
+      </div>
+      <p class="explain">Each island on its own is too small for most funders. Measured the same way and
+        added together, they become one portfolio worth financing.</p>
+    </section>
+
+    <!-- ALERTS -->
+    <section id="tab-alerts" class="tab" role="tabpanel" hidden>
+      <h2>Guard: watching the system after it's installed</h2>
+      <p class="explain">The same sensor stays on after the solar goes in. These checks run on every new reading,
+        and the local technician gets a text message before a small problem becomes a dead system.</p>
+      <div id="alert-list" class="alert-list"></div>
+    </section>
+  </main>
+
+  <footer>Weather: NASA POWER. Map: © OpenStreetMap contributors. Island figures are illustrative unless measured.</footer>
+
+  <script src="vendor/chart.umd.js"></script>
+  <script src="vendor/leaflet.js"></script>
+  <script src="common.js"></script>
+  <script src="live.js"></script>
+  <script src="plan.js"></script>
+  <script src="map.js"></script>
+  <script src="alerts.js"></script>
+</body>
+</html>

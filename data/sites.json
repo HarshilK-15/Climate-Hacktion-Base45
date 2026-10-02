@@ -1,0 +1,89 @@
+{
+  "_note": "Locations are real (used for real weather). Household counts, loads, generator sizes and diesel prices are ILLUSTRATIVE placeholders. Data Sci: replace with sourced numbers and keep the source column filled in.",
+  "sites": [
+    {
+      "id": "nanumea",
+      "name": "Village on Nanumea",
+      "country": "Tuvalu",
+      "lat": -5.67,
+      "lon": 176.13,
+      "households": 80,
+      "has_clinic": true,
+      "has_school": true,
+      "other_kw": 4,
+      "generator_kw": 30,
+      "diesel_price_per_litre": 2.1,
+      "source": "illustrative"
+    },
+    {
+      "id": "kadavu",
+      "name": "Village on Kadavu",
+      "country": "Fiji",
+      "lat": -19.05,
+      "lon": 178.18,
+      "households": 120,
+      "has_clinic": true,
+      "has_school": true,
+      "other_kw": 6,
+      "generator_kw": 45,
+      "diesel_price_per_litre": 1.7,
+      "source": "illustrative"
+    },
+    {
+      "id": "eua",
+      "name": "Village on 'Eua",
+      "country": "Tonga",
+      "lat": -21.38,
+      "lon": -174.93,
+      "households": 90,
+      "has_clinic": true,
+      "has_school": true,
+      "other_kw": 3,
+      "generator_kw": 35,
+      "diesel_price_per_litre": 1.9,
+      "source": "illustrative"
+    },
+    {
+      "id": "malekula",
+      "name": "Village on Malekula",
+      "country": "Vanuatu",
+      "lat": -16.25,
+      "lon": 167.5,
+      "households": 60,
+      "has_clinic": true,
+      "has_school": true,
+      "other_kw": 2,
+      "generator_kw": 25,
+      "diesel_price_per_litre": 2.0,
+      "source": "illustrative"
+    },
+    {
+      "id": "abaiang",
+      "name": "Village on Abaiang",
+      "country": "Kiribati",
+      "lat": 1.85,
+      "lon": 172.97,
+      "households": 100,
+      "has_clinic": true,
+      "has_school": true,
+      "other_kw": 5,
+      "generator_kw": 35,
+      "diesel_price_per_litre": 2.2,
+      "source": "illustrative"
+    },
+    {
+      "id": "savaii",
+      "name": "Village on Savai'i",
+      "country": "Samoa",
+      "lat": -13.6,
+      "lon": -172.4,
+      "households": 150,
+      "has_clinic": true,
+      "has_school": true,
+      "other_kw": 8,
+      "generator_kw": 55,
+      "diesel_price_per_litre": 1.6,
+      "source": "illustrative"
+    }
+  ]
+}

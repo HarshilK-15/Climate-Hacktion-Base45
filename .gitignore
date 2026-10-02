@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+data/shipless.db
+.env
+received.jsonl

@@ -1,0 +1,11 @@
+# Environment secrets
+.env
+
+# Python cache & virtual environments
+__pycache__/
+*.pyc
+.venv/
+env/
+
+# OS metadata
+.DS_Store

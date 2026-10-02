@@ -1,0 +1,15 @@
+{
+  "total_islands": 6,
+  "total_capex_aud": 2520000,
+  "total_p90_diesel_saved_liters": 270000,
+  "total_co2_saved_kg": 723600,
+  "total_annual_savings_aud": 567000,
+  "islands": [
+    {"name": "Funafuti", "lat": -8.52, "lon": 179.20, "capex": 380000, "diesel_saved": 41000},
+    {"name": "Suva", "lat": -18.14, "lon": 178.44, "capex": 520000, "diesel_saved": 56000},
+    {"name": "Nuku'alofa", "lat": -21.14, "lon": -175.20, "capex": 410000, "diesel_saved": 44000},
+    {"name": "Port Vila", "lat": -17.73, "lon": 168.32, "capex": 450000, "diesel_saved": 48000},
+    {"name": "Tarawa", "lat": 1.45, "lon": 173.03, "capex": 390000, "diesel_saved": 42000},
+    {"name": "Apia", "lat": -13.85, "lon": -171.75, "capex": 370000, "diesel_saved": 39000}
+  ]
+}

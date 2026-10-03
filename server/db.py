@@ -1,9 +1,19 @@
 """Tiny SQLite store for sensor readings. Owner: Mech B."""
+import os
 import sqlite3
+import tempfile
 import threading
 from pathlib import Path
 
-DB_PATH = Path(__file__).resolve().parent.parent / "data" / "shipless.db"
+# Vercel's filesystem is read-only apart from /tmp, so the database lives there when deployed.
+# That copy is wiped whenever the server instance restarts: fine for the demo, but the deployed
+# Live tab only keeps readings sent since the last restart. SHIPLESS_DB overrides both.
+if os.environ.get("SHIPLESS_DB"):
+    DB_PATH = Path(os.environ["SHIPLESS_DB"])
+elif os.environ.get("VERCEL"):
+    DB_PATH = Path(tempfile.gettempdir()) / "shipless.db"
+else:
+    DB_PATH = Path(__file__).resolve().parent.parent / "data" / "shipless.db"
 _lock = threading.Lock()
 
 

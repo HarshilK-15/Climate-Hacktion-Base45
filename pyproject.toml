@@ -1,0 +1,16 @@
+[project]
+name = "shipless"
+version = "0.1.0"
+description = "Shipless: island power, measured. Climate Hack-tion 2026."
+requires-python = ">=3.10"
+# Keep in step with requirements.txt (used for local installs).
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    "numpy>=1.26",
+    "requests>=2.31",
+]
+
+# Vercel deploys the FastAPI app from server/app.py.
+[tool.vercel]
+entrypoint = "server.app:app"

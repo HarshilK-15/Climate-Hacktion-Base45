@@ -36,7 +36,7 @@ h2 { font-size: 1.2rem; margin: 0 0 12px; }
   padding: 14px clamp(16px, 4vw, 40px); display: flex; flex-wrap: wrap; gap: 14px;
   align-items: center; justify-content: space-between;
   background: linear-gradient(to bottom, rgba(18,32,35,.55), rgba(18,32,35,0));
-  transition: background .4s var(--ease), box-shadow .4s var(--ease), padding .4s var(--ease); }
+  transition: background .4s var(--ease), box-shadow .4s var(--ease); }
 /* off the home page the header is a solid bar that stays put while the page scrolls */
 body:not([data-view="home"]) .bar { position: sticky; background: rgba(18,32,35,.96); box-shadow: 0 1px 0 rgba(225,252,173,.12);
   padding-top: 10px; padding-bottom: 10px; backdrop-filter: blur(10px); }
@@ -236,8 +236,10 @@ button[type=submit]:disabled { opacity: .6; cursor: wait; }
 .island-list { border-top: 1px solid var(--ink); margin-top: 24px; }
 .island-row { width: 100%; display: flex; justify-content: space-between; align-items: baseline; gap: 14px;
   background: transparent; border: 0; border-bottom: 1px solid var(--line); padding: 13px 10px; cursor: pointer;
-  text-align: left; font: inherit; color: var(--ink); transition: background .2s ease, padding .3s var(--ease); }
-.island-row:hover, .island-row:focus-visible { background: var(--white); padding-left: 18px; }
+  text-align: left; font: inherit; color: var(--ink); transition: background .2s ease; }
+.island-row > span { transition: transform .3s var(--ease); }
+.island-row:hover, .island-row:focus-visible { background: var(--white); }
+.island-row:hover .island-name, .island-row:focus-visible .island-name { transform: translateX(8px); }
 .island-name { display: flex; gap: 8px; align-items: baseline; font-weight: 700; }
 .island-name small { font-weight: 400; color: var(--muted); }
 .island-val { font-family: var(--display); font-weight: 400; font-size: 1.2rem; color: var(--sea); white-space: nowrap; }

@@ -57,16 +57,16 @@
     $("plan-out").innerHTML = `
       <p class="headline">Install ${fmt(d.solar_kw, 1)} kW of solar and a ${fmt(d.battery_kwh, 1)} kWh battery
         to cut diesel by ${fmt(d.percent_diesel_cut_p50, 1)}%.</p>
-      <div class="figures">
-        <div><b>${fmt(t.diesel_litres_per_year)} L</b><span>diesel per year today</span></div>
-        <div><b>${fmt(d.litres_saved_p50)} L</b><span>saved in a typical year</span></div>
-        <div><b>${fmt(d.litres_saved_p90)} L</b><span>saved even in a bad year (P90)</span></div>
-        <div><b>${money(d.money_saved_per_year_p50)}</b><span>saved per year</span></div>
-        <div><b>${money(d.purchase_cost)}</b><span>to buy and install</span></div>
-        <div><b>${d.payback_years ? fmt(d.payback_years, 1) + " yrs" : "–"}</b><span>to pay for itself</span></div>
-        <div><b>${fmt(d.solar_share_percent, 1)}%</b><span>of power from the sun</span></div>
-        <div class="clinic"><b>${fmt(n.days_clinic_powered, 1)} / 7 days</b><span>clinic powered in the cloudiest week, no fuel ship</span></div>
-      </div>
+      <dl class="ledger">
+        <div><dt>diesel per year today</dt><dd>${fmt(t.diesel_litres_per_year)} L</dd></div>
+        <div><dt>saved in a typical year</dt><dd>${fmt(d.litres_saved_p50)} L</dd></div>
+        <div><dt>saved even in a bad year (P90)</dt><dd>${fmt(d.litres_saved_p90)} L</dd></div>
+        <div><dt>saved per year</dt><dd>${money(d.money_saved_per_year_p50)}</dd></div>
+        <div><dt>to buy and install</dt><dd>${money(d.purchase_cost)}</dd></div>
+        <div><dt>to pay for itself</dt><dd>${d.payback_years ? fmt(d.payback_years, 1) + " yrs" : "–"}</dd></div>
+        <div><dt>of power from the sun</dt><dd>${fmt(d.solar_share_percent, 1)}%</dd></div>
+        <div class="clinic"><dt>clinic powered in the cloudiest week, no fuel ship</dt><dd>${fmt(n.days_clinic_powered, 1)} / 7 days</dd></div>
+      </dl>
       <div class="week"><h2>A typical week with the new system</h2><div class="chart-wrap"><canvas id="week-chart"></canvas></div></div>
       <div class="story">${paras}
         <p class="check ${chk.passed ? "" : "fail"}">${r.explanation.source === "ai" ? "Written by AI" : "Written from a template"};

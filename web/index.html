@@ -5,40 +5,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shipless: island power, measured</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Funnel+Display:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="vendor/leaflet.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="bar">
-    <div class="brand">
+    <a href="./" class="brand" data-goto="home">
       <span class="logo" aria-hidden="true"></span>
       <div>
         <strong>Shipless</strong>
         <span class="tagline">Power that doesn't wait for the boat</span>
       </div>
-    </div>
+    </a>
     <nav class="tabs" role="tablist">
-      <button role="tab" data-tab="live" aria-selected="true">Live power</button>
+      <span class="tab-tick" aria-hidden="true"></span>
+      <button role="tab" data-tab="home" aria-selected="true">Home</button>
+      <button role="tab" data-tab="live" aria-selected="false">Live power</button>
       <button role="tab" data-tab="plan" aria-selected="false">Plan an island</button>
-      <button role="tab" data-tab="map" aria-selected="false">Pacific map</button>
+      <button role="tab" data-tab="map" aria-selected="false">Savings map</button>
       <button role="tab" data-tab="alerts" aria-selected="false">Alerts <span id="alert-count" class="count" hidden></span></button>
     </nav>
   </header>
 
-  <main>
+  <section class="hero">
+    <div class="hero-photo" aria-hidden="true"></div>
+    <div class="hero-lines" aria-hidden="true">
+      <span class="c1"></span><span class="c3"></span><span class="c4"></span><span class="c3"></span><span class="c1"></span>
+    </div>
+    <div class="hero-content">
+      <p class="hero-kicker">Climate Hack-tion 2026 &middot; Pacific electrification</p>
+      <h1>The next boat shouldn't have to bring diesel.</h1>
+      <p class="hero-lede">A clip-on sensor measures what an island's generator really burns. Shipless replays that demand against
+        20 years of real sunshine to size the cheapest solar and battery system for it, then keeps watching
+        after it's installed.</p>
+      <a href="#live" class="pill-cta" data-goto="live">
+        <span class="pill-cta-label">See it live</span>
+        <span class="pill-cta-icon" aria-hidden="true">
+          <svg class="arrow a1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+          <svg class="arrow a2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+        </span>
+      </a>
+    </div>
+    <ol class="hero-steps">
+      <li><a href="#live" data-goto="live"><span>01</span>Measure the generator</a></li>
+      <li><a href="#plan" data-goto="plan"><span>02</span>Simulate 20 years of weather</a></li>
+      <li><a href="#map" data-goto="map"><span>03</span>Bundle islands into one plan</a></li>
+      <li><a href="#alerts" data-goto="alerts"><span>04</span>Guard it after install</a></li>
+    </ol>
+  </section>
+
+  <main id="app">
     <!-- LIVE -->
-    <section id="tab-live" class="tab" role="tabpanel">
+    <section id="tab-live" class="tab" role="tabpanel" hidden>
+      <p class="eyebrow"><span>01</span>Live power</p>
+      <h2 class="page-title">What the generator's doing right now</h2>
       <div class="live-grid">
         <div class="readout">
+          <label class="loc-label" for="live-location">Sensor</label>
+          <select id="live-location" aria-label="Sensor location"></select>
           <p class="status" id="live-status"><span class="dot"></span><span id="live-status-text">Waiting for the sensor</span></p>
-          <p class="watts"><span id="live-watts">–</span><span class="unit">W</span></p>
-          <p class="sub"><span id="live-amps">–</span> A on the generator cable</p>
-          <dl class="mini">
-            <div><dt>Lowest</dt><dd id="live-min">–</dd></div>
-            <div><dt>Highest</dt><dd id="live-max">–</dd></div>
-            <div><dt>Energy</dt><dd id="live-kwh">–</dd></div>
-          </dl>
+          <div class="gauge-row">
+            <div class="gauge" id="live-gauge" style="--pct:0">
+              <div class="gauge-face">
+                <span class="watts"><span id="live-watts">–</span><span class="unit">W</span></span>
+              </div>
+            </div>
+            <div class="gauge-info">
+              <p class="sub"><span id="live-amps">–</span> A on the generator cable</p>
+              <p class="cap-line" id="live-cap-line"></p>
+              <dl class="mini">
+                <div><dt>Lowest</dt><dd id="live-min">–</dd></div>
+                <div><dt>Highest</dt><dd id="live-max">–</dd></div>
+                <div><dt>Energy</dt><dd id="live-kwh">–</dd></div>
+              </dl>
+            </div>
+          </div>
           <p class="device" id="live-device"></p>
         </div>
         <div class="chart-box">
@@ -61,6 +103,7 @@
     <section id="tab-plan" class="tab" role="tabpanel" hidden>
       <div class="plan-grid">
         <form id="plan-form" class="plan-form">
+          <p class="eyebrow"><span>02</span>Plan an island</p>
           <h2>Tell us about the island</h2>
           <label for="describe">Describe it in your own words</label>
           <textarea id="describe" rows="4" placeholder="e.g. We have 60 houses, a clinic with a vaccine fridge and a school. Our 40 kW generator uses 2,500 litres of diesel a month at $2.10 a litre."></textarea>
@@ -100,20 +143,38 @@
 
     <!-- MAP -->
     <section id="tab-map" class="tab" role="tabpanel" hidden>
+      <p class="eyebrow"><span>03</span>Savings map</p>
+      <h2 class="page-title">Map out the savings and the spend: solar vs. diesel</h2>
+      <p class="explain">Every circle is an island still paying for diesel by the barrel. Click one to see what
+        it spends today next to what the same power would cost from solar and a battery instead — then switch the
+        view below to see the fleet by money saved, diesel cut, or CO₂ avoided.</p>
+      <div class="map-toolbar">
+        <div class="metric-toggle" role="group" aria-label="Map by">
+          <button type="button" class="metric-btn" data-metric="money" aria-pressed="true">Money saved</button>
+          <button type="button" class="metric-btn" data-metric="litres" aria-pressed="false">Diesel cut</button>
+          <button type="button" class="metric-btn" data-metric="co2" aria-pressed="false">CO₂ avoided</button>
+        </div>
+        <div class="legend" id="map-legend"></div>
+      </div>
       <div class="map-grid">
         <div id="map" aria-label="Map of islands"></div>
         <aside class="totals" id="totals"><p>Calculating every island…</p></aside>
       </div>
-      <p class="explain">Each island on its own is too small for most funders. Measured the same way and
-        added together, they become one portfolio worth financing.</p>
+      <div class="island-list" id="island-list"></div>
     </section>
 
     <!-- ALERTS -->
     <section id="tab-alerts" class="tab" role="tabpanel" hidden>
-      <h2>Guard: watching the system after it's installed</h2>
+      <p class="eyebrow"><span>04</span>Guard</p>
+      <h2 class="page-title">Guard: watching the system after it's installed</h2>
       <p class="explain">The same sensor stays on after the solar goes in. These checks run on every new reading,
         and the local technician gets a text message before a small problem becomes a dead system.</p>
       <div id="alert-list" class="alert-list"></div>
+
+      <h2 class="page-title fleet-heading">Watching every district</h2>
+      <p class="explain">Simulated output dips from the districts on the Live tab, each with a quick fix a
+        technician (or the system itself) can trigger.</p>
+      <div id="fleet-alert-list" class="alert-list"></div>
     </section>
   </main>
 

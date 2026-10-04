@@ -33,10 +33,10 @@ def connect_wifi():
     if not wlan.isconnected():
         print("Connecting to Wi-Fi:", config.WIFI_SSID)
         wlan.connect(config.WIFI_SSID, config.WIFI_PASSWORD)
-        for _ in range(20):
+        for _ in range(30):   # ~30 s: phone hotspots can be slow to accept the Pico
             if wlan.isconnected():
                 break
-            blink(1, 0.25)
+            blink(1, 0.5)
     if wlan.isconnected():
         print("Wi-Fi OK, Pico IP:", wlan.ifconfig()[0])
         return True

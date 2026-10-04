@@ -17,3 +17,6 @@ received.jsonl
 # Local AI-agent tooling (editor/agent config, installed skills/plugins) — never shared via git
 .claude/settings.local.json
 .cursor/
+
+# Local device secrets (Wi-Fi password etc.)
+firmware/config_local.py

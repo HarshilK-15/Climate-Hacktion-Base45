@@ -24,3 +24,10 @@ SAMPLE_WINDOW_MS = 200    # about 10 cycles of 50 Hz mains
 READ_EVERY_S = 10         # one reading every 10 seconds
 SEND_EVERY_N = 6          # send a batch every 6 readings (about once a minute)
 MAX_BUFFER = 500          # max unsent readings kept if Wi-Fi is down
+
+# --- Local overrides (git-ignored): Wi-Fi password, laptop IP, etc. ---
+# Create firmware/config_local.py on the machine you upload from; it is copied to the Pico too.
+try:
+    from config_local import *
+except ImportError:
+    pass

@@ -1424,9 +1424,9 @@
  "meta": {
   "source": "precomputed",
   "seconds": 1.64,
-  "engine_version": "f4580dc96b",
-  "computed_at": "2026-10-04T01:22:21Z",
-  "inputs_fingerprint": "51dedb8fb3cb78cd",
+  "engine_version": "84a903f1de",
+  "computed_at": "2026-10-04T06:01:08Z",
+  "inputs_fingerprint": "22a5889517386490",
   "warnings": []
  }
 }

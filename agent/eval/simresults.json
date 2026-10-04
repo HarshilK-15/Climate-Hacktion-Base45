@@ -1,0 +1,3114 @@
+[
+ {
+  "label": "funafuti",
+  "simresult": {
+   "site": "Funafuti, Tuvalu",
+   "pv_kw": 62.0,
+   "battery_kwh": 166.2,
+   "generator_kw": 30.0,
+   "capex_aud": 314870,
+   "lifetime_cost_aud": 566052,
+   "diesel_litres_saved_p50": 30547,
+   "diesel_litres_saved_p90": 30126,
+   "co2_tonnes_saved_per_year": 82,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "funafuti",
+   "name": "Funafuti",
+   "country": "Tuvalu",
+   "lat": -8.52,
+   "lon": 179.2
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 224.4,
+   "peak_kw": 21.8,
+   "generator_kw": 30.0,
+   "critical_kw": 0.4,
+   "basis": "Data Sci mock week (data/mock_load_profile.csv) repeated"
+  },
+  "today": {
+   "diesel_litres_per_year": 33338,
+   "diesel_cost_per_year": 78345,
+   "lifetime_cost": 1170178
+  },
+  "design": {
+   "solar_kw": 62.0,
+   "battery_kwh": 166.2,
+   "purchase_cost": 314870,
+   "lifetime_cost": 566052,
+   "lifetime_saving": 604126,
+   "litres_saved_p50": 30547,
+   "litres_saved_p90": 30126,
+   "percent_diesel_cut_p50": 91.6,
+   "money_saved_per_year_p50": 71786,
+   "solar_share_percent": 93.1,
+   "generator_hours_per_year": 782,
+   "payback_years": 4.2
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 25.8
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 2.35,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 30,000 litres of diesel.",
+   "promise_litres": 30000.0,
+   "promise_aud_per_year": 70500,
+   "promise_tonnes_co2_per_year": 80,
+   "evidence": "18 of 20 real weather years saved at least 30,000 L; the worst (2019) saved 29,843 L.",
+   "p90_10_year_average_litres": 30516,
+   "p90_if_any_one_year_dropped": [
+    30107,
+    30245
+   ],
+   "p90_bootstrap_90pct_range": [
+    29843,
+    30436
+   ],
+   "litres_saved_each_year": {
+    "2005": 30388,
+    "2006": 30659,
+    "2007": 30145,
+    "2008": 31270,
+    "2009": 30271,
+    "2010": 30894,
+    "2011": 32149,
+    "2012": 30559,
+    "2013": 30513,
+    "2014": 30534,
+    "2015": 29953,
+    "2016": 30441,
+    "2017": 30940,
+    "2018": 31144,
+    "2019": 29843,
+    "2020": 30536,
+    "2021": 30924,
+    "2022": 31562,
+    "2023": 31267,
+    "2024": 30520
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 62.0,
+    "battery_kwh": 166.2,
+    "capex_aud": 314870,
+    "lifetime_cost_aud": 566052,
+    "percent_diesel_cut_p50": 91.6,
+    "payback_years": 4.2,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 62.0,
+    "battery_kwh": 166.2,
+    "capex_aud": 314870,
+    "lifetime_cost_aud": 566052,
+    "percent_diesel_cut_p50": 91.6,
+    "payback_years": 4.2,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 31,
+   "days_until_first_outage": 0.29
+  }
+ },
+ {
+  "label": "nanumea",
+  "simresult": {
+   "site": "Village on Nanumea, Tuvalu",
+   "pv_kw": 68.5,
+   "battery_kwh": 186.0,
+   "generator_kw": 30.0,
+   "capex_aud": 349900,
+   "lifetime_cost_aud": 623916,
+   "diesel_litres_saved_p50": 33640,
+   "diesel_litres_saved_p90": 32804,
+   "co2_tonnes_saved_per_year": 90,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "nanumea",
+   "name": "Village on Nanumea",
+   "country": "Tuvalu",
+   "lat": -5.67,
+   "lon": 176.13
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 279.0,
+   "peak_kw": 19.7,
+   "generator_kw": 30.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 36795,
+   "diesel_cost_per_year": 77269,
+   "lifetime_cost": 1169168
+  },
+  "design": {
+   "solar_kw": 68.5,
+   "battery_kwh": 186.0,
+   "purchase_cost": 349900,
+   "lifetime_cost": 623916,
+   "lifetime_saving": 545252,
+   "litres_saved_p50": 33640,
+   "litres_saved_p90": 32804,
+   "percent_diesel_cut_p50": 91.4,
+   "money_saved_per_year_p50": 70643,
+   "solar_share_percent": 93.0,
+   "generator_hours_per_year": 895,
+   "payback_years": 4.8
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 34.9
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 2.1,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 32,000 litres of diesel.",
+   "promise_litres": 32000.0,
+   "promise_aud_per_year": 67200,
+   "promise_tonnes_co2_per_year": 86,
+   "evidence": "19 of 20 real weather years saved at least 32,000 L; the worst (2015) saved 31,686 L.",
+   "p90_10_year_average_litres": 33383,
+   "p90_if_any_one_year_dropped": [
+    32748,
+    33010
+   ],
+   "p90_bootstrap_90pct_range": [
+    31686,
+    33340
+   ],
+   "litres_saved_each_year": {
+    "2005": 33342,
+    "2006": 33449,
+    "2007": 33479,
+    "2008": 35231,
+    "2009": 33321,
+    "2010": 33373,
+    "2011": 35494,
+    "2012": 33836,
+    "2013": 33636,
+    "2014": 33804,
+    "2015": 31686,
+    "2016": 32860,
+    "2017": 33780,
+    "2018": 34529,
+    "2019": 32303,
+    "2020": 33643,
+    "2021": 34895,
+    "2022": 35713,
+    "2023": 33868,
+    "2024": 33048
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 68.5,
+    "battery_kwh": 186.0,
+    "capex_aud": 349900,
+    "lifetime_cost_aud": 623916,
+    "percent_diesel_cut_p50": 91.4,
+    "payback_years": 4.8,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 64.9,
+    "battery_kwh": 186.0,
+    "capex_aud": 339820,
+    "lifetime_cost_aud": 625578,
+    "percent_diesel_cut_p50": 90.2,
+    "payback_years": 4.7,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 75.7,
+    "battery_kwh": 186.0,
+    "capex_aud": 370060,
+    "lifetime_cost_aud": 628903,
+    "percent_diesel_cut_p50": 93.2,
+    "payback_years": 5.0,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 68.5,
+    "battery_kwh": 186.0,
+    "capex_aud": 349900,
+    "lifetime_cost_aud": 623916,
+    "percent_diesel_cut_p50": 91.4,
+    "payback_years": 4.8,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 33,
+   "days_until_first_outage": 0.0
+  }
+ },
+ {
+  "label": "kadavu",
+  "simresult": {
+   "site": "Village on Kadavu, Fiji",
+   "pv_kw": 104.0,
+   "battery_kwh": 236.4,
+   "generator_kw": 45.0,
+   "capex_aud": 492140,
+   "lifetime_cost_aud": 962076,
+   "diesel_litres_saved_p50": 44773,
+   "diesel_litres_saved_p90": 43973,
+   "co2_tonnes_saved_per_year": 120,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "kadavu",
+   "name": "Village on Kadavu",
+   "country": "Fiji",
+   "lat": -19.05,
+   "lon": 178.18
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 399.0,
+   "peak_kw": 29.0,
+   "generator_kw": 45.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 53630,
+   "diesel_cost_per_year": 91170,
+   "lifetime_cost": 1411472
+  },
+  "design": {
+   "solar_kw": 104.0,
+   "battery_kwh": 236.4,
+   "purchase_cost": 492140,
+   "lifetime_cost": 962076,
+   "lifetime_saving": 449396,
+   "litres_saved_p50": 44773,
+   "litres_saved_p90": 43973,
+   "percent_diesel_cut_p50": 83.5,
+   "money_saved_per_year_p50": 76115,
+   "solar_share_percent": 87.2,
+   "generator_hours_per_year": 1720,
+   "payback_years": 6.2
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 36.3
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 1.7,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 43,000 litres of diesel.",
+   "promise_litres": 43000.0,
+   "promise_aud_per_year": 73100,
+   "promise_tonnes_co2_per_year": 115,
+   "evidence": "20 of 20 real weather years saved at least 43,000 L; the worst (2012) saved 43,396 L.",
+   "p90_10_year_average_litres": 44442,
+   "p90_if_any_one_year_dropped": [
+    43967,
+    44009
+   ],
+   "p90_bootstrap_90pct_range": [
+    43396,
+    44159
+   ],
+   "litres_saved_each_year": {
+    "2005": 45267,
+    "2006": 45216,
+    "2007": 44728,
+    "2008": 43921,
+    "2009": 44168,
+    "2010": 45276,
+    "2011": 44016,
+    "2012": 43396,
+    "2013": 44617,
+    "2014": 45516,
+    "2015": 45045,
+    "2016": 45555,
+    "2017": 45208,
+    "2018": 44462,
+    "2019": 44407,
+    "2020": 44819,
+    "2021": 44850,
+    "2022": 45466,
+    "2023": 43979,
+    "2024": 44072
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 104.0,
+    "battery_kwh": 236.4,
+    "capex_aud": 492140,
+    "lifetime_cost_aud": 962076,
+    "percent_diesel_cut_p50": 83.5,
+    "payback_years": 6.2,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 69.3,
+    "battery_kwh": 88.7,
+    "capex_aud": 269435,
+    "lifetime_cost_aud": 970075,
+    "percent_diesel_cut_p50": 57.8,
+    "payback_years": 4.8,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 121.3,
+    "battery_kwh": 266.0,
+    "capex_aud": 565740,
+    "lifetime_cost_aud": 969429,
+    "percent_diesel_cut_p50": 90.6,
+    "payback_years": 6.6,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 104.0,
+    "battery_kwh": 236.4,
+    "capex_aud": 492140,
+    "lifetime_cost_aud": 962076,
+    "percent_diesel_cut_p50": 83.5,
+    "payback_years": 6.2,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 42,
+   "days_until_first_outage": 0.25
+  }
+ },
+ {
+  "label": "eua",
+  "simresult": {
+   "site": "Village on 'Eua, Tonga",
+   "pv_kw": 85.3,
+   "battery_kwh": 196.0,
+   "generator_kw": 35.0,
+   "capex_aud": 405440,
+   "lifetime_cost_aud": 742726,
+   "diesel_litres_saved_p50": 35094,
+   "diesel_litres_saved_p90": 34844,
+   "co2_tonnes_saved_per_year": 94,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "eua",
+   "name": "Village on 'Eua",
+   "country": "Tonga",
+   "lat": -21.38,
+   "lon": -174.93
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 294.0,
+   "peak_kw": 22.0,
+   "generator_kw": 35.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 40068,
+   "diesel_cost_per_year": 76130,
+   "lifetime_cost": 1162270
+  },
+  "design": {
+   "solar_kw": 85.3,
+   "battery_kwh": 196.0,
+   "purchase_cost": 405440,
+   "lifetime_cost": 742726,
+   "lifetime_saving": 419544,
+   "litres_saved_p50": 35094,
+   "litres_saved_p90": 34844,
+   "percent_diesel_cut_p50": 87.6,
+   "money_saved_per_year_p50": 66678,
+   "solar_share_percent": 90.1,
+   "generator_hours_per_year": 1224,
+   "payback_years": 5.9
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 32.3
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 1.9,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 34,000 litres of diesel.",
+   "promise_litres": 34000.0,
+   "promise_aud_per_year": 64600,
+   "promise_tonnes_co2_per_year": 91,
+   "evidence": "20 of 20 real weather years saved at least 34,000 L; the worst (2012) saved 34,429 L.",
+   "p90_10_year_average_litres": 35027,
+   "p90_if_any_one_year_dropped": [
+    34841,
+    34866
+   ],
+   "p90_bootstrap_90pct_range": [
+    34429,
+    35012
+   ],
+   "litres_saved_each_year": {
+    "2005": 35203,
+    "2006": 35512,
+    "2007": 34871,
+    "2008": 35023,
+    "2009": 34819,
+    "2010": 35260,
+    "2011": 34847,
+    "2012": 34429,
+    "2013": 35081,
+    "2014": 35504,
+    "2015": 35831,
+    "2016": 35448,
+    "2017": 35035,
+    "2018": 35044,
+    "2019": 35081,
+    "2020": 35269,
+    "2021": 35162,
+    "2022": 35647,
+    "2023": 35106,
+    "2024": 34908
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 85.3,
+    "battery_kwh": 196.0,
+    "capex_aud": 405440,
+    "lifetime_cost_aud": 742726,
+    "percent_diesel_cut_p50": 87.6,
+    "payback_years": 5.9,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 76.8,
+    "battery_kwh": 196.0,
+    "capex_aud": 381640,
+    "lifetime_cost_aud": 746032,
+    "percent_diesel_cut_p50": 84.9,
+    "payback_years": 5.7,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 89.6,
+    "battery_kwh": 196.0,
+    "capex_aud": 417480,
+    "lifetime_cost_aud": 745192,
+    "percent_diesel_cut_p50": 88.6,
+    "payback_years": 6.0,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 85.3,
+    "battery_kwh": 196.0,
+    "capex_aud": 405440,
+    "lifetime_cost_aud": 742726,
+    "percent_diesel_cut_p50": 87.6,
+    "payback_years": 5.9,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 38,
+   "days_until_first_outage": 0.33
+  }
+ },
+ {
+  "label": "malekula",
+  "simresult": {
+   "site": "Village on Malekula, Vanuatu",
+   "pv_kw": 60.7,
+   "battery_kwh": 139.3,
+   "generator_kw": 25.0,
+   "capex_aud": 288365,
+   "lifetime_cost_aud": 514546,
+   "diesel_litres_saved_p50": 25623,
+   "diesel_litres_saved_p90": 25185,
+   "co2_tonnes_saved_per_year": 69,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "malekula",
+   "name": "Village on Malekula",
+   "country": "Vanuatu",
+   "lat": -16.25,
+   "lon": 167.5
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 209.0,
+   "peak_kw": 15.0,
+   "generator_kw": 25.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 28522,
+   "diesel_cost_per_year": 57043,
+   "lifetime_cost": 866023
+  },
+  "design": {
+   "solar_kw": 60.7,
+   "battery_kwh": 139.3,
+   "purchase_cost": 288365,
+   "lifetime_cost": 514546,
+   "lifetime_saving": 351476,
+   "litres_saved_p50": 25623,
+   "litres_saved_p90": 25185,
+   "percent_diesel_cut_p50": 89.8,
+   "money_saved_per_year_p50": 51245,
+   "solar_share_percent": 92.0,
+   "generator_hours_per_year": 1017,
+   "payback_years": 5.4
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 39.9
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 2.0,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 25,000 litres of diesel.",
+   "promise_litres": 25000.0,
+   "promise_aud_per_year": 50000,
+   "promise_tonnes_co2_per_year": 67,
+   "evidence": "19 of 20 real weather years saved at least 25,000 L; the worst (2012) saved 24,827 L.",
+   "p90_10_year_average_litres": 25494,
+   "p90_if_any_one_year_dropped": [
+    25183,
+    25316
+   ],
+   "p90_bootstrap_90pct_range": [
+    24827,
+    25460
+   ],
+   "litres_saved_each_year": {
+    "2005": 25647,
+    "2006": 25508,
+    "2007": 25699,
+    "2008": 25187,
+    "2009": 25425,
+    "2010": 25834,
+    "2011": 25464,
+    "2012": 24827,
+    "2013": 25855,
+    "2014": 25788,
+    "2015": 25562,
+    "2016": 26340,
+    "2017": 25805,
+    "2018": 25598,
+    "2019": 26312,
+    "2020": 25349,
+    "2021": 25991,
+    "2022": 25476,
+    "2023": 25171,
+    "2024": 25818
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 60.7,
+    "battery_kwh": 139.3,
+    "capex_aud": 288365,
+    "lifetime_cost_aud": 514546,
+    "percent_diesel_cut_p50": 89.8,
+    "payback_years": 5.4,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 54.6,
+    "battery_kwh": 139.3,
+    "capex_aud": 271285,
+    "lifetime_cost_aud": 517511,
+    "percent_diesel_cut_p50": 87.2,
+    "payback_years": 5.3,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 63.7,
+    "battery_kwh": 139.3,
+    "capex_aud": 296765,
+    "lifetime_cost_aud": 515866,
+    "percent_diesel_cut_p50": 90.8,
+    "payback_years": 5.6,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 60.7,
+    "battery_kwh": 139.3,
+    "capex_aud": 288365,
+    "lifetime_cost_aud": 514546,
+    "percent_diesel_cut_p50": 89.8,
+    "payback_years": 5.4,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 50,
+   "days_until_first_outage": 0.08
+  }
+ },
+ {
+  "label": "abaiang",
+  "simresult": {
+   "site": "Village on Abaiang, Kiribati",
+   "pv_kw": 80.5,
+   "battery_kwh": 226.0,
+   "generator_kw": 35.0,
+   "capex_aud": 417500,
+   "lifetime_cost_aud": 751937,
+   "diesel_litres_saved_p50": 40586,
+   "diesel_litres_saved_p90": 38939,
+   "co2_tonnes_saved_per_year": 109,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "abaiang",
+   "name": "Village on Abaiang",
+   "country": "Kiribati",
+   "lat": 1.85,
+   "lon": 172.97
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 339.0,
+   "peak_kw": 24.4,
+   "generator_kw": 35.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 44060,
+   "diesel_cost_per_year": 96932,
+   "lifetime_cost": 1460711
+  },
+  "design": {
+   "solar_kw": 80.5,
+   "battery_kwh": 226.0,
+   "purchase_cost": 417500,
+   "lifetime_cost": 751937,
+   "lifetime_saving": 708774,
+   "litres_saved_p50": 40586,
+   "litres_saved_p90": 38939,
+   "percent_diesel_cut_p50": 92.1,
+   "money_saved_per_year_p50": 89290,
+   "solar_share_percent": 94.0,
+   "generator_hours_per_year": 850,
+   "payback_years": 4.5
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 35.4
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 2.2,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 38,000 litres of diesel.",
+   "promise_litres": 38000.0,
+   "promise_aud_per_year": 83600,
+   "promise_tonnes_co2_per_year": 102,
+   "evidence": "19 of 20 real weather years saved at least 38,000 L; the worst (2015) saved 37,374 L.",
+   "p90_10_year_average_litres": 39910,
+   "p90_if_any_one_year_dropped": [
+    38836,
+    39237
+   ],
+   "p90_bootstrap_90pct_range": [
+    37374,
+    39763
+   ],
+   "litres_saved_each_year": {
+    "2005": 39791,
+    "2006": 40023,
+    "2007": 40855,
+    "2008": 42108,
+    "2009": 39285,
+    "2010": 39981,
+    "2011": 41655,
+    "2012": 40651,
+    "2013": 41524,
+    "2014": 39513,
+    "2015": 37374,
+    "2016": 40225,
+    "2017": 41801,
+    "2018": 41701,
+    "2019": 38010,
+    "2020": 40829,
+    "2021": 41739,
+    "2022": 42126,
+    "2023": 39042,
+    "2024": 40522
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 80.5,
+    "battery_kwh": 226.0,
+    "capex_aud": 417500,
+    "lifetime_cost_aud": 751937,
+    "percent_diesel_cut_p50": 92.1,
+    "payback_years": 4.5,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 76.3,
+    "battery_kwh": 226.0,
+    "capex_aud": 405740,
+    "lifetime_cost_aud": 753790,
+    "percent_diesel_cut_p50": 90.9,
+    "payback_years": 4.4,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 89.0,
+    "battery_kwh": 226.0,
+    "capex_aud": 441300,
+    "lifetime_cost_aud": 756685,
+    "percent_diesel_cut_p50": 93.9,
+    "payback_years": 4.7,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 80.5,
+    "battery_kwh": 226.0,
+    "capex_aud": 417500,
+    "lifetime_cost_aud": 751937,
+    "percent_diesel_cut_p50": 92.1,
+    "payback_years": 4.5,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 35,
+   "days_until_first_outage": 0.33
+  }
+ },
+ {
+  "label": "savaii",
+  "simresult": {
+   "site": "Village on Savai'i, Samoa",
+   "pv_kw": 132.3,
+   "battery_kwh": 329.3,
+   "generator_kw": 55.0,
+   "capex_aud": 650345,
+   "lifetime_cost_aud": 1120834,
+   "diesel_litres_saved_p50": 60135,
+   "diesel_litres_saved_p90": 59136,
+   "co2_tonnes_saved_per_year": 161,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "savaii",
+   "name": "Village on Savai'i",
+   "country": "Samoa",
+   "lat": -13.6,
+   "lon": -172.4
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 494.0,
+   "peak_kw": 36.0,
+   "generator_kw": 55.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 66184,
+   "diesel_cost_per_year": 105894,
+   "lifetime_cost": 1652394
+  },
+  "design": {
+   "solar_kw": 132.3,
+   "battery_kwh": 329.3,
+   "purchase_cost": 650345,
+   "lifetime_cost": 1120834,
+   "lifetime_saving": 531561,
+   "litres_saved_p50": 60135,
+   "litres_saved_p90": 59136,
+   "percent_diesel_cut_p50": 90.9,
+   "money_saved_per_year_p50": 96216,
+   "solar_share_percent": 92.6,
+   "generator_hours_per_year": 957,
+   "payback_years": 6.5
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 38.8
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 1.6,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 59,000 litres of diesel.",
+   "promise_litres": 59000.0,
+   "promise_aud_per_year": 94400,
+   "promise_tonnes_co2_per_year": 158,
+   "evidence": "18 of 20 real weather years saved at least 59,000 L; the worst (2020) saved 58,899 L.",
+   "p90_10_year_average_litres": 59888,
+   "p90_if_any_one_year_dropped": [
+    59114,
+    59278
+   ],
+   "p90_bootstrap_90pct_range": [
+    58899,
+    59703
+   ],
+   "litres_saved_each_year": {
+    "2005": 59981,
+    "2006": 59308,
+    "2007": 60286,
+    "2008": 60036,
+    "2009": 60595,
+    "2010": 60678,
+    "2011": 61798,
+    "2012": 60482,
+    "2013": 59157,
+    "2014": 59996,
+    "2015": 59709,
+    "2016": 60184,
+    "2017": 58943,
+    "2018": 60086,
+    "2019": 59655,
+    "2020": 58899,
+    "2021": 60857,
+    "2022": 62119,
+    "2023": 60614,
+    "2024": 60399
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 132.3,
+    "battery_kwh": 329.3,
+    "capex_aud": 650345,
+    "lifetime_cost_aud": 1120834,
+    "percent_diesel_cut_p50": 90.9,
+    "payback_years": 6.5,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 104.4,
+    "battery_kwh": 219.6,
+    "capex_aud": 478980,
+    "lifetime_cost_aud": 1133785,
+    "percent_diesel_cut_p50": 73.7,
+    "payback_years": 5.8,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 146.1,
+    "battery_kwh": 329.3,
+    "capex_aud": 688985,
+    "lifetime_cost_aud": 1134331,
+    "percent_diesel_cut_p50": 93.1,
+    "payback_years": 6.7,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 132.3,
+    "battery_kwh": 329.3,
+    "capex_aud": 650345,
+    "lifetime_cost_aud": 1120834,
+    "percent_diesel_cut_p50": 90.9,
+    "payback_years": 6.5,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 46,
+   "days_until_first_outage": 0.08
+  }
+ },
+ {
+  "label": "{\"site_id\": \"kadavu\", \"households\": 80}",
+  "simresult": {
+   "site": "Village on Kadavu, Fiji",
+   "pv_kw": 77.9,
+   "battery_kwh": 177.2,
+   "generator_kw": 45.0,
+   "capex_aud": 368740,
+   "lifetime_cost_aud": 703592,
+   "diesel_litres_saved_p50": 40334,
+   "diesel_litres_saved_p90": 39696,
+   "co2_tonnes_saved_per_year": 108,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "kadavu",
+   "name": "Village on Kadavu",
+   "country": "Fiji",
+   "lat": -19.05,
+   "lon": 178.18
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 299.0,
+   "peak_kw": 19.7,
+   "generator_kw": 45.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 46357,
+   "diesel_cost_per_year": 78806,
+   "lifetime_cost": 1214789
+  },
+  "design": {
+   "solar_kw": 77.9,
+   "battery_kwh": 177.2,
+   "purchase_cost": 368740,
+   "lifetime_cost": 703592,
+   "lifetime_saving": 511197,
+   "litres_saved_p50": 40334,
+   "litres_saved_p90": 39696,
+   "percent_diesel_cut_p50": 87.0,
+   "money_saved_per_year_p50": 68567,
+   "solar_share_percent": 90.5,
+   "generator_hours_per_year": 1218,
+   "payback_years": 5.1
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 36.3
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 1.7,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 39,000 litres of diesel.",
+   "promise_litres": 39000.0,
+   "promise_aud_per_year": 66300,
+   "promise_tonnes_co2_per_year": 105,
+   "evidence": "20 of 20 real weather years saved at least 39,000 L; the worst (2012) saved 39,216 L.",
+   "p90_10_year_average_litres": 40098,
+   "p90_if_any_one_year_dropped": [
+    39693,
+    39723
+   ],
+   "p90_bootstrap_90pct_range": [
+    39216,
+    39888
+   ],
+   "litres_saved_each_year": {
+    "2005": 40787,
+    "2006": 40836,
+    "2007": 40289,
+    "2008": 39672,
+    "2009": 39899,
+    "2010": 40825,
+    "2011": 39730,
+    "2012": 39216,
+    "2013": 40251,
+    "2014": 41046,
+    "2015": 40593,
+    "2016": 41073,
+    "2017": 40708,
+    "2018": 40154,
+    "2019": 40019,
+    "2020": 40378,
+    "2021": 40417,
+    "2022": 40959,
+    "2023": 39698,
+    "2024": 39789
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 77.9,
+    "battery_kwh": 177.2,
+    "capex_aud": 368740,
+    "lifetime_cost_aud": 703592,
+    "percent_diesel_cut_p50": 87.0,
+    "payback_years": 5.1,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 64.9,
+    "battery_kwh": 132.9,
+    "capex_aud": 294685,
+    "lifetime_cost_aud": 714498,
+    "percent_diesel_cut_p50": 76.6,
+    "payback_years": 4.6,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 90.9,
+    "battery_kwh": 199.3,
+    "capex_aud": 423925,
+    "lifetime_cost_aud": 716332,
+    "percent_diesel_cut_p50": 92.7,
+    "payback_years": 5.5,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 77.9,
+    "battery_kwh": 177.2,
+    "capex_aud": 368740,
+    "lifetime_cost_aud": 703592,
+    "percent_diesel_cut_p50": 87.0,
+    "payback_years": 5.1,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 34,
+   "days_until_first_outage": 0.21
+  }
+ },
+ {
+  "label": "{\"site_id\": \"kadavu\", \"households\": 160}",
+  "simresult": {
+   "site": "Village on Kadavu, Fiji",
+   "pv_kw": 72.2,
+   "battery_kwh": 73.9,
+   "generator_kw": 45.0,
+   "capex_aud": 264975,
+   "lifetime_cost_aud": 1215325,
+   "diesel_litres_saved_p50": 29444,
+   "diesel_litres_saved_p90": 28865,
+   "co2_tonnes_saved_per_year": 79,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "kadavu",
+   "name": "Village on Kadavu",
+   "country": "Fiji",
+   "lat": -19.05,
+   "lon": 178.18
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 499.0,
+   "peak_kw": 38.4,
+   "generator_kw": 45.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 61844,
+   "diesel_cost_per_year": 105135,
+   "lifetime_cost": 1633617
+  },
+  "design": {
+   "solar_kw": 72.2,
+   "battery_kwh": 73.9,
+   "purchase_cost": 264975,
+   "lifetime_cost": 1215325,
+   "lifetime_saving": 418292,
+   "litres_saved_p50": 29444,
+   "litres_saved_p90": 28865,
+   "percent_diesel_cut_p50": 47.6,
+   "money_saved_per_year_p50": 50054,
+   "solar_share_percent": 51.3,
+   "generator_hours_per_year": 5095,
+   "payback_years": 5.0
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 36.3
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 1.7,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 28,000 litres of diesel.",
+   "promise_litres": 28000.0,
+   "promise_aud_per_year": 47600,
+   "promise_tonnes_co2_per_year": 75,
+   "evidence": "20 of 20 real weather years saved at least 28,000 L; the worst (2012) saved 28,522 L.",
+   "p90_10_year_average_litres": 29248,
+   "p90_if_any_one_year_dropped": [
+    28862,
+    28896
+   ],
+   "p90_bootstrap_90pct_range": [
+    28522,
+    29124
+   ],
+   "litres_saved_each_year": {
+    "2005": 29943,
+    "2006": 29858,
+    "2007": 29385,
+    "2008": 28836,
+    "2009": 29139,
+    "2010": 29899,
+    "2011": 28986,
+    "2012": 28522,
+    "2013": 29310,
+    "2014": 30030,
+    "2015": 29730,
+    "2016": 29955,
+    "2017": 29823,
+    "2018": 29251,
+    "2019": 29229,
+    "2020": 29622,
+    "2021": 29502,
+    "2022": 29898,
+    "2023": 28903,
+    "2024": 28868
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 72.2,
+    "battery_kwh": 73.9,
+    "capex_aud": 264975,
+    "lifetime_cost_aud": 1215325,
+    "percent_diesel_cut_p50": 47.6,
+    "payback_years": 5.0,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 86.7,
+    "battery_kwh": 110.9,
+    "capex_aud": 337025,
+    "lifetime_cost_aud": 1216527,
+    "percent_diesel_cut_p50": 54.2,
+    "payback_years": 5.6,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 151.7,
+    "battery_kwh": 332.7,
+    "capex_aud": 707555,
+    "lifetime_cost_aud": 1227101,
+    "percent_diesel_cut_p50": 88.8,
+    "payback_years": 7.4,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 72.2,
+    "battery_kwh": 73.9,
+    "capex_aud": 264975,
+    "lifetime_cost_aud": 1215325,
+    "percent_diesel_cut_p50": 47.6,
+    "payback_years": 5.0,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 15,
+   "days_until_first_outage": 0.0
+  }
+ },
+ {
+  "label": "{\"site_id\": \"eua\", \"diesel_price_per_litre\": 2.4}",
+  "simresult": {
+   "site": "Village on 'Eua, Tonga",
+   "pv_kw": 89.6,
+   "battery_kwh": 196.0,
+   "generator_kw": 35.0,
+   "capex_aud": 417480,
+   "lifetime_cost_aud": 775761,
+   "diesel_litres_saved_p50": 35506,
+   "diesel_litres_saved_p90": 35234,
+   "co2_tonnes_saved_per_year": 95,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "eua",
+   "name": "Village on 'Eua",
+   "country": "Tonga",
+   "lat": -21.38,
+   "lon": -174.93
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 294.0,
+   "peak_kw": 22.0,
+   "generator_kw": 35.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 40068,
+   "diesel_cost_per_year": 96164,
+   "lifetime_cost": 1434540
+  },
+  "design": {
+   "solar_kw": 89.6,
+   "battery_kwh": 196.0,
+   "purchase_cost": 417480,
+   "lifetime_cost": 775761,
+   "lifetime_saving": 658779,
+   "litres_saved_p50": 35506,
+   "litres_saved_p90": 35234,
+   "percent_diesel_cut_p50": 88.6,
+   "money_saved_per_year_p50": 85214,
+   "solar_share_percent": 91.0,
+   "generator_hours_per_year": 1124,
+   "payback_years": 4.8
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 32.3
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 2.4,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 35,000 litres of diesel.",
+   "promise_litres": 35000.0,
+   "promise_aud_per_year": 84000,
+   "promise_tonnes_co2_per_year": 94,
+   "evidence": "19 of 20 real weather years saved at least 35,000 L; the worst (2012) saved 34,905 L.",
+   "p90_10_year_average_litres": 35444,
+   "p90_if_any_one_year_dropped": [
+    35229,
+    35299
+   ],
+   "p90_bootstrap_90pct_range": [
+    34905,
+    35437
+   ],
+   "litres_saved_each_year": {
+    "2005": 35572,
+    "2006": 35891,
+    "2007": 35314,
+    "2008": 35492,
+    "2009": 35195,
+    "2010": 35703,
+    "2011": 35238,
+    "2012": 34905,
+    "2013": 35510,
+    "2014": 35930,
+    "2015": 36215,
+    "2016": 35826,
+    "2017": 35501,
+    "2018": 35449,
+    "2019": 35493,
+    "2020": 35721,
+    "2021": 35502,
+    "2022": 36061,
+    "2023": 35551,
+    "2024": 35326
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 89.6,
+    "battery_kwh": 196.0,
+    "capex_aud": 417480,
+    "lifetime_cost_aud": 775761,
+    "percent_diesel_cut_p50": 88.6,
+    "payback_years": 4.8,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 76.8,
+    "battery_kwh": 196.0,
+    "capex_aud": 381640,
+    "lifetime_cost_aud": 786930,
+    "percent_diesel_cut_p50": 84.9,
+    "payback_years": 4.5,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 102.4,
+    "battery_kwh": 196.0,
+    "capex_aud": 453320,
+    "lifetime_cost_aud": 787087,
+    "percent_diesel_cut_p50": 90.9,
+    "payback_years": 5.1,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 89.6,
+    "battery_kwh": 196.0,
+    "capex_aud": 417480,
+    "lifetime_cost_aud": 775761,
+    "percent_diesel_cut_p50": 88.6,
+    "payback_years": 4.8,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 41,
+   "days_until_first_outage": 0.38
+  }
+ },
+ {
+  "label": "{\"site_id\": \"nanumea\", \"households\": 120}",
+  "simresult": {
+   "site": "Village on Nanumea, Tuvalu",
+   "pv_kw": 93.1,
+   "battery_kwh": 280.8,
+   "generator_kw": 30.0,
+   "capex_aud": 499360,
+   "lifetime_cost_aud": 874142,
+   "diesel_litres_saved_p50": 41594,
+   "diesel_litres_saved_p90": 40428,
+   "co2_tonnes_saved_per_year": 111,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "nanumea",
+   "name": "Village on Nanumea",
+   "country": "Tuvalu",
+   "lat": -5.67,
+   "lon": 176.13
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 379.0,
+   "peak_kw": 29.0,
+   "generator_kw": 30.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 45251,
+   "diesel_cost_per_year": 95027,
+   "lifetime_cost": 1443826
+  },
+  "design": {
+   "solar_kw": 93.1,
+   "battery_kwh": 280.8,
+   "purchase_cost": 499360,
+   "lifetime_cost": 874142,
+   "lifetime_saving": 569684,
+   "litres_saved_p50": 41594,
+   "litres_saved_p90": 40428,
+   "percent_diesel_cut_p50": 91.9,
+   "money_saved_per_year_p50": 87347,
+   "solar_share_percent": 92.8,
+   "generator_hours_per_year": 936,
+   "payback_years": 5.5
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 34.9
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 2.1,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 40,000 litres of diesel.",
+   "promise_litres": 40000.0,
+   "promise_aud_per_year": 84000,
+   "promise_tonnes_co2_per_year": 107,
+   "evidence": "18 of 20 real weather years saved at least 40,000 L; the worst (2015) saved 39,038 L.",
+   "p90_10_year_average_litres": 41226,
+   "p90_if_any_one_year_dropped": [
+    40354,
+    40696
+   ],
+   "p90_bootstrap_90pct_range": [
+    39038,
+    41184
+   ],
+   "litres_saved_each_year": {
+    "2005": 41187,
+    "2006": 41327,
+    "2007": 41344,
+    "2008": 43710,
+    "2009": 41248,
+    "2010": 41162,
+    "2011": 43962,
+    "2012": 41746,
+    "2013": 41612,
+    "2014": 41756,
+    "2015": 39038,
+    "2016": 40502,
+    "2017": 41663,
+    "2018": 42849,
+    "2019": 39764,
+    "2020": 41576,
+    "2021": 43205,
+    "2022": 44302,
+    "2023": 41877,
+    "2024": 40744
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 93.1,
+    "battery_kwh": 280.8,
+    "capex_aud": 499360,
+    "lifetime_cost_aud": 874142,
+    "percent_diesel_cut_p50": 91.9,
+    "payback_years": 5.5,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 88.2,
+    "battery_kwh": 252.7,
+    "capex_aud": 461755,
+    "lifetime_cost_aud": 877862,
+    "percent_diesel_cut_p50": 87.3,
+    "payback_years": 5.4,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 102.9,
+    "battery_kwh": 252.7,
+    "capex_aud": 502915,
+    "lifetime_cost_aud": 886888,
+    "percent_diesel_cut_p50": 90.2,
+    "payback_years": 5.7,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 93.1,
+    "battery_kwh": 280.8,
+    "capex_aud": 499360,
+    "lifetime_cost_aud": 874142,
+    "percent_diesel_cut_p50": 91.9,
+    "payback_years": 5.5,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 35,
+   "days_until_first_outage": 0.04
+  }
+ },
+ {
+  "label": "{\"site_id\": \"malekula\", \"households\": 40}",
+  "simresult": {
+   "site": "Village on Malekula, Vanuatu",
+   "pv_kw": 46.2,
+   "battery_kwh": 106.0,
+   "generator_kw": 25.0,
+   "capex_aud": 219460,
+   "lifetime_cost_aud": 385132,
+   "diesel_litres_saved_p50": 23352,
+   "diesel_litres_saved_p90": 23034,
+   "co2_tonnes_saved_per_year": 63,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "malekula",
+   "name": "Village on Malekula",
+   "country": "Vanuatu",
+   "lat": -16.25,
+   "lon": 167.5
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 159.0,
+   "peak_kw": 10.3,
+   "generator_kw": 25.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 25370,
+   "diesel_cost_per_year": 50739,
+   "lifetime_cost": 767930
+  },
+  "design": {
+   "solar_kw": 46.2,
+   "battery_kwh": 106.0,
+   "purchase_cost": 219460,
+   "lifetime_cost": 385132,
+   "lifetime_saving": 382798,
+   "litres_saved_p50": 23352,
+   "litres_saved_p90": 23034,
+   "percent_diesel_cut_p50": 92.0,
+   "money_saved_per_year_p50": 46704,
+   "solar_share_percent": 93.9,
+   "generator_hours_per_year": 739,
+   "payback_years": 4.5
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 39.9
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 2.0,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 23,000 litres of diesel.",
+   "promise_litres": 23000.0,
+   "promise_aud_per_year": 46000,
+   "promise_tonnes_co2_per_year": 62,
+   "evidence": "19 of 20 real weather years saved at least 23,000 L; the worst (2012) saved 22,726 L.",
+   "p90_10_year_average_litres": 23271,
+   "p90_if_any_one_year_dropped": [
+    23033,
+    23126
+   ],
+   "p90_bootstrap_90pct_range": [
+    22726,
+    23254
+   ],
+   "litres_saved_each_year": {
+    "2005": 23340,
+    "2006": 23258,
+    "2007": 23447,
+    "2008": 23022,
+    "2009": 23214,
+    "2010": 23558,
+    "2011": 23258,
+    "2012": 22726,
+    "2013": 23590,
+    "2014": 23522,
+    "2015": 23313,
+    "2016": 23926,
+    "2017": 23519,
+    "2018": 23364,
+    "2019": 23934,
+    "2020": 23149,
+    "2021": 23687,
+    "2022": 23273,
+    "2023": 23036,
+    "2024": 23501
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 46.2,
+    "battery_kwh": 106.0,
+    "capex_aud": 219460,
+    "lifetime_cost_aud": 385132,
+    "percent_diesel_cut_p50": 92.0,
+    "payback_years": 4.5,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 41.5,
+    "battery_kwh": 106.0,
+    "capex_aud": 206300,
+    "lifetime_cost_aud": 389054,
+    "percent_diesel_cut_p50": 89.6,
+    "payback_years": 4.3,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 48.5,
+    "battery_kwh": 106.0,
+    "capex_aud": 225900,
+    "lifetime_cost_aud": 385544,
+    "percent_diesel_cut_p50": 93.0,
+    "payback_years": 4.6,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 46.2,
+    "battery_kwh": 106.0,
+    "capex_aud": 219460,
+    "lifetime_cost_aud": 385132,
+    "percent_diesel_cut_p50": 92.0,
+    "payback_years": 4.5,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 47,
+   "days_until_first_outage": 0.08
+  }
+ },
+ {
+  "label": "{\"site_id\": \"malekula\", \"households\": 90}",
+  "simresult": {
+   "site": "Village on Malekula, Vanuatu",
+   "pv_kw": 78.3,
+   "battery_kwh": 189.3,
+   "generator_kw": 25.0,
+   "capex_aud": 380145,
+   "lifetime_cost_aud": 713439,
+   "diesel_litres_saved_p50": 29867,
+   "diesel_litres_saved_p90": 29336,
+   "co2_tonnes_saved_per_year": 80,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "malekula",
+   "name": "Village on Malekula",
+   "country": "Vanuatu",
+   "lat": -16.25,
+   "lon": 167.5
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 284.0,
+   "peak_kw": 22.0,
+   "generator_kw": 25.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 34732,
+   "diesel_cost_per_year": 69464,
+   "lifetime_cost": 1059295
+  },
+  "design": {
+   "solar_kw": 78.3,
+   "battery_kwh": 189.3,
+   "purchase_cost": 380145,
+   "lifetime_cost": 713439,
+   "lifetime_saving": 345856,
+   "litres_saved_p50": 29867,
+   "litres_saved_p90": 29336,
+   "percent_diesel_cut_p50": 86.0,
+   "money_saved_per_year_p50": 59734,
+   "solar_share_percent": 87.9,
+   "generator_hours_per_year": 1626,
+   "payback_years": 6.2
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 39.9
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 2.0,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 29,000 litres of diesel.",
+   "promise_litres": 29000.0,
+   "promise_aud_per_year": 58000,
+   "promise_tonnes_co2_per_year": 78,
+   "evidence": "19 of 20 real weather years saved at least 29,000 L; the worst (2012) saved 28,861 L.",
+   "p90_10_year_average_litres": 29699,
+   "p90_if_any_one_year_dropped": [
+    29334,
+    29493
+   ],
+   "p90_bootstrap_90pct_range": [
+    28861,
+    29607
+   ],
+   "litres_saved_each_year": {
+    "2005": 29883,
+    "2006": 29672,
+    "2007": 29947,
+    "2008": 29316,
+    "2009": 29556,
+    "2010": 30122,
+    "2011": 29613,
+    "2012": 28861,
+    "2013": 30148,
+    "2014": 30088,
+    "2015": 29784,
+    "2016": 30829,
+    "2017": 30082,
+    "2018": 29851,
+    "2019": 30793,
+    "2020": 29532,
+    "2021": 30341,
+    "2022": 29688,
+    "2023": 29339,
+    "2024": 30101
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 78.3,
+    "battery_kwh": 189.3,
+    "capex_aud": 380145,
+    "lifetime_cost_aud": 713439,
+    "percent_diesel_cut_p50": 86.0,
+    "payback_years": 6.2,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 74.2,
+    "battery_kwh": 189.3,
+    "capex_aud": 368665,
+    "lifetime_cost_aud": 715257,
+    "percent_diesel_cut_p50": 84.5,
+    "payback_years": 6.1,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 86.6,
+    "battery_kwh": 189.3,
+    "capex_aud": 403385,
+    "lifetime_cost_aud": 716994,
+    "percent_diesel_cut_p50": 88.3,
+    "payback_years": 6.4,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 78.3,
+    "battery_kwh": 189.3,
+    "capex_aud": 380145,
+    "lifetime_cost_aud": 713439,
+    "percent_diesel_cut_p50": 86.0,
+    "payback_years": 6.2,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 52,
+   "days_until_first_outage": 0.08
+  }
+ },
+ {
+  "label": "{\"site_id\": \"abaiang\", \"other_kw\": 10}",
+  "simresult": {
+   "site": "Village on Abaiang, Kiribati",
+   "pv_kw": 92.4,
+   "battery_kwh": 259.3,
+   "generator_kw": 35.0,
+   "capex_aud": 479125,
+   "lifetime_cost_aud": 819730,
+   "diesel_litres_saved_p50": 46457,
+   "diesel_litres_saved_p90": 44524,
+   "co2_tonnes_saved_per_year": 125,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "abaiang",
+   "name": "Village on Abaiang",
+   "country": "Kiribati",
+   "lat": 1.85,
+   "lon": 172.97
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 389.0,
+   "peak_kw": 24.4,
+   "generator_kw": 35.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 49097,
+   "diesel_cost_per_year": 108014,
+   "lifetime_cost": 1631153
+  },
+  "design": {
+   "solar_kw": 92.4,
+   "battery_kwh": 259.3,
+   "purchase_cost": 479125,
+   "lifetime_cost": 819730,
+   "lifetime_saving": 811422,
+   "litres_saved_p50": 46457,
+   "litres_saved_p90": 44524,
+   "percent_diesel_cut_p50": 94.6,
+   "money_saved_per_year_p50": 102205,
+   "solar_share_percent": 95.6,
+   "generator_hours_per_year": 606,
+   "payback_years": 4.5
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 35.4
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 2.2,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 44,000 litres of diesel.",
+   "promise_litres": 44000.0,
+   "promise_aud_per_year": 96800,
+   "promise_tonnes_co2_per_year": 118,
+   "evidence": "18 of 20 real weather years saved at least 44,000 L; the worst (2015) saved 42,619 L.",
+   "p90_10_year_average_litres": 45636,
+   "p90_if_any_one_year_dropped": [
+    44403,
+    44819
+   ],
+   "p90_bootstrap_90pct_range": [
+    42619,
+    45536
+   ],
+   "litres_saved_each_year": {
+    "2005": 45575,
+    "2006": 45761,
+    "2007": 46756,
+    "2008": 48132,
+    "2009": 44862,
+    "2010": 45696,
+    "2011": 47619,
+    "2012": 46535,
+    "2013": 47574,
+    "2014": 45189,
+    "2015": 42619,
+    "2016": 46030,
+    "2017": 47841,
+    "2018": 47736,
+    "2019": 43432,
+    "2020": 46744,
+    "2021": 47731,
+    "2022": 48201,
+    "2023": 44645,
+    "2024": 46379
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 92.4,
+    "battery_kwh": 259.3,
+    "capex_aud": 479125,
+    "lifetime_cost_aud": 819730,
+    "percent_diesel_cut_p50": 94.6,
+    "payback_years": 4.5,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 87.5,
+    "battery_kwh": 259.3,
+    "capex_aud": 465405,
+    "lifetime_cost_aud": 821772,
+    "percent_diesel_cut_p50": 93.3,
+    "payback_years": 4.4,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 102.1,
+    "battery_kwh": 259.3,
+    "capex_aud": 506285,
+    "lifetime_cost_aud": 829025,
+    "percent_diesel_cut_p50": 96.1,
+    "payback_years": 4.7,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 92.4,
+    "battery_kwh": 259.3,
+    "capex_aud": 479125,
+    "lifetime_cost_aud": 819730,
+    "percent_diesel_cut_p50": 94.6,
+    "payback_years": 4.5,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 33,
+   "days_until_first_outage": 0.33
+  }
+ },
+ {
+  "label": "{\"site_id\": \"savaii\", \"households\": 200}",
+  "simresult": {
+   "site": "Village on Savai'i, Samoa",
+   "pv_kw": 157.0,
+   "battery_kwh": 412.7,
+   "generator_kw": 55.0,
+   "capex_aud": 790395,
+   "lifetime_cost_aud": 1426970,
+   "diesel_litres_saved_p50": 66847,
+   "diesel_litres_saved_p90": 65638,
+   "co2_tonnes_saved_per_year": 179,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "savaii",
+   "name": "Village on Savai'i",
+   "country": "Samoa",
+   "lat": -13.6,
+   "lon": -172.4
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 619.0,
+   "peak_kw": 47.7,
+   "generator_kw": 55.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 76477,
+   "diesel_cost_per_year": 122363,
+   "lifetime_cost": 1916767
+  },
+  "design": {
+   "solar_kw": 157.0,
+   "battery_kwh": 412.7,
+   "purchase_cost": 790395,
+   "lifetime_cost": 1426970,
+   "lifetime_saving": 489796,
+   "litres_saved_p50": 66847,
+   "litres_saved_p90": 65638,
+   "percent_diesel_cut_p50": 87.4,
+   "money_saved_per_year_p50": 106956,
+   "solar_share_percent": 89.3,
+   "generator_hours_per_year": 1486,
+   "payback_years": 7.1
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 38.8
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 1.6,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 65,000 litres of diesel.",
+   "promise_litres": 65000.0,
+   "promise_aud_per_year": 104000,
+   "promise_tonnes_co2_per_year": 174,
+   "evidence": "20 of 20 real weather years saved at least 65,000 L; the worst (2020) saved 65,373 L.",
+   "p90_10_year_average_litres": 66510,
+   "p90_if_any_one_year_dropped": [
+    65610,
+    65738
+   ],
+   "p90_bootstrap_90pct_range": [
+    65373,
+    66211
+   ],
+   "litres_saved_each_year": {
+    "2005": 66559,
+    "2006": 65756,
+    "2007": 66882,
+    "2008": 66825,
+    "2009": 67466,
+    "2010": 67387,
+    "2011": 68875,
+    "2012": 67204,
+    "2013": 65667,
+    "2014": 66567,
+    "2015": 66218,
+    "2016": 66869,
+    "2017": 65382,
+    "2018": 66715,
+    "2019": 66145,
+    "2020": 65373,
+    "2021": 67790,
+    "2022": 69241,
+    "2023": 67520,
+    "2024": 67190
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 157.0,
+    "battery_kwh": 412.7,
+    "capex_aud": 790395,
+    "lifetime_cost_aud": 1426970,
+    "percent_diesel_cut_p50": 87.4,
+    "payback_years": 7.1,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 130.8,
+    "battery_kwh": 275.1,
+    "capex_aud": 600075,
+    "lifetime_cost_aud": 1438701,
+    "percent_diesel_cut_p50": 70.6,
+    "payback_years": 6.6,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 183.1,
+    "battery_kwh": 412.7,
+    "capex_aud": 863475,
+    "lifetime_cost_aud": 1449154,
+    "percent_diesel_cut_p50": 91.0,
+    "payback_years": 7.5,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 157.0,
+    "battery_kwh": 412.7,
+    "capex_aud": 790395,
+    "lifetime_cost_aud": 1426970,
+    "percent_diesel_cut_p50": 87.4,
+    "payback_years": 7.1,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 46,
+   "days_until_first_outage": 0.04
+  }
+ },
+ {
+  "label": "{\"site_id\": \"funafuti\", \"households\": 600, \"has_clinic\": true}",
+  "simresult": {
+   "site": "Funafuti, Tuvalu",
+   "pv_kw": 400.3,
+   "battery_kwh": 1241.8,
+   "generator_kw": 180.0,
+   "capex_aud": 2176370,
+   "lifetime_cost_aud": 4093150,
+   "diesel_litres_saved_p50": 183509,
+   "diesel_litres_saved_p90": 180493,
+   "co2_tonnes_saved_per_year": 492,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "funafuti",
+   "name": "Funafuti",
+   "country": "Tuvalu",
+   "lat": -8.52,
+   "lon": 179.2
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 1524.0,
+   "peak_kw": 141.2,
+   "generator_kw": 180.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 206264,
+   "diesel_cost_per_year": 484721,
+   "lifetime_cost": 7244754
+  },
+  "design": {
+   "solar_kw": 400.3,
+   "battery_kwh": 1241.8,
+   "purchase_cost": 2176370,
+   "lifetime_cost": 4093150,
+   "lifetime_saving": 3151604,
+   "litres_saved_p50": 183509,
+   "litres_saved_p90": 180493,
+   "percent_diesel_cut_p50": 89.0,
+   "money_saved_per_year_p50": 431246,
+   "solar_share_percent": 90.3,
+   "generator_hours_per_year": 1058,
+   "payback_years": 4.9
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 25.8
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 2.35,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 180,000 litres of diesel.",
+   "promise_litres": 180000.0,
+   "promise_aud_per_year": 423000,
+   "promise_tonnes_co2_per_year": 482,
+   "evidence": "18 of 20 real weather years saved at least 180,000 L; the worst (2019) saved 178,714 L.",
+   "p90_10_year_average_litres": 183096,
+   "p90_if_any_one_year_dropped": [
+    180313,
+    181190
+   ],
+   "p90_bootstrap_90pct_range": [
+    178714,
+    182355
+   ],
+   "litres_saved_each_year": {
+    "2005": 182227,
+    "2006": 183820,
+    "2007": 180674,
+    "2008": 188436,
+    "2009": 181319,
+    "2010": 186085,
+    "2011": 194748,
+    "2012": 183313,
+    "2013": 182368,
+    "2014": 183182,
+    "2015": 178868,
+    "2016": 182982,
+    "2017": 186058,
+    "2018": 187299,
+    "2019": 178714,
+    "2020": 183705,
+    "2021": 186107,
+    "2022": 190460,
+    "2023": 188176,
+    "2024": 183093
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 400.3,
+    "battery_kwh": 1241.8,
+    "capex_aud": 2176370,
+    "lifetime_cost_aud": 4093150,
+    "percent_diesel_cut_p50": 89.0,
+    "payback_years": 4.9,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 379.2,
+    "battery_kwh": 1354.7,
+    "capex_aud": 2213255,
+    "lifetime_cost_aud": 4160940,
+    "percent_diesel_cut_p50": 89.6,
+    "payback_years": 5.0,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 442.4,
+    "battery_kwh": 1354.7,
+    "capex_aud": 2390215,
+    "lifetime_cost_aud": 4146184,
+    "percent_diesel_cut_p50": 92.8,
+    "payback_years": 5.2,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 400.3,
+    "battery_kwh": 1241.8,
+    "capex_aud": 2176370,
+    "lifetime_cost_aud": 4093150,
+    "percent_diesel_cut_p50": 89.0,
+    "payback_years": 4.9,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 39,
+   "days_until_first_outage": 0.33
+  }
+ },
+ {
+  "label": "{\"name\": \"Village near Suva\", \"lat\": -18.14, \"lon\": 178.44, \"households\": 70, \"has_clinic\": true}",
+  "simresult": {
+   "site": "Village near Suva",
+   "pv_kw": 61.1,
+   "battery_kwh": 162.2,
+   "generator_kw": 30.0,
+   "capex_aud": 308950,
+   "lifetime_cost_aud": 553706,
+   "diesel_litres_saved_p50": 28369,
+   "diesel_litres_saved_p90": 28350,
+   "co2_tonnes_saved_per_year": 76,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 2
+  },
+  "site": {
+   "id": "custom",
+   "name": "Village near Suva",
+   "country": "",
+   "lat": -18.14,
+   "lon": 178.44
+  },
+  "weather": "NASA POWER hourly, Suva 2023-2024, 0 km away",
+  "years_of_weather": 2,
+  "load": {
+   "daily_kwh": 199.0,
+   "peak_kw": 17.4,
+   "generator_kw": 30.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 31174,
+   "diesel_cost_per_year": 65465,
+   "lifetime_cost": 986605
+  },
+  "design": {
+   "solar_kw": 61.1,
+   "battery_kwh": 162.2,
+   "purchase_cost": 308950,
+   "lifetime_cost": 553706,
+   "lifetime_saving": 432898,
+   "litres_saved_p50": 28369,
+   "litres_saved_p90": 28350,
+   "percent_diesel_cut_p50": 91.0,
+   "money_saved_per_year_p50": 59574,
+   "solar_share_percent": 92.1,
+   "generator_hours_per_year": 836,
+   "payback_years": 5.0
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 38.7
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 2.1,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 28,000 litres of diesel.",
+   "promise_litres": 28000.0,
+   "promise_aud_per_year": 58800,
+   "promise_tonnes_co2_per_year": 75,
+   "evidence": "2 of 2 real weather years saved at least 28,000 L; the worst (2023) saved 28,345 L.",
+   "p90_10_year_average_litres": 28359,
+   "p90_if_any_one_year_dropped": [
+    28350,
+    28350
+   ],
+   "p90_bootstrap_90pct_range": [
+    28345,
+    28392
+   ],
+   "litres_saved_each_year": {
+    "2023": 28345,
+    "2024": 28392
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 61.1,
+    "battery_kwh": 162.2,
+    "capex_aud": 308950,
+    "lifetime_cost_aud": 553706,
+    "percent_diesel_cut_p50": 91.0,
+    "payback_years": 5.0,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 61.1,
+    "battery_kwh": 162.2,
+    "capex_aud": 308950,
+    "lifetime_cost_aud": 553706,
+    "percent_diesel_cut_p50": 91.0,
+    "payback_years": 5.0,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 69,
+   "days_until_first_outage": 0.29
+  }
+ },
+ {
+  "label": "{\"name\": \"Village near Apia\", \"lat\": -13.85, \"lon\": -171.75, \"households\": 50, \"has_clinic\": true}",
+  "simresult": {
+   "site": "Village near Apia",
+   "pv_kw": 40.9,
+   "battery_kwh": 121.4,
+   "generator_kw": 20.0,
+   "capex_aud": 217710,
+   "lifetime_cost_aud": 383388,
+   "diesel_litres_saved_p50": 19790,
+   "diesel_litres_saved_p90": 19706,
+   "co2_tonnes_saved_per_year": 53,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 2
+  },
+  "site": {
+   "id": "custom",
+   "name": "Village near Apia",
+   "country": "",
+   "lat": -13.85,
+   "lon": -171.75
+  },
+  "weather": "NASA POWER hourly, Apia 2023-2024, 0 km away",
+  "years_of_weather": 2,
+  "load": {
+   "daily_kwh": 149.0,
+   "peak_kw": 12.7,
+   "generator_kw": 20.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 21422,
+   "diesel_cost_per_year": 44985,
+   "lifetime_cost": 678494
+  },
+  "design": {
+   "solar_kw": 40.9,
+   "battery_kwh": 121.4,
+   "purchase_cost": 217710,
+   "lifetime_cost": 383388,
+   "lifetime_saving": 295106,
+   "litres_saved_p50": 19790,
+   "litres_saved_p90": 19706,
+   "percent_diesel_cut_p50": 92.4,
+   "money_saved_per_year_p50": 41558,
+   "solar_share_percent": 93.4,
+   "generator_hours_per_year": 720,
+   "payback_years": 5.1
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 48.6
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 2.1,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 19,000 litres of diesel.",
+   "promise_litres": 19000.0,
+   "promise_aud_per_year": 39900,
+   "promise_tonnes_co2_per_year": 51,
+   "evidence": "2 of 2 real weather years saved at least 19,000 L; the worst (2024) saved 19,685 L.",
+   "p90_10_year_average_litres": 19748,
+   "p90_if_any_one_year_dropped": [
+    19706,
+    19706
+   ],
+   "p90_bootstrap_90pct_range": [
+    19685,
+    19894
+   ],
+   "litres_saved_each_year": {
+    "2023": 19894,
+    "2024": 19685
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 40.9,
+    "battery_kwh": 121.4,
+    "capex_aud": 217710,
+    "lifetime_cost_aud": 383388,
+    "percent_diesel_cut_p50": 92.4,
+    "payback_years": 5.1,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 40.9,
+    "battery_kwh": 121.4,
+    "capex_aud": 217710,
+    "lifetime_cost_aud": 383388,
+    "percent_diesel_cut_p50": 92.4,
+    "payback_years": 5.1,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 84,
+   "days_until_first_outage": 0.5
+  }
+ },
+ {
+  "label": "{\"name\": \"Village near Port Vila\", \"lat\": -17.73, \"lon\": 168.32, \"households\": 100, \"has_school\": true}",
+  "simresult": {
+   "site": "Village near Port Vila",
+   "pv_kw": 78.0,
+   "battery_kwh": 196.3,
+   "generator_kw": 30.0,
+   "capex_aud": 385255,
+   "lifetime_cost_aud": 707661,
+   "diesel_litres_saved_p50": 31223,
+   "diesel_litres_saved_p90": 30995,
+   "co2_tonnes_saved_per_year": 84,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 2
+  },
+  "site": {
+   "id": "custom",
+   "name": "Village near Port Vila",
+   "country": "",
+   "lat": -17.73,
+   "lon": 168.32
+  },
+  "weather": "NASA POWER hourly, Port Vila 2023-2024, 0 km away",
+  "years_of_weather": 2,
+  "load": {
+   "daily_kwh": 265.0,
+   "peak_kw": 23.4,
+   "generator_kw": 30.0,
+   "critical_kw": 0.0,
+   "basis": "data/loads.py village model, households and buildings"
+  },
+  "today": {
+   "diesel_litres_per_year": 35367,
+   "diesel_cost_per_year": 74270,
+   "lifetime_cost": 1122793
+  },
+  "design": {
+   "solar_kw": 78.0,
+   "battery_kwh": 196.3,
+   "purchase_cost": 385255,
+   "lifetime_cost": 707661,
+   "lifetime_saving": 415132,
+   "litres_saved_p50": 31223,
+   "litres_saved_p90": 30995,
+   "percent_diesel_cut_p50": 88.3,
+   "money_saved_per_year_p50": 65567,
+   "solar_share_percent": 90.3,
+   "generator_hours_per_year": 1168,
+   "payback_years": 5.7
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 46.3
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 2.1,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 30,000 litres of diesel.",
+   "promise_litres": 30000.0,
+   "promise_aud_per_year": 63000,
+   "promise_tonnes_co2_per_year": 80,
+   "evidence": "2 of 2 real weather years saved at least 30,000 L; the worst (2023) saved 30,939 L.",
+   "p90_10_year_average_litres": 31109,
+   "p90_if_any_one_year_dropped": [
+    30995,
+    30995
+   ],
+   "p90_bootstrap_90pct_range": [
+    30939,
+    31506
+   ],
+   "litres_saved_each_year": {
+    "2023": 30939,
+    "2024": 31506
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 78.0,
+    "battery_kwh": 196.3,
+    "capex_aud": 385255,
+    "lifetime_cost_aud": 707661,
+    "percent_diesel_cut_p50": 88.3,
+    "payback_years": 5.7,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 70.2,
+    "battery_kwh": 176.7,
+    "capex_aud": 346755,
+    "lifetime_cost_aud": 719889,
+    "percent_diesel_cut_p50": 82.0,
+    "payback_years": 5.5,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 70.2,
+    "battery_kwh": 176.7,
+    "capex_aud": 346755,
+    "lifetime_cost_aud": 719889,
+    "percent_diesel_cut_p50": 82.0,
+    "payback_years": 5.5,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 78.0,
+    "battery_kwh": 196.3,
+    "capex_aud": 385255,
+    "lifetime_cost_aud": 707661,
+    "percent_diesel_cut_p50": 88.3,
+    "payback_years": 5.7,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 67,
+   "days_until_first_outage": 0.58
+  }
+ },
+ {
+  "label": "{\"site_id\": \"kadavu\", \"diesel_litres_per_month\": 4000}",
+  "simresult": {
+   "site": "Village on Kadavu, Fiji",
+   "pv_kw": 102.9,
+   "battery_kwh": 234.0,
+   "generator_kw": 45.0,
+   "capex_aud": 487020,
+   "lifetime_cost_aud": 952071,
+   "diesel_litres_saved_p50": 44515,
+   "diesel_litres_saved_p90": 43713,
+   "co2_tonnes_saved_per_year": 119,
+   "blackout_hours_worst_year": 0,
+   "critical_load_survives_7d_no_fuel": true,
+   "years_simulated": 20
+  },
+  "site": {
+   "id": "kadavu",
+   "name": "Village on Kadavu",
+   "country": "Fiji",
+   "lat": -19.05,
+   "lon": 178.18
+  },
+  "weather": "NASA POWER hourly, 2005-2024 (20 years)",
+  "years_of_weather": 20,
+  "load": {
+   "daily_kwh": 394.7,
+   "peak_kw": 28.7,
+   "generator_kw": 45.0,
+   "critical_kw": 0.4,
+   "basis": "data/loads.py village model, scaled to match 4,000 litres of diesel per month"
+  },
+  "today": {
+   "diesel_litres_per_year": 53277,
+   "diesel_cost_per_year": 90571,
+   "lifetime_cost": 1401931
+  },
+  "design": {
+   "solar_kw": 102.9,
+   "battery_kwh": 234.0,
+   "purchase_cost": 487020,
+   "lifetime_cost": 952071,
+   "lifetime_saving": 449860,
+   "litres_saved_p50": 44515,
+   "litres_saved_p90": 43713,
+   "percent_diesel_cut_p50": 83.6,
+   "money_saved_per_year_p50": 75675,
+   "solar_share_percent": 87.3,
+   "generator_hours_per_year": 1705,
+   "payback_years": 6.2
+  },
+  "no_fuel_ship": {
+   "hours_clinic_powered": 168,
+   "of_hours": 168,
+   "days_clinic_powered": 7.0,
+   "first_outage_hour": null,
+   "cloudiest_week_sunshine_vs_average_percent": 36.3
+  },
+  "assumptions": {
+   "solar_cost_per_kw": 2800.0,
+   "battery_cost_per_kwh": 850.0,
+   "om_fraction": 0.015,
+   "project_years": 20,
+   "discount_rate": 0.04,
+   "diesel_price_per_litre": 1.7,
+   "co2_kg_per_litre": 2.68,
+   "gen_om_per_kwh": 0.08,
+   "battery_life_years": 10,
+   "pv_derate": 0.8,
+   "batt_eff_charge": 0.95,
+   "batt_eff_discharge": 0.95,
+   "batt_min_soc": 0.2,
+   "batt_c_rate": 0.5,
+   "batt_start_soc": 0.5,
+   "gen_min_load": 0.3,
+   "fuel_a": 0.276,
+   "fuel_b": 0.025
+  },
+  "bank": {
+   "sentence": "In 9 years out of 10, this island saves at least 43,000 litres of diesel.",
+   "promise_litres": 43000.0,
+   "promise_aud_per_year": 73100,
+   "promise_tonnes_co2_per_year": 115,
+   "evidence": "20 of 20 real weather years saved at least 43,000 L; the worst (2012) saved 43,156 L.",
+   "p90_10_year_average_litres": 44182,
+   "p90_if_any_one_year_dropped": [
+    43708,
+    43741
+   ],
+   "p90_bootstrap_90pct_range": [
+    43156,
+    43893
+   ],
+   "litres_saved_each_year": {
+    "2005": 45006,
+    "2006": 44983,
+    "2007": 44456,
+    "2008": 43674,
+    "2009": 43902,
+    "2010": 45020,
+    "2011": 43747,
+    "2012": 43156,
+    "2013": 44353,
+    "2014": 45252,
+    "2015": 44757,
+    "2016": 45278,
+    "2017": 44941,
+    "2018": 44225,
+    "2019": 44150,
+    "2020": 44573,
+    "2021": 44597,
+    "2022": 45206,
+    "2023": 43717,
+    "2024": 43806
+   },
+   "covers": "weather only; not load growth, panel ageing or diesel price changes"
+  },
+  "options": {
+   "cheapest_over_20_years": {
+    "pv_kw": 102.9,
+    "battery_kwh": 234.0,
+    "capex_aud": 487020,
+    "lifetime_cost_aud": 952071,
+    "percent_diesel_cut_p50": 83.6,
+    "payback_years": 6.2,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_to_buy": {
+    "pv_kw": 68.6,
+    "battery_kwh": 87.7,
+    "capex_aud": 266625,
+    "lifetime_cost_aud": 960301,
+    "percent_diesel_cut_p50": 57.9,
+    "payback_years": 4.8,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "most_diesel_free": {
+    "pv_kw": 120.0,
+    "battery_kwh": 263.2,
+    "capex_aud": 559720,
+    "lifetime_cost_aud": 959370,
+    "percent_diesel_cut_p50": 90.6,
+    "payback_years": 6.6,
+    "critical_load_survives_7d_no_fuel": true
+   },
+   "cheapest_ignoring_clinic": {
+    "pv_kw": 102.9,
+    "battery_kwh": 234.0,
+    "capex_aud": 487020,
+    "lifetime_cost_aud": 952071,
+    "percent_diesel_cut_p50": 83.6,
+    "payback_years": 6.2,
+    "critical_load_survives_7d_no_fuel": true
+   }
+  },
+  "price_of_resilience_aud": 0,
+  "whole_island_no_fuel": {
+   "hours_powered_of_168": 42,
+   "days_until_first_outage": 0.25
+  }
+ }
+]

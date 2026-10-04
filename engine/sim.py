@@ -69,13 +69,31 @@ def _fingerprint(site, load, critical, ghi_years, weather_label, overrides, grid
 
 
 def simulate(site, load, critical, ghi_years, weather_label, overrides=None, grid=APP_GRID):
-    """The full plan for one site (see contracts/FORMATS.md). Same inputs -> cached answer."""
+    """The full plan for one site (see contracts/FORMATS.md). Same inputs -> cached answer.
+
+    If the inputs exactly match a precomputed answer (engine/precomputed/, built by
+    python -m engine.precompute), that answer is used instead of re-running the search: the map and
+    the default plans come back at once, even on a cold serverless start (Vercel)."""
     key = _fingerprint(site, load, critical, ghi_years, weather_label, overrides, grid)
     if key not in _PLANS:
         if len(_PLANS) >= _PLANS_MAX:
             _PLANS.pop(next(iter(_PLANS)))          # forget the oldest
-        _PLANS[key] = plan(site, load, critical, ghi_years, weather_label, overrides, grid)[0]
+        pre = _precomputed(key)
+        _PLANS[key] = pre if pre is not None else plan(site, load, critical, ghi_years, weather_label,
+                                                       overrides, grid)[0]
     return copy.deepcopy(_PLANS[key])                # callers add to the result; keep the cache clean
+
+
+def _precomputed(key):
+    """The precomputed answer for exactly these inputs and this engine code, or None.
+    Same fingerprint as engine.service (inputs + engine version), so a stale file is never used."""
+    try:
+        from engine import service                  # imported here: service imports this module
+        fp = hashlib.sha1(key.encode() + json.dumps([service.ENGINE_VERSION, None]).encode()).hexdigest()[:16]
+        hit = service._load_precomputed()["by_fp"].get(fp)
+    except Exception:                                # no files / unreadable: just compute it
+        return None
+    return copy.deepcopy(hit) if hit else None
 
 
 def plan(site, load, critical, ghi_years, weather_label, overrides=None, grid=APP_GRID):

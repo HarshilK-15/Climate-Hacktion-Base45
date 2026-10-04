@@ -1,0 +1,17 @@
+# Never upload to Vercel. Secrets go in Vercel's dashboard (Settings > Environment Variables), not files.
+.env
+.env.*
+venv/
+.venv/
+env/
+
+# Local-only data and caches
+data/shipless.db
+received.jsonl
+__pycache__/
+*.pyc
+.pytest_cache/
+.claude/
+
+# Not part of the web app
+firmware/

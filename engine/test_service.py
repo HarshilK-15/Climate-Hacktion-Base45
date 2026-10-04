@@ -199,6 +199,25 @@ def test_published_case_fuel_curve_and_as_built_system():
     assert np.median(share) >= 0.97 and t["unserved_hours"].max() == 0
 
 
+def test_server_plans_reuse_precomputed_answers():
+    """The app's own plan path (sim.simulate) answers a default island from the precomputed file at once."""
+    from data.weather import get_ghi, get_site
+    site = dict(get_site("kadavu"))
+    load, critical, _ = build_load(site)
+    ghi, label = get_ghi(site["lat"], site["lon"])
+    sim._PLANS.clear()
+    t0 = time.perf_counter()
+    r = sim.simulate(site, load, critical, ghi, label)
+    seconds = time.perf_counter() - t0
+    pre = service.precomputed("kadavu")
+    assert pre is not None and r.get("meta", {}).get("source") == "precomputed", \
+        "engine/precomputed is stale or missing: run python -m engine.precompute"
+    assert r["design"] == pre["design"] and r["simresult"] == pre["simresult"] and seconds < 1.0
+    changed = dict(site, households=site["households"] + 1)          # any change -> computed live
+    load2, critical2, _ = build_load(changed)
+    assert "meta" not in sim.simulate(changed, load2, critical2, ghi, label, grid=SMALL)
+
+
 def _free_port():
     s = socket.socket()
     s.bind(("127.0.0.1", 0))

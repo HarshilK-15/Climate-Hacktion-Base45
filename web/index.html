@@ -100,16 +100,19 @@
     </section>
 
     <!-- PLAN -->
-    <section id="tab-plan" class="tab" role="tabpanel" hidden>
+    <section id="tab-plan" class="tab tab-wide" role="tabpanel" hidden>
       <div class="plan-grid">
         <form id="plan-form" class="plan-form">
           <p class="eyebrow"><span>02</span>Plan an island</p>
           <h2>Tell us about the island</h2>
-          <label for="describe">Describe it in your own words</label>
-          <textarea id="describe" rows="4" placeholder="e.g. We have 60 houses, a clinic with a vaccine fridge and a school. Our 40 kW generator uses 2,500 litres of diesel a month at $2.10 a litre."></textarea>
-          <button type="button" id="describe-btn" class="secondary">Fill in the form from my description</button>
-          <p class="hint" id="describe-note"></p>
 
+          <label for="describe" class="step-label"><span class="step-num">1</span>Describe the island
+            <span class="ai-tag">✦ AI fills the form</span></label>
+          <textarea id="describe" rows="3" placeholder="e.g. We have 60 houses on Kadavu, a clinic with a vaccine fridge and a school. Our 40 kW generator uses 2,500 litres of diesel a month."></textarea>
+          <button type="button" id="describe-btn" class="secondary">Fill in the form from my description</button>
+          <p class="ai-note" id="describe-note" role="status" hidden></p>
+
+          <p class="step-label"><span class="step-num">2</span>Check the numbers</p>
           <label for="site">Location (for real sunshine data)</label>
           <select id="site"></select>
           <div class="two">
@@ -117,8 +120,8 @@
             <div><label for="generator_kw">Generator size (kW)</label><input id="generator_kw" type="number" min="0" step="any"></div>
           </div>
           <div class="two">
-            <div><label for="diesel_litres_per_month">Diesel per month (litres)</label><input id="diesel_litres_per_month" type="number" min="0" placeholder="optional"></div>
-            <div><label for="diesel_price_per_litre">Diesel price (USD per litre)</label><input id="diesel_price_per_litre" type="number" min="0" step="0.01"></div>
+            <div><label for="diesel_litres_per_month">Diesel per month (L)</label><input id="diesel_litres_per_month" type="number" min="0" placeholder="optional"></div>
+            <div><label for="diesel_price_per_litre">Diesel price (AUD/L)</label><input id="diesel_price_per_litre" type="number" min="0" step="0.01"></div>
           </div>
           <div class="two">
             <div><label for="other_kw">Other daytime load (kW)</label><input id="other_kw" type="number" min="0" step="any"></div>
@@ -127,15 +130,23 @@
               <label><input id="has_school" type="checkbox"> School</label>
             </div>
           </div>
-          <label class="live-toggle"><input id="use_live_shape" type="checkbox"> Use the daily pattern measured by the live sensor</label>
+          <label class="live-toggle"><input id="use_live_shape" type="checkbox"> Use the live sensor's daily pattern</label>
           <button type="submit" id="plan-btn">Simulate 20 years of weather</button>
         </form>
 
         <div class="plan-out" id="plan-out">
           <div class="empty">
             <h2>Your plan appears here</h2>
-            <p>Pick a location, check the numbers, then run the simulation. It tests over a hundred
-              solar and battery sizes against every hour of real weather and picks the cheapest one that keeps the lights on.</p>
+            <ol class="guide">
+              <li><span class="step-num">1</span><div><strong>Describe the island</strong>Type a sentence or two in your own
+                words. The AI fills in the form for you, and asks if something's missing.</div></li>
+              <li><span class="step-num">2</span><div><strong>Check the numbers</strong>Pick the island for its real sunshine
+                and fix anything that looks wrong. Highlighted fields came from the AI.</div></li>
+              <li><span class="step-num">3</span><div><strong>Simulate</strong>Over a hundred solar and battery sizes are tested
+                against every hour of 20 years of real weather. The cheapest one that keeps the lights on wins.</div></li>
+            </ol>
+            <p class="empty-note"><span class="ai-badge">✦ AI</span>The plain-English summary is written by AI, and every
+              number in it is checked against the simulation before you see it.</p>
           </div>
         </div>
       </div>

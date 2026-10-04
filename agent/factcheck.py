@@ -90,14 +90,15 @@ def scan(paths, rows=None):
             continue
         items = []
         for line, n, text in claims_in(f.read_text(encoding="utf-8")):
-            hit = next(((src, st) for src, v, st, pct in pool
-                        if (pct or n.kind != "percent") and _match(n, v)), None)
-            if hit is None:
-                status, src = "UNSOURCED", ""
-            elif any(hit[1].upper().startswith(s) for s in flagged_status):
-                status, src = "FLAGGED IN SHEET", f"{hit[0]} [{hit[1]}]"
+            hits = [(src, st) for src, v, st, pct in pool if (pct or n.kind != "percent") and _match(n, v)]
+            bad = lambda h: any(h[1].upper().startswith(s) for s in flagged_status)
+            good = [h for h in hits if not bad(h)]      # a properly sourced match wins over a flagged one
+            if good:
+                status, src = "sourced", good[0][0]
+            elif hits:
+                status, src = "FLAGGED IN SHEET", f"{hits[0][0]} [{hits[0][1]}]"
             else:
-                status, src = "sourced", hit[0]
+                status, src = "UNSOURCED", ""
             items.append({"line": line, "number": n.text, "text": text, "status": status, "source": src})
         result[str(p)] = items
     return result

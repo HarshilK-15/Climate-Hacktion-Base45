@@ -306,6 +306,102 @@ def test_sms_without_twilio_is_demo_mode_and_never_logs_the_number():
     assert r["sent"] is False and r["mode"] == "demo" and "1234" not in r["to"]
 
 
+# ------------------------------------------------------------------------------------ keys, abuse, providers
+
+_KEY_VARS = ("GEMINI_API_KEY", "GOOGLE_API_KEY", "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "LLM_KEY",
+             "SHIPLESS_PROVIDER", "SHIPLESS_MODEL", "SHIPLESS_AI", "SHIPLESS_TEST_OTHER")
+
+
+@contextlib.contextmanager
+def env(**values):
+    """Run with exactly these key-related variables set (others removed), then restore everything."""
+    saved = {k: os.environ.pop(k, None) for k in _KEY_VARS}
+    os.environ.update({k: v for k, v in values.items() if v is not None})
+    try:
+        yield
+    finally:
+        for k in _KEY_VARS:
+            os.environ.pop(k, None)
+            if saved[k] is not None:
+                os.environ[k] = saved[k]
+
+
+def test_key_file_is_read_but_never_overrides_the_terminal():
+    """The key can live in the git-ignored .env file; a variable set in the terminal always wins."""
+    with env(SHIPLESS_TEST_OTHER="from-terminal"), tempfile.TemporaryDirectory() as d:
+        f = Path(d) / ".env"
+        f.write_text("# comment\nGEMINI_API_KEY=\"test-key-123\"\nexport SHIPLESS_TEST_OTHER=from-file\n",
+                     encoding="utf-8")
+        loaded = llm.load_env_file(f)
+        assert loaded == ["GEMINI_API_KEY"] and os.environ["GEMINI_API_KEY"] == "test-key-123"
+        assert os.environ["SHIPLESS_TEST_OTHER"] == "from-terminal"
+
+
+def test_gemini_is_used_when_its_key_is_present():
+    """With a Gemini key the app uses Gemini; with none it runs on rules; a setting can force the provider."""
+    with env():
+        assert llm.provider() is None and not llm.has_key()
+    with env(GEMINI_API_KEY="x" * 39):
+        assert llm.provider() == "gemini" and llm.current_model().startswith("gemini-")
+    with env(GEMINI_API_KEY="x" * 39, SHIPLESS_PROVIDER="anthropic"):
+        assert llm.provider() == "anthropic"
+    with env(GEMINI_API_KEY="x" * 39, SHIPLESS_AI="off"):
+        assert not llm.has_key()
+
+
+def test_hourly_cap_stops_a_stranger_burning_the_key():
+    """If the app is public, someone hammering it can't spend the key: past the hourly cap, templates are used."""
+    llm.set_backend(None)               # also clears the call counter
+    old = llm.MAX_CALLS_PER_HOUR
+    llm.MAX_CALLS_PER_HOUR = 2
+    try:
+        llm._spend()
+        llm._spend()
+        try:
+            llm._spend()
+        except llm.LLMError as e:
+            assert "hourly" in str(e)
+        else:
+            raise AssertionError("cap not enforced")
+    finally:
+        llm.MAX_CALLS_PER_HOUR = old
+        llm.set_backend(None)
+
+
+def test_identical_requests_are_answered_from_memory():
+    """The same question twice costs one model call, not two."""
+    calls = []
+    with fake_model(lambda *a: calls.append(1) or "OK"):
+        assert llm.ask("s", "u") == llm.ask("s", "u") == "OK"
+    assert len(calls) == 1
+
+
+def test_model_answers_are_converted_to_the_right_types():
+    """'1200' becomes 1200 and the string 'false' becomes False, never True: no silent type bugs."""
+    out = intake._coerce({"households": "1,200", "has_clinic": "false", "has_school": "yes",
+                          "diesel_price": "2.40", "generator_size": "forty", "place_name": "Kadavu"})
+    assert out["households"] == 1200 and out["has_clinic"] is False and out["has_school"] is True
+    assert out["diesel_price"] == 2.4 and out["generator_size"] is None and out["place_name"] == "Kadavu"
+
+
+def test_no_api_key_is_in_any_committed_file():
+    """No API key is in any file git tracks, and the .env file that holds the key is git-ignored."""
+    import re
+    import subprocess
+    files = subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True).stdout.split()
+    patterns = re.compile(r"AIza[0-9A-Za-z_\-]{35}|sk-ant-[A-Za-z0-9_\-]{20,}")
+    leaks = []
+    for name in files:
+        p = ROOT / name
+        if p.suffix.lower() in (".png", ".jpg", ".npz", ".pdf", ".ico") or not p.is_file():
+            continue
+        if patterns.search(p.read_text(encoding="utf-8", errors="ignore")):
+            leaks.append(name)
+    assert not leaks, f"API key found in tracked files: {leaks}"
+    assert subprocess.run(["git", "check-ignore", "-q", ".env"], cwd=ROOT).returncode == 0
+    assert ".env" not in files
+
+
 # ------------------------------------------------------------------------------------ the server's interface
 
 def test_server_interface_is_unchanged():

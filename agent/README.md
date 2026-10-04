@@ -25,11 +25,50 @@ Then run `python -m agent.demo` (or open `agent/out/checker_demo.html`).
     python -m agent.sms                     # every alert as the technician's text message
     python -m agent.factcheck               # every number in our own docs: sourced, or flagged
     python -m agent.evaluate                # accuracy results -> agent/eval/RESULTS.md
-    python -m agent.test_agent              # 29 tests, offline, with a fake model
+    python -m agent.test_agent              # 35 tests, offline, with a fake model
+    python -m agent.llm --check             # is the key found and safe, does one call work? (never prints it)
 
-AI on: set `ANTHROPIC_API_KEY` (or the brief's `LLM_KEY`); never in code or git. AI off: no key, or
-`SHIPLESS_AI=off` (use it if the venue Wi-Fi is bad: everything falls back to rules and templates,
-which pass the same checker). Model: `claude-opus-5-5`, changeable with `SHIPLESS_MODEL`.
+## The API key: where it goes, and how it can't leak or be abused
+
+**Step 1: put it in `.env`.** Copy `agent/env.example` to the **project folder** (next to
+`README.md`), name the copy `.env`, and paste the key after `GEMINI_API_KEY=`.
+- `.env` is in `.gitignore`, so git never commits it. A test (`test_no_api_key_is_in_any_committed_file`)
+  fails if a Google or Anthropic key ever appears in a tracked file, or if `.env` stops being ignored.
+- A variable set in the terminal (`$env:GEMINI_API_KEY="..."`) overrides the file.
+
+**Step 2: run `python -m agent.llm --check`.** It shows where the key was found, only its first and
+last 4 characters, whether `.env` is git-ignored, and the result of one tiny test call.
+
+**Where the key never goes:** code, the web app (anything in `web/` is visible to every visitor),
+the Pico, chat messages, screenshots or the demo video. Only the server reads it.
+
+**Protecting it in Google's console** (the key's Google Cloud project, *APIs & Services >
+Credentials*):
+- Restrict the key to the **Generative Language API** only.
+- If the server has a fixed address, add an **IP address** restriction.
+- Free-tier key (no billing account): someone who steals it can't run up a bill, only hit the rate
+  limit.
+- Paid key: set a **budget alert**.
+- Note that Google's terms let it use prompts sent through free-tier keys to improve its products.
+  We only send island facts, never personal data.
+
+**Abuse guards in the app:**
+- At most `SHIPLESS_AI_MAX_CALLS_PER_HOUR` (120) model calls an hour; after that, templates.
+- Identical requests are answered from memory.
+- `SHIPLESS_AI=off` switches the AI off instantly.
+
+This matters if the app goes on a public ngrok or Render URL, where anyone can press the buttons.
+
+**If it ever leaks** (committed, pasted or shown on screen): delete the key in Google AI Studio
+straight away and make a new one. Deleting the commit is not enough, because git history and forks
+keep it.
+
+**Model:** `gemini-3.5-flash` (stable; Gemini 2.5 shuts down on 16 Oct 2026). Change it with
+`SHIPLESS_MODEL`; see what your key can use with `python -m agent.llm --models`. Claude still works:
+set `ANTHROPIC_API_KEY` instead (or `SHIPLESS_PROVIDER=anthropic`).
+
+**AI off:** no key, or `SHIPLESS_AI=off`. Use it if the venue Wi-Fi is bad: everything falls back to
+rules and templates, which pass the same checker.
 
 ## How it works
 
@@ -58,7 +97,7 @@ which numbers weren't in the facts and tries again, up to 3 drafts in total. The
 is shown. Rejected drafts are kept in `attempts`, so the app can show "1 draft rejected". The
 templates pass the same checker on every island; a test enforces it.
 
-**The intake** (`intake.py`). Facts are extracted to a fixed JSON schema (Claude structured outputs),
+**The intake** (`intake.py`). Facts are extracted to a fixed JSON schema (the model's structured JSON output),
 and every field must quote the user's words:
 - **Quotes are checked.** Code confirms each quote is really in the user's text and contains the
   number. Invented facts are dropped and the user is told.
@@ -107,7 +146,7 @@ to. Run `python -m agent.evaluate` with a key to score the AI itself, and paste 
 | Explainer: passes the checker first try | **20/20** engine results (7 islands + 13 variations) |
 | Explainer: within 120 words | 20/20 |
 | **Tamper test: corrupted engine result caught** | **20/20** |
-| Front-desk tests | 29 passing (`python -m agent.test_agent`) |
+| Front-desk tests | 35 passing (`python -m agent.test_agent`) |
 
 ## The demo for the video (brief 5.3)
 
@@ -137,14 +176,19 @@ features:
 - **Funder page:** `GET /api/funder-summary` returning `agent.explain.funder_summary()["html"]`.
 - **SMS:** `/api/alerts` can call `agent.sms.compose(alert, site_name)` once per new alert (cached)
   for AI wording; keep `alert_sms` for every poll. Pass the site name; today alerts say "your site".
-- **Dependency:** the root `requirements.txt` needs `anthropic` (added in this branch).
+- **Dependency:** the root `requirements.txt` needs `google-genai` (and `anthropic` if Claude is used);
+  both are added in this branch.
+- **Start-up message:** `server/app.py` prints "AI explanations: ON (model)" using `agent.has_key()` and
+  `agent.MODEL`; both now reflect Gemini. Its "set ANTHROPIC_API_KEY" hint should become "put
+  GEMINI_API_KEY in .env".
 
 ## Files
 
 | File | Job |
 | --- | --- |
 | `agent.py` | what the server imports (unchanged names) |
-| `llm.py` | the only file that calls the model; key from the environment; `SHIPLESS_AI=off` switch |
+| `llm.py` | the only file that calls the model (Gemini, or Claude); reads the key from `.env`; hourly cap, cache, `SHIPLESS_AI=off`; `--check` |
+| `env.example` | template for the git-ignored `.env` key file |
 | `check_numbers.py` | the checker; `highlight_html()` for the app, `ansi()` for the terminal |
 | `facts.py` | engine output to the fact sheet the AI may see |
 | `intake.py` | description to SiteInput, follow-up questions, quotes checked |
@@ -153,6 +197,6 @@ features:
 | `demo.py` | the three-scene on-camera demo, plus `out/checker_demo.html` |
 | `factcheck.py`, `fact_check.csv` | the fact-check sheet and the scanner for our own documents |
 | `evaluate.py`, `eval/` | accuracy tests (20 intake cases, 20 engine results), `RESULTS.md` |
-| `test_agent.py` | 29 offline tests |
+| `test_agent.py` | 35 offline tests |
 | `DISCLOSURES.md` | every AI model, tool, library and dataset (submission "Tools used") |
 | `USER_TESTING.md` | script and record sheet for testing with 3-5 non-technical people, and the Pacific-language notes |

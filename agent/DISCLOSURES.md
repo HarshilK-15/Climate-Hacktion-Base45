@@ -8,8 +8,9 @@ including AI chat or coding assistants used outside this repository.
 
 | What | Version | Where it is used | Link |
 | --- | --- | --- | --- |
-| Claude Opus 5.5 (Anthropic), through the Claude API | model ID `claude-opus-5-5` (set with `SHIPLESS_MODEL`) | `agent/`: description to form fields, plain-language explanations, SMS wording. It only sees the engine's fact sheet; every number it writes is checked by `agent/check_numbers.py` | https://docs.claude.com |
-| Server-side refusal fallback (Claude API beta `server-side-fallback-2026-07-01`) | `fallbacks: "default"` | `agent/llm.py`: if the model declines, the API retries on Anthropic's recommended fallback model | https://docs.claude.com |
+| Gemini 3.5 Flash (Google), through the Gemini API | model ID `gemini-3.5-flash` (set with `SHIPLESS_MODEL`) | `agent/`: description to form fields, plain-language explanations, SMS wording. It only sees the engine's fact sheet; every number it writes is checked by `agent/check_numbers.py` | https://ai.google.dev/gemini-api/docs/models |
+| Claude Opus 5.5 (Anthropic): optional alternative, not used unless `ANTHROPIC_API_KEY` is set | model ID `claude-opus-5-5` | same features, same checker | https://docs.claude.com |
+| *Team: record which model the demo actually ran on* | | `python -m agent.llm --check` prints it | |
 | Rules and templates (no AI) | this repo | the same features when there is no API key or `SHIPLESS_AI=off`; also the fallback whenever the AI fails the checker | `agent/intake.py`, `agent/explain.py`, `agent/sms.py` |
 
 No other AI model is called by the product. The engine (`engine/`) uses no AI: it is physics and
@@ -28,7 +29,8 @@ arithmetic, checked by 63 tests.
 | Library | Version | Licence | Used for |
 | --- | --- | --- | --- |
 | Python | 3.11.9 | PSF | everything server-side |
-| anthropic (Python SDK) | 1.11.0 | MIT | the Claude API calls in `agent/llm.py` |
+| google-genai (Google Gen AI SDK) | 2.28.0 | Apache-2.0 | the Gemini API calls in `agent/llm.py` |
+| anthropic (Python SDK) | 1.11.0 | MIT | optional Claude API calls in `agent/llm.py` |
 | httpx2 | 2.13.1 | BSD-3 | HTTP for the anthropic SDK |
 | FastAPI | 0.142.2 | MIT | the server and the engine service |
 | Starlette | 1.7.0 | BSD-3 | under FastAPI |

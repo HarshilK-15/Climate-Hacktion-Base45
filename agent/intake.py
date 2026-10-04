@@ -226,8 +226,34 @@ _PRICE = re.compile(rf"(?P<c1>A\$|AU\$|AUD|US\$|USD|FJ\$|FJD|NZ\$|NZD|T\$|WS\$|\
                     rf"|(?P<v2>{_NUM})\s*(?P<c2>AUD|USD|FJD|NZD|tala|pa'anga|vatu|dollars?)", re.I)
 
 
+def _coerce(raw):
+    """Model output -> the schema's types. Some models send "1200" or "true" as strings, and
+    bool("false") is True in Python, so every value is converted explicitly; anything that doesn't
+    convert becomes None (unknown) rather than a guess."""
+    out = _blank()
+    for k, spec in SCHEMA["properties"].items():
+        v = raw.get(k) if isinstance(raw, dict) else None
+        kinds = [s.get("type") for s in spec.get("anyOf", [spec])]
+        if isinstance(v, str) and v.strip().lower() in ("", "null", "none", "unknown", "n/a"):
+            v = None
+        if v is None:
+            out[k] = None if "null" in kinds else out.get(k)
+        elif "boolean" in kinds:
+            out[k] = v if isinstance(v, bool) else {"true": True, "yes": True, "false": False,
+                                                     "no": False}.get(str(v).strip().lower())
+        elif "integer" in kinds or "number" in kinds:
+            try:
+                n = float(str(v).replace(",", "").strip())
+                out[k] = int(round(n)) if "integer" in kinds else n
+            except ValueError:
+                out[k] = None
+        else:
+            out[k] = str(v)
+    return out
+
+
 def ai_extract(conversation):
-    return {**_blank(), **llm.ask(SYSTEM, conversation, schema=SCHEMA, effort="low", max_tokens=8000)}
+    return _coerce(llm.ask(SYSTEM, conversation, schema=SCHEMA, effort="low", max_tokens=8000))
 
 
 # ---------------------------------------------------------------------------------------------

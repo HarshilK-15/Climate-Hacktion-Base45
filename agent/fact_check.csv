@@ -46,8 +46,11 @@ Demo villages: households; generator sizes; diesel prices,see data/sites.json,da
 Engine diesel cut per island (typical year),83.5% to 92.1%,engine/precomputed/index.json,engine output,2026-10-04,ENGINE OUTPUT,agent README; funder summary
 Ta'u microgrid switched on,November 2016,https://www.utilitydive.com/news/tesla-solarcity-ready-diesel-reducing-microgrid-in-american-samoa/431053/,AI draft - human to confirm,2026-10-04,SOURCED (press),engine/published_case.py
 SMS length limits,160 characters (GSM-7 alphabet); 70 characters (UCS-2),https://www.3gpp.org/DynaReport/23038.htm,AI draft - human to confirm,2026-10-04,STANDARD: 3GPP TS 23.038 (SMS alphabets); 160 / 70 per single message,agent/sms.py
-Front-desk tests,29,agent/test_agent.py,Mech A role (run by Elec B),2026-10-04,VERIFIED: all pass (python -m agent.test_agent),agent README
+Front-desk tests,35,agent/test_agent.py,Mech A role (run by Elec B),2026-10-04,VERIFIED: all pass (python -m agent.test_agent),agent README
 Intake accuracy without AI (rules),14/15 (brief 5.2 set); 19/20 (full set); 15/15 valid SiteInput,agent/eval/RESULTS.md,Mech A role (run by Elec B),2026-10-04,MEASURED (python -m agent.evaluate) - re-run with an API key for the AI score,agent README
 Explainer and checker on 20 engine results,20/20 pass first try (templates); 20/20 tampered results caught,agent/eval/RESULTS.md,Mech A role (run by Elec B),2026-10-04,MEASURED (python -m agent.evaluate),agent README; video
 Funder one-pager self-check,77 numbers - all traced,agent/out/funder_summary.md,Mech A role (run by Elec B),2026-10-04,MEASURED (python -m agent.explain funder),agent README
 Intake limits,at most 3 follow-up questions; 120-word summaries,brief 5.2 and 5.3,Mech A role,2026-10-04,DESIGN CHOICE from the brief,agent README
+AI model used by the app,gemini-3.5-flash (stable),https://ai.google.dev/gemini-api/docs/models,AI draft - human to confirm,2026-10-04,SOURCED: listed as a stable model on Google's models page,agent/llm.py; DISCLOSURES
+Gemini 2.5 models shut down,16 October 2026,https://ai.google.dev/gemini-api/docs/models,AI draft - human to confirm,2026-10-04,SOURCED (Google models page / search result) - confirm on the page,agent README
+AI abuse guard,120 model calls an hour (default),agent/llm.py,Mech A role (run by Elec B),2026-10-04,DESIGN CHOICE (ASSUMPTION in code),agent README

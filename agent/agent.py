@@ -12,9 +12,9 @@ Without a key everything still works on rules and templates, so the demo never b
 This file keeps the names server/app.py already uses (parse_description, explain, alert_sms,
 has_key, MODEL) with the same response shapes, plus extra fields the web app can use later.
 
-Set the key before starting the server (keep it out of git!):
-  Mac/Linux:  export ANTHROPIC_API_KEY=sk-ant-...      (LLM_KEY also works)
-  Windows:    set ANTHROPIC_API_KEY=sk-ant-...
+The key (Gemini by default) goes in a git-ignored file called .env in the project folder:
+    GEMINI_API_KEY=your-key-here          (template: agent/env.example)
+Check it with: python -m agent.llm --check   (it never prints the key). Details in agent/llm.py.
 """
 from agent import explain as _explain
 from agent import intake, llm

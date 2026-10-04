@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "summary": {
+    "total_islands": 6,
+    "total_households": 1250,
+    "total_capex_usd": 578000,
+    "total_annual_diesel_saved_liters": 425000.0,
+    "total_annual_co2_saved_kg": 1139000.0,
+    "total_annual_co2_saved_tonnes": 1139.0,
+    "total_annual_money_saved_usd": 786250.0
+  },
+  "islands": [
+    {
+      "id": "island_1",
+      "name": "Vatoa",
+      "nation": "Fiji",
+      "lat": -19.82,
+      "lng": -178.22,
+      "households": 85,
+      "capex_usd": 45000,
+      "annual_diesel_saved_liters": 28900.0,
+      "annual_co2_saved_kg": 77452.0,
+      "annual_money_saved_usd": 53465.0
+    },
+    {
+      "id": "island_2",
+      "name": "Funafuti Outer",
+      "nation": "Tuvalu",
+      "lat": -8.52,
+      "lng": 179.19,
+      "households": 120,
+      "capex_usd": 62000,
+      "annual_diesel_saved_liters": 40800.0,
+      "annual_co2_saved_kg": 109344.0,
+      "annual_money_saved_usd": 75480.0
+    },
+    {
+      "id": "island_3",
+      "name": "Eua",
+      "nation": "Tonga",
+      "lat": -21.37,
+      "lng": -174.92,
+      "households": 310,
+      "capex_usd": 140000,
+      "annual_diesel_saved_liters": 105400.0,
+      "annual_co2_saved_kg": 282472.0,
+      "annual_money_saved_usd": 194990.0
+    },
+    {
+      "id": "island_4",
+      "name": "Aitutaki",
+      "nation": "Cook Islands",
+      "lat": -18.85,
+      "lng": -159.78,
+      "households": 450,
+      "capex_usd": 195000,
+      "annual_diesel_saved_liters": 153000.0,
+      "annual_co2_saved_kg": 410040.0,
+      "annual_money_saved_usd": 283050.0
+    },
+    {
+      "id": "island_5",
+      "name": "Kirimati Outer",
+      "nation": "Kiribati",
+      "lat": 1.87,
+      "lng": -157.36,
+      "households": 220,
+      "capex_usd": 98000,
+      "annual_diesel_saved_liters": 74800.0,
+      "annual_co2_saved_kg": 200464.0,
+      "annual_money_saved_usd": 138380.0
+    },
+    {
+      "id": "island_6",
+      "name": "Mitiaro",
+      "nation": "Cook Islands",
+      "lat": -19.85,
+      "lng": -157.7,
+      "households": 65,
+      "capex_usd": 38000,
+      "annual_diesel_saved_liters": 22100.0,
+      "annual_co2_saved_kg": 59228.0,
+      "annual_money_saved_usd": 40885.0
+    }
+  ]
+}

@@ -38,7 +38,8 @@ def fetch_nasa_data(island):
         "latitude": lat,
         "start": "20230101",                  # YYYYMMDD
         "end": "20241231",                    # YYYYMMDD
-        "format": "JSON"
+        "format": "JSON",
+        "time-standard": "LST",               # local solar time, so noon is noon (matches island load)
     }
 
     retries = 3
@@ -55,8 +56,9 @@ def fetch_nasa_data(island):
                 # Replace NASA's missing value code (-999) with 0.0
                 df["ghi_wm2"] = df["ghi_wm2"].apply(lambda x: 0.0 if x == -999 else float(x))
                 
-                # Format timestamp nicely (YYYYMMDDHH -> YYYY-MM-DD THH:00:00Z)
-                df["timestamp"] = pd.to_datetime(df["timestamp"], format="%Y%m%d%H").dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+                # Format timestamp nicely (YYYYMMDDHH -> YYYY-MM-DDTHH:00:00). No "Z": this is
+                # local solar time, not UTC
+                df["timestamp"] = pd.to_datetime(df["timestamp"], format="%Y%m%d%H").dt.strftime("%Y-%m-%dT%H:%M:%S")
                 
                 output_filepath = os.path.join(OUTPUT_DIR, f"{name}_ghi.csv")
                 df.to_csv(output_filepath, index=False)

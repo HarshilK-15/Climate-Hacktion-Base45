@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" font-family="Inter, Segoe UI, system-ui, sans-serif">
+<rect width="1600" height="900" fill="#fcfcfb"/>
+<text x="80" y="88" font-size="42" font-weight="700" fill="#0b0b0b">Prices 30% wrong? Where our answer holds, and where it flips.</text>
+<text x="80" y="134" font-size="23" fill="#52514e">Village on Savai'i, Samoa: diesel price and solar panel cost, each 30% lower, as sourced, 30% higher.</text>
+<text x="80" y="166" font-size="23" fill="#52514e">Every cell re-runs the whole design search on 20 years of real weather. Cell = the best design for those prices.</text>
+<text x="815.0" y="220" font-size="21" font-weight="600" fill="#52514e" text-anchor="middle">Solar panel cost (AUD per kW)</text>
+<text x="100" y="505.0" font-size="21" font-weight="600" fill="#52514e" text-anchor="middle" transform="rotate(-90 100 505.0)">Diesel price (AUD per litre)</text>
+<text x="465.0" y="254" font-size="20" fill="#52514e" text-anchor="middle">-30%  (1,960)</text>
+<text x="815.0" y="254" font-size="20" fill="#52514e" text-anchor="middle">as sourced  (2,800)</text>
+<text x="1165.0" y="254" font-size="20" fill="#52514e" text-anchor="middle">+30%  (3,640)</text>
+<text x="274" y="354.0" font-size="20" fill="#52514e" text-anchor="end">-30%  (1.12)</text>
+<rect x="292.0" y="270.0" width="346" height="154" rx="4" fill="#5598e7"/>
+<text x="465.0" y="314.0" font-size="28" font-weight="700" fill="#0b0b0b" text-anchor="middle">90 kW + 110 kWh</text>
+<text x="465.0" y="348.0" font-size="20" fill="#52514e" text-anchor="middle">AUD 881k over 20 years</text>
+<text x="465.0" y="374.0" font-size="20" fill="#52514e" text-anchor="middle">60% less diesel</text>
+<text x="465.0" y="406.0" font-size="20" font-weight="600" fill="#0b0b0b" text-anchor="middle">our design here: +7.7%</text>
+<rect x="642.0" y="270.0" width="346" height="154" rx="4" fill="#2a78d6"/>
+<text x="815.0" y="314.0" font-size="28" font-weight="700" fill="#ffffff" text-anchor="middle">90 kW + 110 kWh</text>
+<text x="815.0" y="348.0" font-size="20" fill="#e8eefa" text-anchor="middle">AUD 972k over 20 years</text>
+<text x="815.0" y="374.0" font-size="20" fill="#e8eefa" text-anchor="middle">60% less diesel</text>
+<text x="815.0" y="406.0" font-size="20" font-weight="600" fill="#ffffff" text-anchor="middle">our design here: +11.3%</text>
+<rect x="992.0" y="270.0" width="346" height="154" rx="4" fill="#1c5cab"/>
+<text x="1165.0" y="314.0" font-size="28" font-weight="700" fill="#ffffff" text-anchor="middle">90 kW + 110 kWh</text>
+<text x="1165.0" y="348.0" font-size="20" fill="#e8eefa" text-anchor="middle">AUD 1,064k over 20 years</text>
+<text x="1165.0" y="374.0" font-size="20" fill="#e8eefa" text-anchor="middle">60% less diesel</text>
+<text x="1165.0" y="406.0" font-size="20" font-weight="600" fill="#ffffff" text-anchor="middle">our design here: +14.3%</text>
+<text x="274" y="512.0" font-size="20" fill="#52514e" text-anchor="end">as sourced  (1.60)</text>
+<rect x="292.0" y="428.0" width="346" height="154" rx="4" fill="#cde2fb"/>
+<text x="465.0" y="472.0" font-size="28" font-weight="700" fill="#0b0b0b" text-anchor="middle">139 kW + 329 kWh</text>
+<text x="465.0" y="506.0" font-size="20" fill="#52514e" text-anchor="middle">AUD 985k over 20 years</text>
+<text x="465.0" y="532.0" font-size="20" fill="#52514e" text-anchor="middle">92% less diesel</text>
+<text x="465.0" y="564.0" font-size="20" font-weight="600" fill="#0b0b0b" text-anchor="middle">our design here: +0.2%</text>
+<rect x="642.0" y="428.0" width="346" height="154" rx="4" fill="#cde2fb"/>
+<text x="815.0" y="472.0" font-size="28" font-weight="700" fill="#0b0b0b" text-anchor="middle">132 kW + 329 kWh</text>
+<text x="815.0" y="506.0" font-size="20" fill="#52514e" text-anchor="middle">AUD 1,121k over 20 years</text>
+<text x="815.0" y="532.0" font-size="20" fill="#52514e" text-anchor="middle">91% less diesel</text>
+<text x="815.0" y="564.0" font-size="20" font-weight="600" fill="#0b0b0b" text-anchor="middle">our design here: +0.0%</text>
+<rect x="992.0" y="428.0" width="346" height="154" rx="4" fill="#b7d3f6"/>
+<text x="1165.0" y="472.0" font-size="28" font-weight="700" fill="#0b0b0b" text-anchor="middle">90 kW + 183 kWh</text>
+<text x="1165.0" y="506.0" font-size="20" fill="#52514e" text-anchor="middle">AUD 1,230k over 20 years</text>
+<text x="1165.0" y="532.0" font-size="20" fill="#52514e" text-anchor="middle">67% less diesel</text>
+<text x="1165.0" y="564.0" font-size="20" font-weight="600" fill="#0b0b0b" text-anchor="middle">our design here: +2.0%</text>
+<text x="274" y="670.0" font-size="20" fill="#52514e" text-anchor="end">+30%  (2.08)</text>
+<rect x="292.0" y="586.0" width="346" height="154" rx="4" fill="#b7d3f6"/>
+<text x="465.0" y="630.0" font-size="28" font-weight="700" fill="#0b0b0b" text-anchor="middle">146 kW + 329 kWh</text>
+<text x="465.0" y="664.0" font-size="20" fill="#52514e" text-anchor="middle">AUD 1,017k over 20 years</text>
+<text x="465.0" y="690.0" font-size="20" fill="#52514e" text-anchor="middle">93% less diesel</text>
+<text x="465.0" y="722.0" font-size="20" font-weight="600" fill="#0b0b0b" text-anchor="middle">our design here: +0.9%</text>
+<rect x="642.0" y="586.0" width="346" height="154" rx="4" fill="#cde2fb"/>
+<text x="815.0" y="630.0" font-size="28" font-weight="700" fill="#0b0b0b" text-anchor="middle">139 kW + 329 kWh</text>
+<text x="815.0" y="664.0" font-size="20" fill="#52514e" text-anchor="middle">AUD 1,160k over 20 years</text>
+<text x="815.0" y="690.0" font-size="20" fill="#52514e" text-anchor="middle">92% less diesel</text>
+<text x="815.0" y="722.0" font-size="20" font-weight="600" fill="#0b0b0b" text-anchor="middle">our design here: +0.0%</text>
+<rect x="992.0" y="586.0" width="346" height="154" rx="4" fill="#cde2fb"/>
+<text x="1165.0" y="630.0" font-size="28" font-weight="700" fill="#0b0b0b" text-anchor="middle">125 kW + 329 kWh</text>
+<text x="1165.0" y="664.0" font-size="20" fill="#52514e" text-anchor="middle">AUD 1,293k over 20 years</text>
+<text x="1165.0" y="690.0" font-size="20" fill="#52514e" text-anchor="middle">89% less diesel</text>
+<text x="1165.0" y="722.0" font-size="20" font-weight="600" fill="#0b0b0b" text-anchor="middle">our design here: +0.0%</text>
+<rect x="641" y="427" width="348" height="156" rx="5" fill="none" stroke="#0b0b0b" stroke-width="3"/>
+<text x="1375" y="276" font-size="18" font-weight="600" fill="#0b0b0b">Shade = how much</text>
+<text x="1375" y="301" font-size="18" font-weight="600" fill="#0b0b0b">more our design</text>
+<text x="1375" y="326" font-size="18" font-weight="600" fill="#0b0b0b">costs than the</text>
+<text x="1375" y="351" font-size="18" font-weight="600" fill="#0b0b0b">best for those prices</text>
+<rect x="1375" y="380" width="34" height="20" rx="3" fill="#cde2fb"/>
+<rect x="1375" y="402" width="34" height="20" rx="3" fill="#b7d3f6"/>
+<rect x="1375" y="424" width="34" height="20" rx="3" fill="#9ec5f4"/>
+<rect x="1375" y="446" width="34" height="20" rx="3" fill="#86b6ef"/>
+<rect x="1375" y="468" width="34" height="20" rx="3" fill="#6da7ec"/>
+<rect x="1375" y="490" width="34" height="20" rx="3" fill="#5598e7"/>
+<rect x="1375" y="512" width="34" height="20" rx="3" fill="#3987e5"/>
+<rect x="1375" y="534" width="34" height="20" rx="3" fill="#2a78d6"/>
+<rect x="1375" y="556" width="34" height="20" rx="3" fill="#256abf"/>
+<rect x="1375" y="578" width="34" height="20" rx="3" fill="#1c5cab"/>
+<text x="1421" y="396" font-size="18" fill="#52514e">0%</text>
+<text x="1421" y="594" font-size="18" fill="#52514e">14.3%</text>
+<rect x="1375" y="618" width="34" height="20" rx="4" fill="none" stroke="#0b0b0b" stroke-width="3"/>
+<text x="1421" y="634" font-size="18" fill="#52514e">our design:</text>
+<text x="1421" y="656" font-size="18" fill="#52514e">prices as sourced</text>
+<text x="80" y="798" font-size="25" fill="#0b0b0b">Worst cell: our design costs <tspan font-weight="700">14.3%</tspan> more than that cell's best. In every cell solar beats diesel by at least <tspan font-weight="700">AUD 157,040</tspan> over 20 years.</text>
+<text x="80" y="836" font-size="19" fill="#898781">Shipless engine: hourly dispatch on every weather year. Every design must never black out and must keep the clinic powered through the darkest week on record with no diesel.</text>
+</svg>

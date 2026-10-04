@@ -1,0 +1,160 @@
+"""Precompute every demo answer so the demo never depends on live computation (brief 3.7).
+Owner: Elec B.
+
+    python -m engine.precompute                  # everything (~5-10 min on the dev laptop)
+    python -m engine.precompute kadavu eua       # just these islands (+ the index)
+    python -m engine.precompute --quick          # islands + index only: no sensitivity, no Ta'u
+    python -m engine.precompute --check          # are the files up to date? exit code 1 if not
+
+Writes engine/precomputed/:
+    {island}.json          exactly what POST /simulate {"site_id": island} returns
+    index.json             every island's SimResult + portfolio totals (the map screen)
+    sensitivity.json       diesel +-30% x solar +-30% for every island (GET /sensitivity/{island})
+    sensitivity.md         the same as Markdown tables (slide notes)
+    sensitivity_{island}.svg   one 1600 x 900 slide per island (the video uses Funafuti's)
+    published_case.json    our engine vs the Ta'u microgrid (GET /published-case)
+
+Sunday rule: after the freeze, any bug fix to the engine marks these files stale (the engine
+version is in every file). Run --check; if it says stale, re-run this, then commit the files.
+"""
+import json
+import os
+import sys
+import time
+from datetime import datetime, timezone
+
+from engine import service
+from engine.service import ENGINE_VERSION, build_inputs, compute, demo_islands, freshness, precomputed_dir
+
+HERO = "funafuti"   # the island in the video
+
+
+def _write(path, text):
+    """Write atomically, so the service never reads a half-written file."""
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    os.replace(tmp, path)
+
+
+def _dump(obj):
+    return json.dumps(service.plain(obj), indent=1, ensure_ascii=False) + "\n"
+
+
+def _now():
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def islands(ids, out):
+    for island in ids:
+        t0 = time.perf_counter()
+        res = compute(build_inputs({"site_id": island}))
+        res["meta"]["source"] = "precomputed"
+        _write(out / f"{island}.json", _dump(res))
+        sr = res["simresult"]
+        print(f"  {island:9s} {sr['pv_kw']:7.1f} kW + {sr['battery_kwh']:7.1f} kWh   "
+              f"P90 {sr['diesel_litres_saved_p90']:>7,} L/yr   clinic {'OK' if sr['critical_load_survives_7d_no_fuel'] else 'FAIL'}"
+              f"   ({time.perf_counter() - t0:.1f} s)")
+
+
+def index(out):
+    """index.json from whatever {island}.json files exist (the map screen and GET /islands)."""
+    rows = []
+    for island in demo_islands():
+        f = out / f"{island}.json"
+        if not f.exists():
+            continue
+        r = json.loads(f.read_text(encoding="utf-8"))
+        rows.append({"id": island, "file": f.name, **{k: r["site"].get(k) for k in ("name", "country", "lat", "lon")},
+                     "weather": r["weather"], "simresult": r["simresult"],
+                     "percent_diesel_cut_p50": r["design"]["percent_diesel_cut_p50"],
+                     "payback_years": r["design"]["payback_years"],
+                     "money_saved_per_year_p50": r["design"]["money_saved_per_year_p50"],
+                     "bank_sentence": r["bank"]["sentence"], "engine_version": r["meta"]["engine_version"]})
+    tot = lambda k: sum(x["simresult"][k] for x in rows)
+    _write(out / "index.json", _dump({
+        "generated_at": _now(), "engine_version": ENGINE_VERSION, "islands": rows,
+        "totals": {"islands": len(rows), "capex_aud": tot("capex_aud"),
+                   "diesel_litres_saved_p50": tot("diesel_litres_saved_p50"),
+                   "diesel_litres_saved_p90": tot("diesel_litres_saved_p90"),
+                   "co2_tonnes_saved_per_year": tot("co2_tonnes_saved_per_year"),
+                   "money_saved_per_year_p50": sum(x["money_saved_per_year_p50"] for x in rows),
+                   "clinics_protected": sum(x["simresult"]["critical_load_survives_7d_no_fuel"] for x in rows)}}))
+    print(f"  index.json: {len(rows)} islands")
+
+
+def sensitivity_all(ids, out):
+    from engine.sensitivity import sensitivity, slide_svg, table_md
+    f = out / "sensitivity.json"
+    done = json.loads(f.read_text(encoding="utf-8"))["islands"] if f.exists() else {}
+    for island in ids:
+        t0 = time.perf_counter()
+        done[island] = sensitivity(build_inputs({"site_id": island}))
+        done[island]["engine_version"] = ENGINE_VERSION
+        print(f"  sensitivity {island:9s} max regret {done[island]['max_regret_percent']:.1f}%   "
+              f"min 20-yr saving AUD {done[island]['min_lifetime_saving_aud']:,}   ({time.perf_counter() - t0:.0f} s)")
+    order = [i for i in demo_islands() if i in done]
+    _write(f, _dump({"generated_at": _now(), "engine_version": ENGINE_VERSION,
+                     "islands": {i: done[i] for i in order}}))
+    md = ["# Sensitivity: diesel price x solar panel cost (+-30%)", "",
+          "Generated by `python -m engine.precompute`. Each cell re-runs the full design search. "
+          "Regret = how much more our base design (picked at sourced prices) costs over 20 years than the "
+          "best design for that cell's prices.", ""]
+    for i in order:
+        md += [table_md(done[i]), ""]
+    _write(out / "sensitivity.md", "\n".join(md))
+    for i in order:
+        _write(out / f"sensitivity_{i}.svg", slide_svg(done[i]))
+    print(f"  slides: sensitivity_<island>.svg x {len(order)}  (the video uses sensitivity_{HERO}.svg)")
+
+
+def published(out):
+    from engine.published_case import compare
+    t0 = time.perf_counter()
+    res = compare()
+    res["engine_version"], res["generated_at"] = ENGINE_VERSION, _now()
+    _write(out / "published_case.json", _dump(res))
+    print(f"  published_case.json ({time.perf_counter() - t0:.0f} s)")
+    for line in res["summary"]:
+        print("    - " + line)
+
+
+def check():
+    state = freshness()
+    for island, s in state.items():
+        print(f"  {island:9s} {s}")
+    out = precomputed_dir()
+    for name in ("index.json", "sensitivity.json", "published_case.json"):
+        f = out / name
+        v = json.loads(f.read_text(encoding="utf-8")).get("engine_version") if f.exists() else None
+        print(f"  {name:20s} {'fresh' if v == ENGINE_VERSION else 'stale' if v else 'missing'}")
+        state[name] = "fresh" if v == ENGINE_VERSION else "stale"
+    bad = [k for k, s in state.items() if s != "fresh"]
+    print(f"\n  engine version {ENGINE_VERSION}: " +
+          ("all precomputed files are up to date." if not bad else
+           f"{len(bad)} out of date -> run: python -m engine.precompute"))
+    return not bad
+
+
+def main(argv):
+    flags = {a for a in argv if a.startswith("--")}
+    ids = [a for a in argv if not a.startswith("--")] or demo_islands()
+    unknown = set(ids) - set(demo_islands())
+    if unknown:
+        raise SystemExit(f"unknown island(s) {', '.join(sorted(unknown))}; demo islands: {', '.join(demo_islands())}")
+    if "--check" in flags:
+        raise SystemExit(0 if check() else 1)
+    out = precomputed_dir()
+    out.mkdir(parents=True, exist_ok=True)
+    t0 = time.perf_counter()
+    print(f"\nPRECOMPUTE  engine version {ENGINE_VERSION} -> {out}")
+    islands(ids, out)
+    index(out)
+    if "--quick" not in flags:
+        sensitivity_all(ids, out)
+        if set(ids) == set(demo_islands()):
+            published(out)
+    print(f"\n  done in {time.perf_counter() - t0:.0f} s\n")
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

@@ -1,13 +1,13 @@
 # config.py - edit these values for your setup (Pico W, MicroPython)
 
 # --- Wi-Fi (Pico W only works on 2.4 GHz networks) ---
-WIFI_SSID = "your-hotspot-name"
-WIFI_PASSWORD = "your-hotspot-password"
+WIFI_SSID = "rayans"
+WIFI_PASSWORD = "fkaib9mmtgj2xfc"
 
 # --- Where readings are sent ---
 # First test: your laptop running test_receiver.py, e.g. "http://192.168.43.20:8000/api/readings"
 # Later: the real URL Mech B gives you, e.g. "https://your-app.vercel.app/api/readings"
-API_URL = "http://192.168.0.10:8000/api/readings"
+API_URL = "http://10.199.20.155:8000/api/readings"
 DEVICE_TOKEN = "change-me"   # shared secret the server checks
 DEVICE_ID = "pico-01"
 SITE_ID = "demo-home"
@@ -22,7 +22,7 @@ SPLITTER_MULTIPLIER = 1   # 1 = splitter's x1 slot, 10 = x10 slot (or number of 
 # --- Timing ---
 SAMPLE_WINDOW_MS = 200    # about 10 cycles of 50 Hz mains
 READ_EVERY_S = 10         # one reading every 10 seconds
-SEND_EVERY_N = 6          # send a batch every 6 readings (about once a minute)
+SEND_EVERY_N = 1          # send every reading (demo); use 6 for about once a minute
 MAX_BUFFER = 500          # max unsent readings kept if Wi-Fi is down
 
 # --- Local overrides (git-ignored): Wi-Fi password, laptop IP, etc. ---

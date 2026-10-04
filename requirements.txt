@@ -2,5 +2,6 @@ fastapi>=0.110
 uvicorn>=0.29
 numpy>=1.26
 requests>=2.31
+anthropic>=1.11
 pytest
 pandas

@@ -1,0 +1,140 @@
+"""Runs the number checker on our OWN documents: README, pitch, narrative. Owner: Mech A.
+
+    python -m agent.factcheck                              # the default set of team documents
+    python -m agent.factcheck README.md pitch.md           # any Markdown / text files
+    python -m agent.factcheck --report agent/out/factcheck_report.md
+
+Every number written in a document must be either in the fact-check sheet (agent/fact_check.csv,
+brief 5.1: "every statistic that appears anywhere gets a row") or in the engine's own output
+(engine/precomputed/*.json). Anything else is listed with its file and line, so a made-up statistic
+never reaches a judge. The judges' question "why isn't this just ChatGPT?" has a second answer here:
+we hold our own pitch to the same rule as the AI.
+
+Skipped, because they are not claims: code blocks and `inline code`, links and file paths,
+heading and list numbering, table separator rows, dates (2026-10-04), brief section numbers
+("brief 5.2"), ports, and any line marked <!-- not a claim --> (e.g. a line quoting a bad number
+in order to warn about it).
+"""
+import csv
+import json
+import re
+import sys
+from pathlib import Path
+
+from agent.check_numbers import _match, extract_numbers, is_percent_field
+
+ROOT = Path(__file__).resolve().parent.parent
+SHEET = Path(__file__).resolve().parent / "fact_check.csv"
+# What a judge reads. Add the pitch / video script here when it exists.
+DEFAULT_DOCS = ["README.md", "COP31_STRATEGIC_NARRATIVE.md", "agent/README.md", "PITCH.md", "docs/pitch.md",
+                "VIDEO_SCRIPT.md"]
+NOT_A_CLAIM = "<!-- not a claim -->"
+
+
+def sheet_rows(path=SHEET):
+    with open(path, newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def _sheet_numbers(rows):
+    """(label, value, status, is a percentage?) for every number written in the sheet."""
+    out = []
+    for r in rows:
+        for n in extract_numbers(r["number"] + " " + r["claim"]):
+            out.append((f"fact_check.csv: {r['claim']}", n.value, r["status"], n.kind == "percent"))
+    return out
+
+
+def _engine_numbers():
+    from agent.check_numbers import source_numbers
+    out = []
+    for f in sorted((ROOT / "engine" / "precomputed").glob("*.json")):
+        # unlike the AI checker, the docs may quote the sensitivity grid, so only hourly data is skipped
+        for path, v in source_numbers(json.loads(f.read_text(encoding="utf-8")), skip={"week_trace", "sweep", "meta"}):
+            out.append((f"engine/precomputed/{f.name}: {path}", v, "ENGINE OUTPUT", is_percent_field(path)))
+    return out
+
+
+_CODE_SPAN = re.compile(r"`[^`]*`")
+_LINK = re.compile(r"\]\([^)]*\)|https?://\S+|\S*[/\\]\S*|\S+\.(?:py|json|md|csv|svg|html|txt|pdf)\b")
+_ORDINAL = re.compile(r"^\s*(?:#+\s*)?(?:\d+[.)]|step\s+\d+[:.]?|chapter\s+\d+(?:\.\d+)?|\d+\.\d+\s)", re.I)
+_NOT_CLAIMS = re.compile(r"\b\d{4}-\d{2}-\d{2}\b|\b(?:brief|chapter|section|scene|case|step)\s+\d+(?:\.\d+)?(?:\s*\+\s*"
+                         r"\d+(?:\.\d+)?)?|\b(?:port|localhost:)\s*\d+|\b\d{1,2}:\d{2}\s*(?:UTC)\b", re.I)
+
+
+def claims_in(text):
+    """Prose numbers in a Markdown document -> list of (line number, number, line text)."""
+    out, fenced = [], False
+    for i, line in enumerate(text.splitlines(), 1):
+        if line.strip().startswith("```"):
+            fenced = not fenced
+            continue
+        if fenced or re.fullmatch(r"\s*\|?[\s:|-]+\|?\s*", line or "x") or line.startswith("    ") \
+                or NOT_A_CLAIM in line:
+            continue
+        clean = _ORDINAL.sub(" ", _NOT_CLAIMS.sub(" ", _LINK.sub(" ", _CODE_SPAN.sub(" ", line))))
+        for n in extract_numbers(clean):
+            out.append((i, n, line.strip()))
+    return out
+
+
+def scan(paths, rows=None):
+    """-> {file: [ {line, number, text, status, source} ]} for every number in each document."""
+    rows = rows if rows is not None else sheet_rows()
+    pool = _sheet_numbers(rows) + _engine_numbers()
+    flagged_status = ("NO SOURCE", "CONFLICTS", "NOT ENGINE", "NOT FOUND")
+    result = {}
+    for p in paths:
+        f = ROOT / p if not Path(p).is_absolute() else Path(p)
+        if not f.exists():
+            continue
+        items = []
+        for line, n, text in claims_in(f.read_text(encoding="utf-8")):
+            hit = next(((src, st) for src, v, st, pct in pool
+                        if (pct or n.kind != "percent") and _match(n, v)), None)
+            if hit is None:
+                status, src = "UNSOURCED", ""
+            elif any(hit[1].upper().startswith(s) for s in flagged_status):
+                status, src = "FLAGGED IN SHEET", f"{hit[0]} [{hit[1]}]"
+            else:
+                status, src = "sourced", hit[0]
+            items.append({"line": line, "number": n.text, "text": text, "status": status, "source": src})
+        result[str(p)] = items
+    return result
+
+
+def report_md(result):
+    lines = ["# Fact-check scan of our own documents", "",
+             "Generated by `python -m agent.factcheck`. A number passes if it is in `agent/fact_check.csv` "
+             "(with a source) or in the engine's output (`engine/precomputed/`).", ""]
+    for p, items in result.items():
+        bad = [x for x in items if x["status"] != "sourced"]
+        lines += [f"## {p}: {len(items)} numbers, {len(bad)} need attention", ""]
+        for x in bad:
+            lines.append(f"- line {x['line']}: **{x['number']}** - {x['status']}"
+                         f"{' (' + x['source'] + ')' if x['source'] else ''}  \n  > {x['text'][:160]}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+if __name__ == "__main__":
+    args = sys.argv[1:]
+    out_path = None
+    if "--report" in args:
+        out_path = args[args.index("--report") + 1]
+        args = [a for a in args if a not in ("--report", out_path)]
+    res = scan(args or DEFAULT_DOCS)
+    total_bad = 0
+    for p, items in res.items():
+        bad = [x for x in items if x["status"] != "sourced"]
+        total_bad += len(bad)
+        print(f"\n{p}: {len(items)} numbers, {len(bad)} need attention")
+        for x in bad[:40]:
+            print(f"  line {x['line']:>4}  {x['number']:>12s}  {x['status']}  {x['source'][:70]}")
+        if len(bad) > 40:
+            print(f"  ... and {len(bad) - 40} more (use --report)")
+    if out_path:
+        Path(out_path).parent.mkdir(parents=True, exist_ok=True)
+        Path(out_path).write_text(report_md(res), encoding="utf-8")
+        print(f"\nreport -> {out_path}")
+    sys.exit(1 if total_bad else 0)

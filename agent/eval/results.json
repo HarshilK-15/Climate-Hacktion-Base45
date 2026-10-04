@@ -1,0 +1,638 @@
+{
+ "mode": "rules",
+ "model": "claude-opus-5-5",
+ "intake": [
+  {
+   "id": 1,
+   "kind": "good",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 0,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 2,
+   "kind": "good",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 0,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 3,
+   "kind": "good",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 0,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 4,
+   "kind": "good",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 0,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 5,
+   "kind": "good",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 0,
+   "source": "rules",
+   "problems": [],
+   "warnings": [
+    "Generator 70 kVA counted as 56 kW (power factor 0.8)."
+   ]
+  },
+  {
+   "id": 6,
+   "kind": "good",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 0,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 7,
+   "kind": "good",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 0,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 8,
+   "kind": "vague",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 2,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 9,
+   "kind": "vague",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 1,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 10,
+   "kind": "vague",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 2,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 11,
+   "kind": "new place",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 1,
+   "source": "rules",
+   "problems": [],
+   "warnings": [
+    "No clinic mentioned: tick the clinic box if there is one."
+   ]
+  },
+  {
+   "id": 12,
+   "kind": "currency",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 1,
+   "source": "rules",
+   "problems": [],
+   "warnings": [
+    "Diesel price not used: it isn't in Australian dollars and the engine has no exchange rate, so the regional average from data/costs.md is used."
+   ]
+  },
+  {
+   "id": 13,
+   "kind": "Pacific language (Bislama, unverified)",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 1,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 14,
+   "kind": "adversarial",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 1,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 15,
+   "kind": "adversarial (prompt injection)",
+   "passed": false,
+   "valid_site_input": true,
+   "questions_asked": 0,
+   "source": "rules",
+   "problems": [
+    "households=5000 (expected 95)",
+    "generator_kw=900.0 (should be empty)"
+   ],
+   "warnings": []
+  },
+  {
+   "id": 16,
+   "kind": "good",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 0,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 17,
+   "kind": "number words",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 0,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 18,
+   "kind": "coordinates",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 1,
+   "source": "rules",
+   "problems": [],
+   "warnings": [
+    "No clinic mentioned: tick the clinic box if there is one."
+   ]
+  },
+  {
+   "id": 19,
+   "kind": "negation",
+   "passed": true,
+   "valid_site_input": true,
+   "questions_asked": 0,
+   "source": "rules",
+   "problems": [],
+   "warnings": []
+  },
+  {
+   "id": 20,
+   "kind": "adversarial (nonsense)",
+   "passed": true,
+   "valid_site_input": false,
+   "questions_asked": 3,
+   "source": "rules",
+   "problems": [],
+   "warnings": [
+    "No clinic mentioned: tick the clinic box if there is one."
+   ]
+  }
+ ],
+ "explain": [
+  {
+   "label": "funafuti",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 118,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "62",
+    "166.2",
+    "314,870",
+    "30,547",
+    "91.6%",
+    "30,126",
+    "82"
+   ]
+  },
+  {
+   "label": "nanumea",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "68.5",
+    "186",
+    "349,900",
+    "33,640",
+    "91.4%",
+    "32,804",
+    "90"
+   ]
+  },
+  {
+   "label": "kadavu",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "104",
+    "236.4",
+    "492,140",
+    "44,773",
+    "83.5%",
+    "43,973"
+   ]
+  },
+  {
+   "label": "eua",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "85.3",
+    "196",
+    "405,440",
+    "35,094",
+    "87.6%",
+    "34,844",
+    "94"
+   ]
+  },
+  {
+   "label": "malekula",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "60.7",
+    "139.3",
+    "288,365",
+    "25,623",
+    "89.8%",
+    "25,185",
+    "69"
+   ]
+  },
+  {
+   "label": "abaiang",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "80.5",
+    "226",
+    "417,500",
+    "40,586",
+    "92.1%",
+    "38,939",
+    "109"
+   ]
+  },
+  {
+   "label": "savaii",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "132.3",
+    "329.3",
+    "650,345",
+    "60,135",
+    "90.9%",
+    "59,136",
+    "161"
+   ]
+  },
+  {
+   "label": "{\"site_id\": \"kadavu\", \"households\": 80}",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "77.9",
+    "177.2",
+    "368,740",
+    "40,334",
+    "87%",
+    "39,696",
+    "108"
+   ]
+  },
+  {
+   "label": "{\"site_id\": \"kadavu\", \"households\": 160}",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "73.9",
+    "264,975",
+    "29,444",
+    "47.6%",
+    "28,865",
+    "79"
+   ]
+  },
+  {
+   "label": "{\"site_id\": \"eua\", \"diesel_price_per_litre\": 2.4}",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "89.6",
+    "196",
+    "417,480",
+    "35,506",
+    "88.6%",
+    "35,234",
+    "95"
+   ]
+  },
+  {
+   "label": "{\"site_id\": \"nanumea\", \"households\": 120}",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "93.1",
+    "280.8",
+    "499,360",
+    "41,594",
+    "91.9%",
+    "40,428",
+    "111"
+   ]
+  },
+  {
+   "label": "{\"site_id\": \"malekula\", \"households\": 40}",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "46.2",
+    "106",
+    "219,460",
+    "23,352",
+    "92%",
+    "23,034",
+    "63"
+   ]
+  },
+  {
+   "label": "{\"site_id\": \"malekula\", \"households\": 90}",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "78.3",
+    "189.3",
+    "380,145",
+    "29,867",
+    "86%",
+    "29,336",
+    "80"
+   ]
+  },
+  {
+   "label": "{\"site_id\": \"abaiang\", \"other_kw\": 10}",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "92.4",
+    "259.3",
+    "479,125",
+    "46,457",
+    "94.6%",
+    "44,524",
+    "125"
+   ]
+  },
+  {
+   "label": "{\"site_id\": \"savaii\", \"households\": 200}",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "157",
+    "412.7",
+    "790,395",
+    "66,847",
+    "87.4%",
+    "65,638",
+    "179"
+   ]
+  },
+  {
+   "label": "{\"site_id\": \"funafuti\", \"households\": 600, \"has_clinic\": true}",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 118,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "400.3",
+    "1,241.8",
+    "2,176,370",
+    "183,509",
+    "89%",
+    "180,493",
+    "492"
+   ]
+  },
+  {
+   "label": "{\"name\": \"Village near Suva\", \"lat\": -18.14, \"lon\": 178.44, \"households\": 70, \"has_clinic\": true}",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 119,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "61.1",
+    "162.2",
+    "308,950",
+    "28,369",
+    "91%",
+    "76"
+   ]
+  },
+  {
+   "label": "{\"name\": \"Village near Apia\", \"lat\": -13.85, \"lon\": -171.75, \"households\": 50, \"has_clinic\": true}",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 119,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "40.9",
+    "121.4",
+    "217,710",
+    "19,790",
+    "92.4%",
+    "19,706",
+    "53"
+   ]
+  },
+  {
+   "label": "{\"name\": \"Village near Port Vila\", \"lat\": -17.73, \"lon\": 168.32, \"households\": 100, \"has_school\": true}",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "78",
+    "196.3",
+    "385,255",
+    "31,223",
+    "88.3%",
+    "30,995",
+    "84"
+   ]
+  },
+  {
+   "label": "{\"site_id\": \"kadavu\", \"diesel_litres_per_month\": 4000}",
+   "source": "template",
+   "passed_first_try": true,
+   "passed": true,
+   "attempts": 0,
+   "rejected_drafts": 0,
+   "words": 120,
+   "within_word_limit": true,
+   "numbers_checked": 14,
+   "tamper_detected": true,
+   "tamper_flagged": [
+    "102.9",
+    "234",
+    "487,020",
+    "44,515",
+    "83.6%",
+    "43,713",
+    "119"
+   ]
+  }
+ ]
+}

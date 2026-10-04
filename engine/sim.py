@@ -6,191 +6,122 @@ For every hour of the year it decides where the island's power comes from:
   1. solar panels (used directly)
   2. battery (charged from spare solar, or spare generator output)
   3. diesel generator (only when 1 and 2 cannot cover the demand)
-and counts the diesel burned. It tries a grid of solar and battery sizes, picks the one
-with the lowest lifetime cost, then re-runs that design on every year of weather to get
+and counts the diesel burned. engine/optimise.py tries a grid of solar and battery sizes on
+every weather year at once and picks the cheapest over 20 years that never blacks out and keeps
+the clinic powered through the darkest week on record with no diesel. From the same runs come
 P50 (typical) and P90 (bad-year) diesel savings.
 
-All money is in USD. Every assumption is in DEFAULTS so it is visible and replaceable.
+All money is in AUD (data/costs.md). Every assumption is in DEFAULTS so it is visible and replaceable.
 """
+import copy
+import hashlib
+import json
 import math
 
 import numpy as np
 
+from engine.dispatch import TECH_DEFAULTS, dispatch
+from engine.optimise import optimise
+
 HOURS = 8760
+# Designs searched per plan request in the app (panels x battery), then refined 9 x 9 around the
+# winner. Smaller than the command line's 30 x 20 so a plan comes back in a few seconds.
+APP_GRID = (15, 10)
 
 DEFAULTS = {
-    # ---- costs (ASSUMPTIONS - replace with sourced Pacific figures) ----
-    "solar_cost_per_kw": 2500.0,     # installed cost, remote island
-    "battery_cost_per_kwh": 700.0,   # installed cost incl. inverter share
+    # ---- costs (SOURCED: data/costs.md, AUD) ----
+    "solar_cost_per_kw": 2800.0,     # installed microgrid solar, AUD/kWp (costs.md, IRENA)
+    "battery_cost_per_kwh": 850.0,   # installed LiFePO4 BESS, AUD/kWh (costs.md, NREL ATB)
+    "om_fraction": 0.015,            # solar + battery upkeep, 1.5% of CAPEX/yr (costs.md, NREL)
+    "project_years": 20,             # financing term (costs.md section 3)
+    "discount_rate": 0.04,           # concessionary rate, GCF / EU baseline (costs.md section 3)
+    "diesel_price_per_litre": 2.10,  # fallback if the site gives none: portfolio average (costs.md)
+    "co2_kg_per_litre": 2.68,        # kg CO2 per litre of diesel (costs.md section 3)
+    "gen_om_per_kwh": 0.08,          # diesel generator upkeep, AUD/kWh made (costs.md, World Bank)
+    # ---- costs (ASSUMPTION - replace with the battery supplier's warranty life) ----
     "battery_life_years": 10,
-    "om_fraction": 0.015,            # yearly upkeep as a share of purchase cost
-    "project_years": 20,
-    "discount_rate": 0.06,
-    # ---- technical ----
-    "pv_derate": 0.80,               # dust, heat, wiring and inverter losses
-    "batt_eff_charge": 0.95,
-    "batt_eff_discharge": 0.95,
-    "batt_min_soc": 0.20,            # never empty the battery below 20%
-    "batt_c_rate": 0.5,              # max charge/discharge power = 0.5 x capacity
-    "batt_start_soc": 0.5,
-    "gen_min_load": 0.30,            # diesel generators should not run below ~30% load
-    # Linear fuel curve: litres/hour = fuel_a x generator size + fuel_b x output.
-    # Typical values used by microgrid tools - replace with your generator's datasheet.
-    "fuel_a": 0.08,
-    "fuel_b": 0.25,
+    # ---- technical (pv derate, battery, generator floor, fuel curve): see engine/dispatch.py ----
+    **TECH_DEFAULTS,
 }
 
 
-def dispatch(load, ghi, solar_kw, battery_kwh, gen_kw, p, gen_available=True, record=False):
-    """Simulate hour by hour.
-
-    load: (H,) demand in kW.  ghi: (H,) or (H, Y) sunshine in W/m2.
-    solar_kw / battery_kwh: numbers or numpy arrays (to test many designs at once).
-    Returns totals (numpy arrays) and, if record=True, an hourly trace.
-    """
-    S = np.asarray(solar_kw, float)
-    B = np.asarray(battery_kwh, float)
-    shape = np.broadcast(S, B, np.asarray(ghi[0], float)).shape
-    zeros = np.zeros(shape)
-    B = np.broadcast_to(B, shape)
-    soc = B * p["batt_start_soc"]
-    bmin = B * p["batt_min_soc"]
-    plim = B * p["batt_c_rate"]
-    ec, ed = p["batt_eff_charge"], p["batt_eff_discharge"]
-    minload = p["gen_min_load"] * gen_kw
-    k_pv = p["pv_derate"] / 1000.0
-
-    tot = {k: zeros.copy() for k in (
-        "fuel_l", "gen_kwh", "gen_to_load", "solar_direct", "batt_out",
-        "unserved", "curtailed", "gen_hours", "soc_min_frac")}
-    tot["soc_min_frac"] += 1.0
-    trace = {k: [] for k in ("load", "solar", "battery", "diesel", "soc_pct", "unserved")} if record else None
-
-    for t in range(len(load)):
-        L = load[t]
-        pv = S * (ghi[t] * k_pv)
-        direct = np.minimum(pv, L)
-        surplus = pv - direct
-        deficit = L - direct
-
-        ch = np.minimum(np.minimum(surplus, plim), np.maximum(B - soc, 0) / ec)
-        soc = soc + ch * ec
-        curt = surplus - ch
-
-        avail = np.maximum(np.minimum(plim, (soc - bmin) * ed), 0)
-        dis = np.minimum(deficit, avail)
-        soc = soc - dis / ed
-        rest = deficit - dis
-
-        if gen_available:
-            on = rest > 1e-9
-            out = np.where(on, np.minimum(np.maximum(rest, minload), gen_kw), 0.0)
-            to_load = np.minimum(out, rest)
-            extra = out - to_load          # forced by minimum load: store it if we can
-            ch2 = np.minimum(np.minimum(extra, np.maximum(plim - ch, 0)), np.maximum(B - soc, 0) / ec)
-            soc = soc + ch2 * ec
-            tot["fuel_l"] += np.where(on, p["fuel_a"] * gen_kw + p["fuel_b"] * out, 0.0)
-            tot["gen_kwh"] += out
-            tot["gen_hours"] += on
-        else:
-            to_load = zeros
-        uns = rest - to_load
-
-        tot["gen_to_load"] += to_load
-        tot["solar_direct"] += direct
-        tot["batt_out"] += dis
-        tot["unserved"] += uns
-        tot["curtailed"] += curt
-        with np.errstate(divide="ignore", invalid="ignore"):
-            frac = np.where(B > 0, soc / np.where(B > 0, B, 1), 1.0)
-        tot["soc_min_frac"] = np.minimum(tot["soc_min_frac"], frac)
-
-        if record:
-            trace["load"].append(float(L))
-            trace["solar"].append(float(direct))
-            trace["battery"].append(float(dis))
-            trace["diesel"].append(float(to_load))
-            trace["soc_pct"].append(float(frac * 100))
-            trace["unserved"].append(float(uns))
-    tot["load_kwh"] = float(np.sum(load))
-    return tot, trace
+def generator_size(site, load):
+    """The site's own generator, or (ASSUMPTION) 1.25 x peak load rounded up to 10 kW if unknown."""
+    return float(site.get("generator_kw") or math.ceil(1.25 * float(load.max()) / 10) * 10)
 
 
-def _annuity(rate, years):
-    return sum(1 / (1 + rate) ** y for y in range(1, years + 1))
+# Finished plans, keyed by a fingerprint of every input. The server builds every site's default plan
+# at startup (portfolio map), so clicking a site with unchanged settings returns at once.
+_PLANS = {}
+_PLANS_MAX = 64
 
 
-def lifetime_cost(solar_kw, battery_kwh, fuel_l_per_year, price, p):
-    capex = solar_kw * p["solar_cost_per_kw"] + battery_kwh * p["battery_cost_per_kwh"]
-    r, n = p["discount_rate"], p["project_years"]
-    replace = 0.0
-    k = 1
-    while k * p["battery_life_years"] < n:
-        replace = replace + battery_kwh * p["battery_cost_per_kwh"] / (1 + r) ** (k * p["battery_life_years"])
-        k += 1
-    yearly = fuel_l_per_year * price + p["om_fraction"] * capex
-    return capex + replace + _annuity(r, n) * yearly, capex
+def _fingerprint(site, load, critical, ghi_years, weather_label, overrides, grid):
+    h = hashlib.sha1()
+    norm = lambda v: float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else v
+    h.update(json.dumps({k: norm(v) for k, v in site.items()}, sort_keys=True, default=str).encode())
+    h.update(json.dumps([weather_label, overrides or {}, list(grid)], sort_keys=True, default=str).encode())
+    for a in (load, critical, ghi_years):
+        a = np.ascontiguousarray(a)
+        h.update(str((a.shape, a.dtype)).encode())
+        h.update(a.tobytes())
+    return h.hexdigest()
 
 
-def simulate(site, load, critical, ghi_years, weather_label, overrides=None):
+def simulate(site, load, critical, ghi_years, weather_label, overrides=None, grid=APP_GRID):
+    """The full plan for one site (see contracts/FORMATS.md). Same inputs -> cached answer."""
+    key = _fingerprint(site, load, critical, ghi_years, weather_label, overrides, grid)
+    if key not in _PLANS:
+        if len(_PLANS) >= _PLANS_MAX:
+            _PLANS.pop(next(iter(_PLANS)))          # forget the oldest
+        _PLANS[key] = plan(site, load, critical, ghi_years, weather_label, overrides, grid)[0]
+    return copy.deepcopy(_PLANS[key])                # callers add to the result; keep the cache clean
+
+
+def plan(site, load, critical, ghi_years, weather_label, overrides=None, grid=APP_GRID):
+    """simulate() without the cache -> (plan result, optimiser details such as yearly savings)."""
     p = dict(DEFAULTS, **(overrides or {}))
-    price = float(site.get("diesel_price_per_litre") or 1.8)
+    price = float(site.get("diesel_price_per_litre") or p["diesel_price_per_litre"])
     peak = float(load.max())
-    gen_kw = float(site.get("generator_kw") or math.ceil(1.25 * peak / 10) * 10)
+    gen_kw = generator_size(site, load)
     daily = load.sum() / 365
+    ghi_years = np.asarray(ghi_years, float)
     n_years = ghi_years.shape[0]
 
-    # 1) Today: diesel only
-    base, _ = dispatch(load, np.zeros(HOURS), 0.0, 0.0, gen_kw, p)
-    base_fuel = float(base["fuel_l"])
-
-    # 2) Search designs on a typical (median sunshine) year
-    yearly_sun = ghi_years.sum(axis=1)
-    typ = int(np.argsort(yearly_sun)[len(yearly_sun) // 2])
-    solar_full = daily / 4.0      # roughly the panels needed to make a full day's energy
-    S_grid = np.round(np.linspace(0, 1.6 * solar_full, 13), 1)
-    B_grid = np.round(np.linspace(0, 2.0 * daily, 13), 1)
-    S = S_grid[:, None]
-    Bm = B_grid[None, :]
-    sweep, _ = dispatch(load, ghi_years[typ], S, Bm, gen_kw, p)
-    npc, capex = lifetime_cost(S, Bm, sweep["fuel_l"], price, p)
-    ok = sweep["unserved"] <= base["unserved"] + 1e-6
-    npc_masked = np.where(ok, npc, np.inf)
-    i, j = np.unravel_index(np.argmin(npc_masked), npc.shape)
-    best_s, best_b = float(S_grid[i]), float(B_grid[j])
-    base_npc, _ = lifetime_cost(0.0, 0.0, base_fuel, price, p)
-
-    # 3) Run the chosen design on every year of weather -> P50 / P90
-    yrs, _ = dispatch(load, ghi_years.T, best_s, best_b, gen_kw, p)
-    saved = base_fuel - yrs["fuel_l"]
-    p50 = float(np.median(saved))
-    p90 = float(np.percentile(saved, 10))
-    ren = 1 - yrs["gen_to_load"] / yrs["load_kwh"]
-    best_capex = best_s * p["solar_cost_per_kw"] + best_b * p["battery_cost_per_kwh"]
-    yearly_saving_usd = p50 * price - p["om_fraction"] * best_capex
-    payback = best_capex / yearly_saving_usd if yearly_saving_usd > 0 else None
-
-    # 4) "No fuel ship" test: cloudiest week on record, generator off, clinic essentials only
-    flat = ghi_years.reshape(-1)
+    # 1-4) Design search on every weather year, P50/P90, late-fuel-ship test (engine/optimise.py)
+    opt = optimise(load, float(critical.max()), ghi_years, gen_kw, price, p, n_pv=grid[0], n_batt=grid[1])
+    w, today = opt["winner"], opt["today"]
+    best_s, best_b = w["solar_kw"], w["battery_kwh"]
+    base_fuel = today["litres_per_year"]
+    base_npc = today["cost"]["total"]
+    p50, p90 = w["litres_saved_p50"], w["litres_saved_p90"]
+    best_capex = w["capex"]
+    payback = w["payback_years"]
     week = 168
-    csum = np.concatenate([[0], np.cumsum(flat)])
-    sums = csum[week:] - csum[:-week]
-    start = int(np.argmin(sums))
-    w_ghi = flat[start:start + week]
-    crit = np.full(week, float(critical.max())) if critical.max() > 0 else np.zeros(week)
-    _, ctr = dispatch(crit, w_ghi, best_s, best_b, gen_kw, p, gen_available=False, record=True)
-    powered = sum(1 for u in ctr["unserved"] if u < 1e-6)
-    first_fail = next((h for h, u in enumerate(ctr["unserved"]) if u >= 1e-6), None)
 
-    # 5) A typical week for the chart (median-sunshine week of the typical year)
-    _, tr = dispatch(load, ghi_years[typ], best_s, best_b, gen_kw, p, record=True)
-    wk = ghi_years[typ][: 52 * week].reshape(52, week).sum(axis=1)
-    w = int(np.argsort(wk)[26])
-    sl = slice(w * week, (w + 1) * week)
-    week_trace = {k: [round(v, 2) for v in vals[sl]] for k, vals in tr.items()}
+    # 5) A typical week for the chart (median-sunshine week of the median-sunshine year)
+    week_trace = {k: [round(v, 2) for v in vals] for k, vals in opt["week_trace"].items()}
 
     r1 = lambda x: round(float(x), 1)
+    # SimResult (contracts/mock_simresult.json, brief Chapter 1.4): the flat summary the web app
+    # and the AI use. Same numbers as the detailed sections below, just in the agreed shape.
+    simresult = {
+        "site": ", ".join(str(x) for x in (site.get("name"), site.get("country")) if x),
+        "pv_kw": best_s,
+        "battery_kwh": best_b,
+        "generator_kw": r1(gen_kw),
+        "capex_aud": round(best_capex),
+        "lifetime_cost_aud": round(w["cost"]["total"]),
+        "diesel_litres_saved_p50": round(p50),
+        "diesel_litres_saved_p90": round(p90),
+        "co2_tonnes_saved_per_year": round(p50 * p["co2_kg_per_litre"] / 1000),
+        "blackout_hours_worst_year": w["blackout_hours_worst_year"],
+        "critical_load_survives_7d_no_fuel": w["clinic_survives"],
+        "years_simulated": int(n_years),
+    }
+    g = opt["grid"]
     return {
+        "simresult": simresult,
         "site": {k: site.get(k) for k in ("id", "name", "country", "lat", "lon")},
         "weather": weather_label,
         "years_of_weather": int(n_years),
@@ -199,21 +130,22 @@ def simulate(site, load, critical, ghi_years, weather_label, overrides=None):
         "today": {"diesel_litres_per_year": round(base_fuel), "diesel_cost_per_year": round(base_fuel * price),
                   "lifetime_cost": round(base_npc)},
         "design": {"solar_kw": best_s, "battery_kwh": best_b, "purchase_cost": round(best_capex),
-                   "lifetime_cost": round(float(npc[i, j])),
-                   "lifetime_saving": round(base_npc - float(npc[i, j])),
+                   "lifetime_cost": round(w["cost"]["total"]),
+                   "lifetime_saving": round(base_npc - w["cost"]["total"]),
                    "litres_saved_p50": round(p50), "litres_saved_p90": round(p90),
                    "percent_diesel_cut_p50": r1(100 * p50 / base_fuel) if base_fuel else 0,
                    "money_saved_per_year_p50": round(p50 * price),
-                   "solar_share_percent": r1(100 * float(np.median(ren))),
-                   "generator_hours_per_year": round(float(np.median(yrs["gen_hours"]))),
+                   "solar_share_percent": r1(100 * w["solar_share"]),
+                   "generator_hours_per_year": round(w["generator_hours"]),
                    "payback_years": r1(payback) if payback else None},
-        "no_fuel_ship": {"hours_clinic_powered": powered, "of_hours": week,
-                         "days_clinic_powered": r1(powered / 24),
-                         "first_outage_hour": first_fail,
+        "no_fuel_ship": {"hours_clinic_powered": w["clinic_hours_powered"], "of_hours": week,
+                         "days_clinic_powered": r1(w["clinic_hours_powered"] / 24),
+                         "first_outage_hour": w["clinic_first_outage_hour"],
                          "cloudiest_week_sunshine_vs_average_percent":
-                             r1(100 * sums[start] / (flat.mean() * week)) if flat.mean() > 0 else 0},
+                             r1(100 * opt["worst_week_sun_vs_average"])},
         "week_trace": week_trace,
-        "sweep": {"solar_kw": S_grid.tolist(), "battery_kwh": B_grid.tolist(),
-                  "lifetime_cost": np.round(npc).astype(int).tolist()},
+        "sweep": {"solar_kw": np.round(g["solar_kw"], 1).tolist(),
+                  "battery_kwh": np.round(g["battery_kwh"], 1).tolist(),
+                  "lifetime_cost": np.round(g["lifetime_cost"]).astype(int).tolist()},
         "assumptions": {**p, "diesel_price_per_litre": price},
-    }
+    }, opt

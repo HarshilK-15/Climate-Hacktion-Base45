@@ -1,0 +1,14 @@
+{
+  "site": "Funafuti, Tuvalu",
+  "pv_kw": 850,
+  "battery_kwh": 2400,
+  "generator_kw": 400,
+  "capex_aud": 4920000,
+  "lifetime_cost_aud": 13800000,
+  "diesel_litres_saved_p50": 61000,
+  "diesel_litres_saved_p90": 38000,
+  "co2_tonnes_saved_per_year": 163,
+  "blackout_hours_worst_year": 0,
+  "critical_load_survives_7d_no_fuel": true,
+  "years_simulated": 20
+}

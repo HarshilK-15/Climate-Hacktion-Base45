@@ -1,5 +1,8 @@
 """Engine tests. Run from the project folder:  python -m engine.test_sim
 (Also works with pytest.)  Owner: Elec B."""
+import json
+from pathlib import Path
+
 import numpy as np
 
 from engine.sim import DEFAULTS, dispatch, simulate
@@ -26,10 +29,12 @@ def test_battery_stays_in_limits():
 
 
 def test_diesel_only_matches_hand_calculation():
-    """Constant 10 kW on a 20 kW generator: 0.08*20 + 0.25*10 = 4.1 L every hour."""
+    """Constant 10 kW on a 20 kW generator: 0.276*10 + 0.025*20 = 3.26 L every hour."""
     load = np.full(8760, 10.0)
     tot, _ = dispatch(load, np.zeros(8760), 0.0, 0.0, 20.0, P)
-    assert abs(float(tot["fuel_l"]) - 4.1 * 8760) < 1e-6
+    per_hour = P["fuel_a"] * 10.0 + P["fuel_b"] * 20.0
+    assert abs(per_hour - 3.26) < 1e-9
+    assert abs(float(tot["fuel_l"]) - per_hour * 8760) < 1e-6
 
 
 def test_more_solar_never_burns_more_diesel():
@@ -43,6 +48,7 @@ def test_unserved_when_generator_too_small():
     load = np.full(8760, 50.0)
     tot, _ = dispatch(load, np.zeros(8760), 0.0, 0.0, 30.0, P)
     assert abs(float(tot["unserved"]) - 20.0 * 8760) < 1e-6
+    assert int(tot["unserved_hours"]) == 8760
 
 
 def test_full_simulation_runs_and_saves_diesel():
@@ -54,6 +60,20 @@ def test_full_simulation_runs_and_saves_diesel():
     assert d["litres_saved_p50"] >= d["litres_saved_p90"] >= 0
     assert d["lifetime_cost"] <= r["today"]["lifetime_cost"]
     assert len(r["week_trace"]["load"]) == 168
+
+    # The SimResult block has exactly the keys and types of the agreed mock (Chapter 1.4)
+    mock = json.loads((Path(__file__).parent.parent / "contracts" / "mock_simresult.json").read_text())
+    sr = r["simresult"]
+    assert set(sr) == set(mock)
+    for k, v in mock.items():
+        if isinstance(v, bool):
+            assert isinstance(sr[k], bool), k
+        elif isinstance(v, (int, float)):
+            assert isinstance(sr[k], (int, float)) and not isinstance(sr[k], bool), k
+        else:
+            assert isinstance(sr[k], type(v)), k
+    assert sr["diesel_litres_saved_p50"] == d["litres_saved_p50"]
+    assert sr["years_simulated"] == 2
 
 
 if __name__ == "__main__":

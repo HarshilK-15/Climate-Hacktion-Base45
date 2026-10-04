@@ -48,6 +48,11 @@ def get_ghi(lat, lon):
         d = np.load(f)
         years = d["years"].tolist()
         return d["ghi"], f"NASA POWER hourly, {years[0]}-{years[-1]} ({len(years)} years)"
+    # No cache yet: use the nearest file in data/out/ (download_power.py) if one is within 500 km
+    from engine.weather_files import nearest_weather
+    ghi, label, info = nearest_weather(lat, lon)
+    if info.get("place"):
+        return ghi, label
     return synthetic_ghi(lat, lon), "SYNTHETIC weather (run: python -m data.weather fetch)"
 
 

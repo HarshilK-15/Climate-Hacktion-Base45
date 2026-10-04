@@ -9,6 +9,7 @@ import ntptime
 from machine import Pin
 import config
 import sensor
+import api
 
 try:
     import requests
@@ -82,6 +83,8 @@ def send(batch):
 def main():
     online = connect_wifi()
     clock_ok = sync_clock() if online else False
+    if online:
+        api.start()
     buffer = []
     seq = 0
     while True:
@@ -106,8 +109,20 @@ def main():
                     clock_ok = sync_clock()
             if wlan.isconnected() and send(buffer):
                 buffer = []
+        # Expose newest reading at GET /api/reading (shape = contracts/reading.json)
+        api.latest.update({
+            "timestamp": reading["ts"] or iso_now(),
+            "device_id": config.DEVICE_ID,
+            "voltage_v": config.VOLTS,   # assumption: fixed value, no voltage sensor fitted
+            "current_a": reading["amps"],
+            "power_kw": round(reading["watts"] / 1000, 3),
+        })
         gc.collect()
-        time.sleep(config.READ_EVERY_S)
+        # wait READ_EVERY_S, but keep answering API requests meanwhile
+        end = time.ticks_add(time.ticks_ms(), config.READ_EVERY_S * 1000)
+        while time.ticks_diff(end, time.ticks_ms()) > 0:
+            api.poll()
+            time.sleep_ms(50)
 
 
 main()

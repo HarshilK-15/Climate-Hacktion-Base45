@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-10-04T01:25:19Z",
- "engine_version": "f4580dc96b",
+ "generated_at": "2026-10-04T06:03:01Z",
+ "engine_version": "84a903f1de",
  "islands": {
   "funafuti": {
    "site": "Funafuti, Tuvalu",
@@ -176,7 +176,7 @@
    "robust": true,
    "min_lifetime_saving_aud": 263060,
    "headline": "Prices 30% off in any direction move the best size between 28 and 74 kW of panels, but building our design costs at most 2.7% more than the best for those prices, and the island saves at least AUD 263,060 over 20 years even with diesel -30% and solar +30%.",
-   "engine_version": "f4580dc96b"
+   "engine_version": "84a903f1de"
   },
   "nanumea": {
    "site": "Village on Nanumea, Tuvalu",
@@ -352,7 +352,7 @@
    "robust": false,
    "min_lifetime_saving_aud": 224434,
    "headline": "Our design is within 2% of the best in 8 of 9 price worlds. The exception: with diesel -30% (AUD 1.47/L) and solar +30% the best plan becomes a smaller fuel-saver (32 kW + 21 kWh) and ours would cost 6.0% more, so lock in the diesel price before ordering the battery. Solar still wins in every cell: the island saves at least AUD 224,434 over 20 years even with diesel -30% and solar +30%.",
-   "engine_version": "f4580dc96b"
+   "engine_version": "84a903f1de"
   },
   "kadavu": {
    "site": "Village on Kadavu, Fiji",
@@ -528,7 +528,7 @@
    "robust": false,
    "min_lifetime_saving_aud": 193116,
    "headline": "Our design is within 2% of the best in 4 of 9 price worlds. The exception: with diesel -30% (AUD 1.19/L) and solar +30% the best plan becomes a smaller fuel-saver (52 kW + 59 kWh) and ours would cost 18.7% more, so lock in the diesel price before ordering the battery. Solar still wins in every cell: the island saves at least AUD 193,116 over 20 years even with diesel -30% and solar +30%.",
-   "engine_version": "f4580dc96b"
+   "engine_version": "84a903f1de"
   },
   "eua": {
    "site": "Village on 'Eua, Tonga",
@@ -704,7 +704,7 @@
    "robust": false,
    "min_lifetime_saving_aud": 190827,
    "headline": "Our design is within 2% of the best in 6 of 9 price worlds. The exception: with diesel -30% (AUD 1.33/L) and solar +30% the best plan becomes a smaller fuel-saver (34 kW + 22 kWh) and ours would cost 19.6% more, so lock in the diesel price before ordering the battery. Solar still wins in every cell: the island saves at least AUD 190,827 over 20 years even with diesel -30% and solar +30%.",
-   "engine_version": "f4580dc96b"
+   "engine_version": "84a903f1de"
   },
   "malekula": {
    "site": "Village on Malekula, Vanuatu",
@@ -880,7 +880,7 @@
    "robust": false,
    "min_lifetime_saving_aud": 129505,
    "headline": "Our design is within 2% of the best in 7 of 9 price worlds. The exception: with diesel -30% (AUD 1.40/L) and solar +30% the best plan becomes a smaller fuel-saver (39 kW + 46 kWh) and ours would cost 9.6% more, so lock in the diesel price before ordering the battery. Solar still wins in every cell: the island saves at least AUD 129,505 over 20 years even with diesel -30% and solar +30%.",
-   "engine_version": "f4580dc96b"
+   "engine_version": "84a903f1de"
   },
   "abaiang": {
    "site": "Village on Abaiang, Kiribati",
@@ -1056,7 +1056,7 @@
    "robust": true,
    "min_lifetime_saving_aud": 299485,
    "headline": "Prices 30% off in any direction move the best size between 38 and 89 kW of panels, but building our design costs at most 4.5% more than the best for those prices, and the island saves at least AUD 299,485 over 20 years even with diesel -30% and solar +30%.",
-   "engine_version": "f4580dc96b"
+   "engine_version": "84a903f1de"
   },
   "savaii": {
    "site": "Village on Savai'i, Samoa",
@@ -1232,7 +1232,7 @@
    "robust": false,
    "min_lifetime_saving_aud": 157040,
    "headline": "Our design is within 2% of the best in 6 of 9 price worlds. The exception: with diesel -30% (AUD 1.12/L) and solar +30% the best plan becomes a smaller fuel-saver (90 kW + 110 kWh) and ours would cost 14.3% more, so lock in the diesel price before ordering the battery. Solar still wins in every cell: the island saves at least AUD 157,040 over 20 years even with diesel -30% and solar +30%.",
-   "engine_version": "f4580dc96b"
+   "engine_version": "84a903f1de"
   }
  }
 }

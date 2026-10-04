@@ -296,7 +296,9 @@ def test_okina_does_not_split_the_message():
 
 def test_sms_without_twilio_is_demo_mode_and_never_logs_the_number():
     """Without Twilio settings nothing is sent, the app says it's a demo, and the phone number is masked."""
-    saved = {k: os.environ.pop(k, None) for k in ("TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_FROM")}
+    saved = {k: os.environ.pop(k, None) for k in ("TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_FROM",
+                                                   "ACCOUNT_SID", "AUTH_TOKEN", "TWILIO_PHONE_NUMBER",
+                                                   "MY_PHONE_NUMBER", "SMS_TO", "DEMO_PHONE_SECRET")}
     try:
         r = sms.send_sms("+6881234567", "test")
     finally:
@@ -368,6 +370,29 @@ def test_hourly_cap_stops_a_stranger_burning_the_key():
         llm.set_backend(None)
 
 
+def test_out_of_quota_model_hands_over_to_the_fallback_model():
+    """When the main model's daily free quota runs out, the fallback model answers, and the empty one isn't retried."""
+    tried = []
+
+    def once(client, errors, types, model, *rest):
+        tried.append(model)
+        if model == "gemini-3.5-flash":
+            raise llm._OutOfQuota(3600)
+        return "OK"
+
+    real = llm._gemini_once
+    llm._gemini_once = once
+    llm._exhausted.clear()
+    try:
+        with env(GEMINI_API_KEY="x" * 39, SHIPLESS_MODEL="gemini-3.5-flash"):
+            assert llm._call_gemini("s", "u", None, "low", 100) == "OK" and llm.answered_by() == "gemini-3.5-flash-lite"
+            llm._call_gemini("s", "u2", None, "low", 100)
+    finally:
+        llm._gemini_once = real
+        llm._exhausted.clear()
+    assert tried == ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.5-flash-lite"]
+
+
 def test_identical_requests_are_answered_from_memory():
     """The same question twice costs one model call, not two."""
     calls = []
@@ -388,18 +413,49 @@ def test_no_api_key_is_in_any_committed_file():
     """No API key is in any file git tracks, and the .env file that holds the key is git-ignored."""
     import re
     import subprocess
-    files = subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True).stdout.split()
+    files = subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True).stdout.splitlines()
     patterns = re.compile(r"AIza[0-9A-Za-z_\-]{35}|sk-ant-[A-Za-z0-9_\-]{20,}")
+    # the real secrets in .env, whatever shape they have (new Google keys start "AQ.")
+    secrets = []
+    if llm.ENV_FILE.exists():
+        for line in llm.ENV_FILE.read_text(encoding="utf-8-sig").splitlines():
+            m = re.match(r"\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=(.*)", line)   # settings, not comments
+            value = m.group(2).strip().strip("'\"") if m else ""
+            if m and re.search(r"KEY|TOKEN|SECRET|SID|PHONE", m.group(1).upper()) and len(value) >= 8:
+                secrets.append(value)              # API keys, the Twilio token and SID, phone numbers
     leaks = []
     for name in files:
         p = ROOT / name
         if p.suffix.lower() in (".png", ".jpg", ".npz", ".pdf", ".ico") or not p.is_file():
             continue
-        if patterns.search(p.read_text(encoding="utf-8", errors="ignore")):
-            leaks.append(name)
+        text = p.read_text(encoding="utf-8", errors="ignore")
+        if patterns.search(text) or any(s in text for s in secrets):
+            leaks.append(name)                 # the file name only: the key is never printed
     assert not leaks, f"API key found in tracked files: {leaks}"
     assert subprocess.run(["git", "check-ignore", "-q", ".env"], cwd=ROOT).returncode == 0
     assert ".env" not in files
+
+
+def test_free_push_alert_needs_no_phone_number():
+    """Alerts can go out as a free push notification: no phone number, no payment, topic kept in .env."""
+    calls = []
+    real, saved = sms._http_post, os.environ.pop("NTFY_TOPIC_SECRET", None)
+    sms._http_post = lambda url, **kw: calls.append((url, kw)) or type("R", (), {"status_code": 200})()
+    try:
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / ".env"
+            f.write_text("GEMINI_API_KEY=x\n", encoding="utf-8")
+            topic, new = sms.setup_push(f)
+            assert new and topic.startswith("shipless-") and len(topic) >= 25
+            assert f"NTFY_TOPIC_SECRET={topic}" in f.read_text(encoding="utf-8")
+        r = sms.notify("Shipless (Funafuti): demand jumped.", "Shipless alert")
+    finally:
+        sms._http_post = real
+        os.environ.pop("NTFY_TOPIC_SECRET", None)
+        if saved is not None:
+            os.environ["NTFY_TOPIC_SECRET"] = saved
+    assert r["sent"] and r["mode"] == "push" and topic not in r["to"]        # the topic is never echoed in full
+    assert calls[0][0].endswith("/" + topic) and calls[0][1]["data"] == b"Shipless (Funafuti): demand jumped."
 
 
 # ------------------------------------------------------------------------------------ the server's interface
@@ -412,7 +468,8 @@ def test_server_interface_is_unchanged():
     for k in ("households", "generator_kw", "diesel_litres_per_month", "diesel_price_per_litre", "other_kw",
               "has_clinic", "has_school"):
         assert k in d["site"]
-    assert d["source"] in ("ai", "rules") and isinstance(d["site"]["has_clinic"], bool)
+    assert d["source"] in ("ai", "rules") and d["site"]["has_clinic"] in (True, False, None)
+    assert d["site"]["site_id"] == "kadavu"            # the web page selects the island from this
     assert isinstance(e["text"], str) and e["check"]["passed"] is True and e["check"]["unknown_numbers"] == []
     assert len(agent.alert_sms(sms.EXAMPLES[0])) <= 160 and isinstance(agent.MODEL, str)
 

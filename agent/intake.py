@@ -501,8 +501,9 @@ def form_fields(state):
     price = si.get("diesel_price_per_litre")
     if price is None and raw.get("diesel_price") is not None and _currency(state, raw, place) is not False:
         price = raw["diesel_price"]      # shown for the person to confirm; currency question still open
+    # has_clinic / has_school: True, False, or None when the person didn't say (keep the island's own setting)
     return {"site_id": si.get("site_id"), "name": si.get("name"), "households": si.get("households"),
-            "has_clinic": bool(si.get("has_clinic")), "has_school": bool(si.get("has_school")),
+            "has_clinic": si.get("has_clinic"), "has_school": si.get("has_school"),
             "other_kw": si.get("other_kw"), "generator_kw": si.get("generator_kw"),
             "diesel_litres_per_month": si.get("diesel_litres_per_month"), "diesel_price_per_litre": price}
 

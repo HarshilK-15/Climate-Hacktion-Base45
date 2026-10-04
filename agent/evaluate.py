@@ -101,7 +101,10 @@ def run_explain():
         f = build_facts(r)["facts"]
         tampered = check(out["text"], _corrupt(f))
         first = out["attempts"][0]["passed"] if out["attempts"] else out["source"] == "template"
-        rows.append({"label": r["label"], "source": out["source"], "passed_first_try": bool(first),
+        unavailable = [a["reason"] for a in out["attempts"] if a["reason"].startswith("AI unavailable")]
+        rows.append({"label": r["label"], "source": out["source"], "model": out["model"],
+                     "ai_unavailable": unavailable[0] if unavailable else None,
+                     "passed_first_try": bool(first),
                      "passed": out["check"]["passed"], "attempts": len(out["attempts"]),
                      "rejected_drafts": out["rejected_drafts"], "words": out["words"],
                      "within_word_limit": out["words"] <= WORD_LIMITS["officer"],
@@ -114,9 +117,21 @@ def report(intake_rows, explain_rows):
     mode = llm.mode()
     first15 = [r for r in intake_rows if r["id"] <= 15]
     n = lambda rows, key: sum(1 for r in rows if r[key])
+    ai_intake = sum(1 for r in intake_rows if r["source"] == "ai")
+    ai_explain = sum(1 for r in explain_rows if r["source"] == "ai")
+    down = next((r["ai_unavailable"] for r in explain_rows if r["ai_unavailable"]), None)
+    models = sorted({r["model"] for r in explain_rows if r["model"]})
     lines = [f"# Front-desk accuracy results", "",
              f"Run {datetime.now(timezone.utc):%Y-%m-%d %H:%M UTC} with `python -m agent.evaluate`. "
-             f"Mode: **{'AI (' + llm.MODEL + ')' if mode == 'ai' else 'rules + templates (no API key)'}**.", "",
+             f"Mode: **{'AI (' + llm.MODEL + ')' if mode == 'ai' else 'rules + templates (no API key)'}**.", ""]
+    if mode == "ai":
+        lines += [f"The AI actually answered **{ai_intake}/20** descriptions and **{ai_explain}/20** explanations"
+                  f"{' (models: ' + ', '.join(models) + ')' if models else ''}; the rest used rules / templates."]
+        if down:
+            lines += [f"**Not a clean AI score:** the AI was unavailable for part of the run ({down}).", ""]
+        else:
+            lines += [""]
+    lines += [
              "## Intake: description -> SiteInput", "",
              f"- Brief 5.2 set (cases 1-15): **{n(first15, 'passed')}/15** correct "
              f"(valid SiteInput: {n(first15, 'valid_site_input')}/15; target 12/15)",

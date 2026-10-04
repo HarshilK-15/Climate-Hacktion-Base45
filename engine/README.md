@@ -180,7 +180,13 @@ Bad input → HTTP 422 with a sentence saying what to fix. `your_design.verdict`
 
 At start-up the service also starts background runs for any island whose file is stale, so the first click is fast.
 
-**Deploying** (decide with Mech B): *ngrok* is simplest (`python -m engine.service`, then `ngrok http 8001`). It is
+**Vercel** (the team's deploy, `pyproject.toml` -> `server.app:app`): the server's own plans go through
+`sim.simulate()`, which now answers any request whose inputs exactly match a precomputed file straight
+from `engine/precomputed/`. The map and every default island come back in milliseconds even on a cold
+serverless start; changed inputs are computed live (2-5 s). Checked with a Vercel dress rehearsal: only
+the files Vercel uploads, only `pyproject.toml`'s packages, `VERCEL=1`, read-only files.
+
+**Deploying the engine service on its own** (decide with Mech B): *ngrok* is simplest (`python -m engine.service`, then `ngrok http 8001`). It is
 the same laptop, so the same speed and the precomputed files are already there. *Render / Railway*: start command
 `uvicorn engine.service:app --host 0.0.0.0 --port $PORT`, with `engine/precomputed/` and `data/cache/` committed. Free
 tiers sleep and have slow CPUs, so precomputed answers carry the demo. CORS is open (`ENGINE_CORS_ORIGINS` to narrow it).

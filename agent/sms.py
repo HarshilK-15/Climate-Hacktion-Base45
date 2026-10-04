@@ -14,8 +14,25 @@ compose(alert, use_ai=True) asks the AI for better wording, then checks it like 
 GSM-7 only, 160 characters, site named, and every number traced to the alert's facts. Fails -> template.
 
 Sending: demo mode shows the message as a phone-style notification in the web app. A real SMS goes
-out only if TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN and TWILIO_FROM are set (a free Twilio trial
-works). Say on camera which one the audience is seeing.
+out only if the Twilio settings are in .env (a free Twilio trial works; it can only text numbers you
+have verified with Twilio). Say on camera which one the audience is seeing.
+    ACCOUNT_SID / AUTH_TOKEN / TWILIO_PHONE_NUMBER   (or TWILIO_ACCOUNT_SID / TWILIO_AUTH_TOKEN / TWILIO_FROM)
+    MY_PHONE_NUMBER                                  where demo texts go, in +61... format
+
+FREE ALTERNATIVE (what the demo uses: Twilio trial accounts can only send Twilio's own canned texts):
+a push notification through ntfy (https://ntfy.sh): free, no account, and no phone number at all.
+    python -m agent.sms --setup-push      # makes a secret topic name, saves NTFY_TOPIC_SECRET in .env
+    then on the phone: install the "ntfy" app, tap +, enter that topic name, Subscribe.
+The topic name works like a password (anyone who knows it can read or send alerts to it), so it
+lives only in the git-ignored .env, where the git hook guards it. With a topic set, alerts go there
+instead of SMS. On camera, say it's a push notification standing in for an SMS.
+
+    python -m agent.sms --send            # one example alert to your phone (push, or SMS if no topic)
+    python -m agent.sms --watch           # send each new alert from the running app (python -m server.app)
+        --site "Funafuti"   name the site in the text      --ai   AI wording (checked; uses Gemini quota)
+The watcher texts at most one alert of each type every SMS_COOLDOWN_S (600 s) and SMS_MAX_TEXTS (5)
+per run, so a noisy sensor can't flood your phone or use up the trial credit. Your number is never
+printed in full, and the web page never sees it.
 """
 import os
 import re
@@ -142,20 +159,123 @@ def compose(alert, site=None, use_ai=True):
     return out
 
 
+def _env(*names):
+    """The first of these settings that is set (the .env file is loaded by agent.llm)."""
+    return next((os.environ[n] for n in names if os.environ.get(n)), None)
+
+
+def twilio_settings():
+    return {"sid": _env("TWILIO_ACCOUNT_SID", "ACCOUNT_SID"), "token": _env("TWILIO_AUTH_TOKEN", "AUTH_TOKEN"),
+            "from": _env("TWILIO_FROM", "TWILIO_PHONE_NUMBER"),
+            "to": _env("SMS_TO", "MY_PHONE_NUMBER", "DEMO_PHONE_SECRET")}
+
+
+def mask(text):
+    """Hide every phone-number-like digit run except its last 3 digits: +61412345678 -> +61*******678."""
+    return re.sub(r"\+?\d[\d ]{6,}\d", lambda m: re.sub(r"\d(?=(?:\D*\d){3})", "*", m.group(0)), str(text))
+
+
 def send_sms(to, text):
     """Send a real SMS through Twilio if it is configured; otherwise say it's demo mode.
-    The phone number is never logged in full."""
-    sid, token, sender = (os.environ.get(k) for k in ("TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_FROM"))
-    masked = re.sub(r"\d(?=\d{3})", "*", str(to))
-    if not (sid and token and sender):
-        return {"sent": False, "mode": "demo", "to": masked,
+    to=None sends to MY_PHONE_NUMBER. The phone number is never logged or returned in full."""
+    cfg = twilio_settings()
+    to = to or cfg["to"]
+    if not (cfg["sid"] and cfg["token"] and cfg["from"] and to):
+        return {"sent": False, "mode": "demo", "to": mask(to or ""),
                 "note": "Twilio not configured: shown as a phone-style notification in the app only"}
-    import requests
-    r = requests.post(f"https://api.twilio.com/2010-04-01/Accounts/{sid}/Messages.json", auth=(sid, token),
-                      data={"To": to, "From": sender, "Body": text}, timeout=15)
+    try:
+        r = _http_post(f"https://api.twilio.com/2010-04-01/Accounts/{cfg['sid']}/Messages.json",
+                       auth=(cfg["sid"], cfg["token"]), data={"To": to, "From": cfg["from"], "Body": text})
+    except Exception as e:
+        return {"sent": False, "mode": "twilio", "to": mask(to), "error": f"no connection ({type(e).__name__})"}
     if r.status_code >= 300:
-        return {"sent": False, "mode": "twilio", "to": masked, "error": f"Twilio {r.status_code}"}
-    return {"sent": True, "mode": "twilio", "to": masked, "sid": r.json().get("sid")}
+        try:
+            body = r.json()
+            why = f"Twilio {r.status_code} (code {body.get('code')}): {mask(body.get('message', ''))}"
+        except ValueError:
+            why = f"Twilio {r.status_code}"
+        return {"sent": False, "mode": "twilio", "to": mask(to), "error": why}
+    return {"sent": True, "mode": "twilio", "to": mask(to), "sid": r.json().get("sid")}
+
+
+NTFY_SERVER = os.environ.get("NTFY_SERVER", "https://ntfy.sh")
+
+
+def _http_post(url, **kwargs):
+    import requests                                 # tests replace this function, so they never send anything
+    return requests.post(url, timeout=15, **kwargs)
+
+
+def send_push(text, title="Shipless alert"):
+    """A push notification to the phone subscribed to NTFY_TOPIC_SECRET (free; no phone number used)."""
+    topic = _env("NTFY_TOPIC_SECRET", "NTFY_TOPIC")
+    if not topic:
+        return {"sent": False, "mode": "demo", "note": "no ntfy topic: run python -m agent.sms --setup-push"}
+    try:
+        r = _http_post(f"{NTFY_SERVER}/{topic}", data=text.encode("utf-8"),
+                       headers={"Title": title.encode("utf-8"), "Priority": "high", "Tags": "warning"})
+    except Exception as e:
+        return {"sent": False, "mode": "push", "error": f"no connection ({type(e).__name__})"}
+    if r.status_code >= 300:
+        return {"sent": False, "mode": "push", "error": f"ntfy {r.status_code}"}
+    return {"sent": True, "mode": "push", "to": f"ntfy topic ...{topic[-4:]}"}
+
+
+def notify(text, title="Shipless alert"):
+    """Deliver an alert to the demo phone: push if an ntfy topic is set, else SMS via Twilio, else demo."""
+    if _env("NTFY_TOPIC_SECRET", "NTFY_TOPIC"):
+        return send_push(text, title)
+    return send_sms(None, text)
+
+
+def setup_push(env_file=None):
+    """Make a long random topic name and save it as NTFY_TOPIC_SECRET in the git-ignored .env."""
+    import secrets
+    from agent.llm import ENV_FILE
+    env_file = env_file or ENV_FILE
+    existing = _env("NTFY_TOPIC_SECRET")
+    if existing:
+        return existing, False
+    topic = "shipless-" + secrets.token_urlsafe(18).replace("_", "").replace("-", "")[:22].lower()
+    with open(env_file, "a", encoding="utf-8") as f:
+        f.write(f"\n# Push notifications for the alert demo (python -m agent.sms --setup-push)\nNTFY_TOPIC_SECRET={topic}\n")
+    os.environ["NTFY_TOPIC_SECRET"] = topic
+    return topic, True
+
+
+def watch(base="http://localhost:8000", site=None, use_ai=False, every_s=5):
+    """Text each new alert from the running app to MY_PHONE_NUMBER, with a cooldown and a cap."""
+    import time
+    import requests
+    cooldown = float(os.environ.get("SMS_COOLDOWN_S", "600"))
+    cap = int(os.environ.get("SMS_MAX_TEXTS", "5"))
+    last, sent = {}, 0
+    where = ("a push notification (ntfy)" if _env("NTFY_TOPIC_SECRET", "NTFY_TOPIC")
+             else mask(twilio_settings()["to"] or "nobody (demo mode)"))
+    print(f"  watching {base}/api/alerts: alerts go to {where}; "
+          f"one per alert type every {cooldown:.0f} s, at most {cap} this run. Ctrl+C to stop.")
+    while sent < cap:
+        try:
+            alerts = requests.get(f"{base}/api/alerts", timeout=10).json()
+        except (requests.RequestException, ValueError):
+            print("  (app not reachable: is python -m server.app running?)")
+            time.sleep(every_s)
+            continue
+        for a in alerts:
+            kind = a.get("type")
+            if kind in (None, "no_data") or time.time() - last.get(kind, 0) < cooldown:
+                continue
+            msg = compose(a, site, use_ai=use_ai)
+            r = notify(msg["text"], f"Shipless alert: {a.get('title') or kind}")
+            last[kind] = time.time()
+            sent += r["sent"]
+            print(f"  {kind}: {'sent' if r['sent'] else 'NOT sent'} -> {r.get('to', '')}  "
+                  f"{r.get('error') or r.get('note') or ''}")
+            print(f"     \"{msg['text']}\"")
+            if sent >= cap:
+                break
+        time.sleep(every_s)
+    print(f"  stopped after {sent} texts (SMS_MAX_TEXTS={cap})")
 
 
 EXAMPLES = [
@@ -168,6 +288,22 @@ EXAMPLES = [
 
 if __name__ == "__main__":
     use_ai = "--ai" in sys.argv
+    site = sys.argv[sys.argv.index("--site") + 1] if "--site" in sys.argv else None
+    if "--watch" in sys.argv:
+        watch(site=site, use_ai=use_ai)
+        raise SystemExit
+    if "--setup-push" in sys.argv:
+        topic, new = setup_push()
+        print(f"\n  {'Saved a new' if new else 'Using your existing'} topic in .env (NTFY_TOPIC_SECRET).\n"
+              f"  On your phone: install the 'ntfy' app, tap +, type this topic name, Subscribe:\n\n"
+              f"      {topic}\n\n  Then run: python -m agent.sms --send\n")
+        raise SystemExit
+    if "--send" in sys.argv:
+        r = compose(EXAMPLES[2], site=site or "Funafuti", use_ai=use_ai)
+        out = notify(r["text"], "Shipless alert: Sudden jump in demand")
+        print(f"  {'SENT' if out['sent'] else 'NOT SENT'} ({out['mode']}) to {out.get('to', '')}  "
+              f"{out.get('sid') or out.get('error') or out.get('note') or ''}\n  \"{r['text']}\"")
+        raise SystemExit(0 if out["sent"] else 1)
     for a in EXAMPLES:
         r = compose(a, site="Village on Savaiʻi", use_ai=use_ai)
         print(f"[{a['type']}] {r['length']} chars, {r['encoding']}, {r['segments']} text(s), {r['source']}")

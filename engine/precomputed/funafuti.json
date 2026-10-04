@@ -1395,10 +1395,10 @@
  },
  "meta": {
   "source": "precomputed",
-  "seconds": 1.65,
-  "engine_version": "f4580dc96b",
-  "computed_at": "2026-10-04T01:22:16Z",
-  "inputs_fingerprint": "dd661509fafc7618",
+  "seconds": 1.67,
+  "engine_version": "84a903f1de",
+  "computed_at": "2026-10-04T06:01:03Z",
+  "inputs_fingerprint": "22d8714197bd9e07",
   "warnings": []
  }
 }

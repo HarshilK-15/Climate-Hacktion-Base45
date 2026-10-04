@@ -75,6 +75,32 @@ pasted so it doesn't happen again. **This repository is public.**
 `SHIPLESS_MODEL`; see what your key can use with `python -m agent.llm --models`. Claude still works:
 set `ANTHROPIC_API_KEY` instead (or `SHIPLESS_PROVIDER=anthropic`).
 
+**Free-tier quota (measured 4 Oct 2026):** Google allowed `gemini-3.5-flash` only **20 requests a day**
+on a free key. The agent handles this:
+- When a model is out of quota it falls back to `gemini-3.5-flash-lite`, which has its own allowance
+  (`SHIPLESS_FALLBACK_MODELS`).
+- It remembers Google's "come back in N hours", so it doesn't retry an empty model on every click.
+- After that, it uses templates.
+- `python -m agent.llm --check` shows which model answered.
+
+**For demo day, turn on billing** for the key's project in Google AI Studio and set a budget alert.
+Each answer costs a fraction of a cent, and the daily cap goes away.
+
+**Speed:** thinking is set to `minimal`. Measured on a 120-word explanation:
+
+| Model | Thinking | Time | Number checker |
+| --- | --- | --- | --- |
+| `gemini-3.5-flash` | minimal | 4.5 s | pass |
+| `gemini-3.5-flash` | low | 23.9 s | pass |
+| `gemini-3.5-flash-lite` | minimal | 1.8 s | pass |
+| `gemini-3.5-flash-lite` | low | 2.0 s | **fail**: it calculated its own figure, "74,754" <!-- not a claim --> |
+
+The last row is a real model inventing a number, caught by the checker; use it in the pitch.
+
+**On Vercel:** don't upload `.env`. Put the key in the Vercel dashboard instead (Project >
+Settings > Environment Variables): `GEMINI_API_KEY`, plus `DEVICE_TOKEN` for the sensor. Never put
+either in `vercel.json` or the code. `.vercelignore` keeps `.env` and `venv/` out of uploads.
+
 **AI off:** no key, or `SHIPLESS_AI=off`. Use it if the venue Wi-Fi is bad: everything falls back to
 rules and templates, which pass the same checker.
 
@@ -123,8 +149,17 @@ with the site, the fault and the first thing to check.
   character silently switches the whole text to UCS-2, which holds only 70 characters, so names are
   cleaned first.
 - **AI wording is optional and checked.** It's rejected if it adds a number, such as "battery #2".
-- **Real sending:** a real SMS goes out only if `TWILIO_*` is set; otherwise the app shows a
-  phone-style notification. **Say on camera which one it is.**
+- **Real sending, two routes:**
+  - **SMS:** Twilio, if `ACCOUNT_SID` / `AUTH_TOKEN` / `TWILIO_PHONE_NUMBER` / `MY_PHONE_NUMBER` are in
+    `.env`. Free Twilio trials can only send Twilio's own canned texts, so ours needs a paid account.
+  - **Push notification (what the demo uses):** free, through ntfy. Run `python -m agent.sms --setup-push`
+    once (it saves a secret topic in `.env`) and subscribe to that topic in the ntfy phone app. No phone
+    number is involved.
+  - **Commands:** `python -m agent.sms --send` sends one example alert; `python -m agent.sms --watch
+    --site "Funafuti"` sends each new alert from the running app. The watcher caps it at one per alert
+    type every 10 minutes and 5 per run.
+  - **On camera:** say which route the audience is seeing. Without either route, the app shows a
+    phone-style notification only.
 
 **The funder one-pager** (`explain.funder_summary`, brief 5.3 "Bundle story"). This is all 7 islands
 on one printable page: totals, an island-by-island table, the Ta'u validation, the price sensitivity

@@ -142,6 +142,7 @@ def explain(result, audience="officer", language="English", use_ai=True):
             except llm.LLMError as e:
                 attempts.append({"text": "", "passed": False, "reason": f"AI unavailable: {e}"})
                 break
+            model = llm.answered_by()
             rep = check(text, f)
             too_long = _words(text) > WORD_LIMITS[audience]
             attempts.append({"text": text, "passed": rep.passed and not too_long, "words": _words(text),
@@ -150,7 +151,7 @@ def explain(result, audience="officer", language="English", use_ai=True):
                              ("numbers not in the facts: " + ", ".join(rep.unknown_numbers)) if not rep.passed
                              else f"too long ({_words(text)} words)"})
             if rep.passed and not too_long:
-                return _result(text, "ai", audience, rep, attempts, sheet, language)
+                return _result(text, "ai", audience, rep, attempts, sheet, language, model)
             feedback = (f"Your previous draft used numbers that are not in FACTS: {', '.join(rep.unknown_numbers)}. "
                         f"Rewrite it using only numbers from FACTS." if not rep.passed else
                         f"Your previous draft was {_words(text)} words. Keep it under {WORD_LIMITS[audience]} words.")
@@ -158,9 +159,9 @@ def explain(result, audience="officer", language="English", use_ai=True):
     return _result(text, "template", audience, check(text, f), attempts, sheet, "English")
 
 
-def _result(text, source, audience, rep, attempts, sheet, language):
+def _result(text, source, audience, rep, attempts, sheet, language, model=None):
     return {"text": text, "source": source, "audience": audience, "language": language,
-            "model": llm.MODEL if source == "ai" else None, "words": _words(text),
+            "model": (model or llm.MODEL) if source == "ai" else None, "words": _words(text),
             "check": rep.to_dict(), "html": highlight_html(rep), "attempts": attempts,
             "rejected_drafts": sum(1 for a in attempts if not a["passed"] and a.get("text")),
             "facts": sheet["facts"], "fact_sources": sheet["sources"]}
@@ -197,7 +198,7 @@ def funder_summary(index=None, sensitivity=None, published=None, use_ai=True):
             except llm.LLMError:
                 break
             if check(draft, cover).passed and _words(draft) <= WORD_LIMITS["funder_note"]:
-                note, note_src = draft, "ai"
+                note, note_src = draft, f"AI ({llm.answered_by() or llm.MODEL}), then checked"
                 break
     rows = ["| Island | Solar | Battery | Cost to buy | Diesel saved: typical / bad year | Less diesel | Payback | "
             "Clinic, late fuel ship |", "| --- | --- | --- | --- | --- | --- | --- | --- |"]
@@ -249,8 +250,9 @@ def funder_summary(index=None, sensitivity=None, published=None, use_ai=True):
     footer = (f"\n---\n*Every number above was checked against the Shipless engine's output by "
               f"agent/check_numbers.py: {len(rep.findings)} numbers, "
               f"{'all traced' if rep.passed else str(len(rep.unsourced)) + ' NOT traced'}. "
-              f"Opening paragraph written by {'AI (' + llm.MODEL + '), then checked' if note_src == 'ai' else 'template'}.*\n")
-    return {"markdown": md + footer, "html": _page(md + footer), "check": rep.to_dict(), "source": note_src}
+              f"Opening paragraph written by {note_src}.*\n")
+    return {"markdown": md + footer, "html": _page(md + footer), "check": rep.to_dict(),
+            "source": "template" if note_src == "template" else "ai"}
 
 
 def _page(md):

@@ -84,6 +84,6 @@
   "Our optimiser would build 942 kW + 2673 kWh for a 91% diesel cut; on our prices the as-built system costs 66% more over 20 years to remove the last 9% of diesel. A fair choice for an island that wanted to stop fuel shipments; the engine puts a price on it.",
   "Where we differ: the battery alone covers 1.3 days of average load, not the advertised 3; in the darkest 3 days of 20 years (starting from the charge normal running left, generator off) the whole island stays powered 46 of 72 hours (21% of normal sun). Refill from 20% on a clear day: 9 h from sunrise (advertised: 7 h)."
  ],
- "engine_version": "f4580dc96b",
- "generated_at": "2026-10-04T01:25:38Z"
+ "engine_version": "84a903f1de",
+ "generated_at": "2026-10-04T06:03:20Z"
 }

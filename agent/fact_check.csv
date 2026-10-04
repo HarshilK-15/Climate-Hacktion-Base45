@@ -54,3 +54,5 @@ Intake limits,at most 3 follow-up questions; 120-word summaries,brief 5.2 and 5.
 AI model used by the app,gemini-3.5-flash (stable),https://ai.google.dev/gemini-api/docs/models,AI draft - human to confirm,2026-10-04,SOURCED: listed as a stable model on Google's models page,agent/llm.py; DISCLOSURES
 Gemini 2.5 models shut down,16 October 2026,https://ai.google.dev/gemini-api/docs/models,AI draft - human to confirm,2026-10-04,SOURCED (Google models page / search result) - confirm on the page,agent README
 AI abuse guard,120 model calls an hour (default),agent/llm.py,Mech A role (run by Elec B),2026-10-04,DESIGN CHOICE (ASSUMPTION in code),agent README
+Gemini free-tier daily limit (gemini-3.5-flash),20 requests a day,Google API 429 response (quota GenerateRequestsPerDayPerProjectPerModel-FreeTier),Elec B (measured),2026-10-04,MEASURED from Google's own error on our key,agent README
+Gemini speed (120-word explanation),flash minimal 4.5 s; flash low 23.9 s; flash-lite minimal 1.8 s; flash-lite low 2.0 s (invented 74754),agent/llm.py comment,Elec B (measured),2026-10-04,MEASURED on 4 Oct 2026 - one run each,agent README

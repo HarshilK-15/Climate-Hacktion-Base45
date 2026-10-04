@@ -42,8 +42,15 @@ ANTHROPIC_KEYS = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")
 # Gemini 3.5 Flash: stable, and fast enough for a live demo. (Gemini 2.5 models shut down on
 # 16 Oct 2026, so don't use them.) Check what your key can use: python -m agent.llm --models
 DEFAULT_MODELS = {"gemini": "gemini-3.5-flash", "anthropic": "claude-opus-5-5"}
-# ASSUMPTION: a judge waits ~30 s at most for an AI answer; after that the template is shown.
-TIMEOUT_S = float(os.environ.get("SHIPLESS_AI_TIMEOUT_S", "30"))
+# ASSUMPTION: a judge waits ~20 s at most for an AI answer; after that the template is shown.
+TIMEOUT_S = float(os.environ.get("SHIPLESS_AI_TIMEOUT_S", "20"))
+# Gemini thinking depth. Measured 4 Oct 2026, gemini-3.5-flash, 120-word explanation: MINIMAL 4.5 s,
+# LOW 23.9 s, both passing the number checker. The facts are already worked out by the engine, so
+# deep thinking only adds waiting. SHIPLESS_THINKING=low|medium|high to change it.
+THINKING = os.environ.get("SHIPLESS_THINKING", "minimal").upper()
+# The free tier gives each model its own daily allowance: gemini-3.5-flash allowed only 20 requests a
+# day on 4 Oct 2026. When it runs out, the next model in this list answers instead (still checked).
+FALLBACK_MODELS = os.environ.get("SHIPLESS_FALLBACK_MODELS", "gemini-3.5-flash-lite")
 # ASSUMPTION: a demo and a day of testing make well under 120 model calls an hour. If the app is put
 # on a public URL (ngrok / Render), this stops a stranger from burning the key's quota.
 MAX_CALLS_PER_HOUR = int(os.environ.get("SHIPLESS_AI_MAX_CALLS_PER_HOUR", "120"))
@@ -85,7 +92,14 @@ _ENV_LOADED = load_env_file()
 _backend = None                       # tests: a function (system, user, schema, effort) -> text
 _lock = threading.Lock()
 _calls = deque()                      # times of real model calls in the last hour
-_cache = OrderedDict()
+_cache = OrderedDict()                # request -> (text, model that wrote it)
+_exhausted = {}                       # model -> time its quota is back (from Google's 429 retry delay)
+_local = threading.local()            # which model wrote the last answer on this thread
+
+
+def answered_by():
+    """The model that wrote the most recent answer on this thread (it may be a fallback model)."""
+    return getattr(_local, "model", None)
 
 
 def provider():
@@ -156,15 +170,19 @@ def ask(system, user, *, schema=None, effort="low", max_tokens=8192):
     p = "test" if _backend is not None else provider()
     key = hashlib.sha256(json.dumps([p, current_model(), system, user, schema, effort]).encode()).hexdigest()
     with _lock:
-        text = _cache.get(key)
-    if text is None:
+        hit = _cache.get(key)
+    if hit is not None:
+        text, _local.model = hit
+    else:
         if _backend is not None:
             text = _backend(system, user, schema, effort)
+            _local.model = "test"
         else:
             _spend()
+            _local.model = current_model()
             text = (_call_gemini if p == "gemini" else _call_anthropic)(system, user, schema, effort, max_tokens)
         with _lock:
-            _cache[key] = text
+            _cache[key] = (text, answered_by())
             while len(_cache) > CACHE_MAX:
                 _cache.popitem(last=False)
     if schema is None:
@@ -188,15 +206,60 @@ def _strip_fences(text):
 # Gemini (Google Gen AI SDK)
 # ---------------------------------------------------------------------------------------------
 
-_LEVELS = {"low": "LOW", "medium": "MEDIUM", "high": "HIGH"}
+class _OutOfQuota(Exception):
+    def __init__(self, retry_s):
+        self.retry_s = retry_s
+
+
+def _retry_seconds(err):
+    """Google's RetryInfo ('63815s') from a 429, or a cautious 60 s if it isn't there."""
+    try:
+        for d in err.details.get("error", {}).get("details", []):
+            if "RetryInfo" in d.get("@type", ""):
+                return max(60.0, float(str(d.get("retryDelay", "60s")).rstrip("s")))
+    except (AttributeError, ValueError, TypeError):
+        pass
+    return 60.0
+
+
+def gemini_models():
+    """The model to ask first, then the fallbacks with their own (separate) free quota."""
+    out = []
+    for m in [current_model()] + [x.strip() for x in FALLBACK_MODELS.split(",")]:
+        if m and m not in out:
+            out.append(m)
+    return out
 
 
 def _call_gemini(system, user, schema, effort, max_tokens):
-    from google import genai
-    from google.genai import errors, types
+    """Ask Gemini, moving down the model list when a model's quota is used up."""
+    try:
+        from google import genai
+        from google.genai import errors, types
+    except ImportError:
+        raise LLMError("the google-genai package is not installed (pip install -r requirements.txt)") from None
     _, api_key = _key_for("gemini")
     client = genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=int(TIMEOUT_S * 1000)))
-    # Try the strict request first (JSON schema + low thinking for speed). If the model rejects one
+    waits = []
+    for model in gemini_models():
+        until = _exhausted.get(model, 0)
+        if until > time.time():                       # known to be out of quota: don't waste the call
+            waits.append((model, until - time.time()))
+            continue
+        try:
+            text = _gemini_once(client, errors, types, model, system, user, schema, max_tokens)
+            _local.model = model
+            return text
+        except _OutOfQuota as q:
+            _exhausted[model] = time.time() + q.retry_s
+            waits.append((model, q.retry_s))
+    soonest = min(w for _, w in waits) if waits else 60
+    raise LLMError(f"free quota used up for {', '.join(m for m, _ in waits)} (next one back in about "
+                   f"{soonest / 3600:.1f} h); using templates. Turn on billing in Google AI Studio to lift it")
+
+
+def _gemini_once(client, errors, types, model, system, user, schema, max_tokens):
+    # Try the strict request first (JSON schema + minimal thinking for speed). If the model rejects one
     # of those options, retry once plainly with the schema written into the instructions; the
     # callers check every answer anyway.
     attempts = [dict(schema=schema, thinking=True), dict(schema=None, thinking=False)]
@@ -213,9 +276,9 @@ def _call_gemini(system, user, schema, effort, max_tokens):
                 cfg["system_instruction"] = system + "\n\nReply with JSON only, matching this JSON schema:\n" + \
                     json.dumps(schema)
         if a["thinking"]:
-            cfg["thinking_config"] = types.ThinkingConfig(thinking_level=_LEVELS.get(effort, "LOW"))
+            cfg["thinking_config"] = types.ThinkingConfig(thinking_level=THINKING)
         try:
-            resp = client.models.generate_content(model=current_model(), contents=user,
+            resp = client.models.generate_content(model=model, contents=user,
                                                   config=types.GenerateContentConfig(**cfg))
         except errors.ClientError as e:
             msg = f"{e.status or ''} {e.message or ''}".lower()
@@ -224,9 +287,9 @@ def _call_gemini(system, user, schema, effort, max_tokens):
             if "api key" in msg or "api_key" in msg or e.code in (401, 403):
                 raise LLMError("the API key was rejected (or is restricted)") from None
             if e.code == 429:
-                raise LLMError("rate limited / quota used up") from None
+                raise _OutOfQuota(_retry_seconds(e)) from None
             if e.code == 404:
-                raise LLMError(f"model '{current_model()}' not found: set SHIPLESS_MODEL "
+                raise LLMError(f"model '{model}' not found: set SHIPLESS_MODEL "
                                f"(see python -m agent.llm --models)") from None
             last = LLMError(f"API error {e.code}")
             continue                                  # 400 on an option: try the plain request
@@ -252,7 +315,10 @@ def _call_gemini(system, user, schema, effort, max_tokens):
 # ---------------------------------------------------------------------------------------------
 
 def _call_anthropic(system, user, schema, effort, max_tokens):
-    import anthropic
+    try:
+        import anthropic
+    except ImportError:
+        raise LLMError("the anthropic package is not installed (pip install -r requirements.txt)") from None
     name, api_key = _key_for("anthropic")
     client = anthropic.Anthropic(api_key=api_key) if name != "ANTHROPIC_AUTH_TOKEN" else anthropic.Anthropic()
     output_config = {"effort": effort}
@@ -297,7 +363,8 @@ def check():
         name, secret = _key_for(p)
         where = "the .env file" if name in _ENV_LOADED else "the terminal environment"
         print(f"  key           {name} from {where}: {_mask(secret)}")
-        print(f"  model         {current_model()}")
+        print(f"  model         {' -> then '.join(gemini_models()) if p == 'gemini' else current_model()}"
+              f"{'   (thinking: ' + THINKING.lower() + ')' if p == 'gemini' else ''}")
     ignored = subprocess.run(["git", "check-ignore", "-q", str(ENV_FILE)], cwd=ROOT).returncode == 0
     tracked = subprocess.run(["git", "ls-files", "--error-unmatch", ".env"], cwd=ROOT,
                              capture_output=True).returncode == 0
@@ -312,7 +379,7 @@ def check():
         t0 = time.perf_counter()
         out = ask("Reply with exactly the word OK.", "Health check.", effort="low", max_tokens=256)
         print(f"  test call     {'OK' if 'ok' in out.lower() else 'answered: ' + out[:40]!r} "
-              f"({time.perf_counter() - t0:.1f} s)\n")
+              f"from {answered_by()} ({time.perf_counter() - t0:.1f} s)\n")
     except LLMError as e:
         print(f"  test call     FAILED: {e}\n")
 
@@ -336,9 +403,21 @@ def list_models():
 
 HOOK = r"""#!/bin/sh
 # Shipless: refuse to commit an API key or the .env file (installed by: python -m agent.llm --install-hook)
-if git diff --cached -U0 | grep -E '^\+' | grep -qE 'AIza[0-9A-Za-z_-]{35}|sk-ant-[A-Za-z0-9_-]{20,}'; then
+added=$(git diff --cached -U0 | grep -E '^\+')
+# 1. known key shapes (Google AIza..., Anthropic sk-ant-...)
+if printf '%s\n' "$added" | grep -qE 'AIza[0-9A-Za-z_-]{35}|sk-ant-[A-Za-z0-9_-]{20,}'; then
   echo "Blocked by Shipless: this commit contains an API key. Keep keys only in .env (git-ignored)." >&2
   exit 1
+fi
+# 2. the actual secret values in your .env, whatever their shape (new Google keys start AQ.):
+#    API keys and tokens, the Twilio account SID, and phone numbers
+if [ -f .env ]; then
+  for v in $(sed -n 's/^\(export \)\{0,1\}[A-Za-z_]*\(KEY\|TOKEN\|SECRET\|SID\|PHONE\)[A-Za-z_]*=//p' .env | tr -d "\"' \r"); do
+    if [ ${#v} -ge 8 ] && printf '%s\n' "$added" | grep -qF -- "$v"; then
+      echo "Blocked by Shipless: this commit contains a secret from your .env file." >&2
+      exit 1
+    fi
+  done
 fi
 if git diff --cached --name-only | grep -qE '(^|/)\.env$'; then
   echo "Blocked by Shipless: .env holds the API key and must never be committed." >&2

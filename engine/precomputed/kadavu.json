@@ -1423,10 +1423,10 @@
  },
  "meta": {
   "source": "precomputed",
-  "seconds": 1.6,
-  "engine_version": "f4580dc96b",
-  "computed_at": "2026-10-04T01:22:19Z",
-  "inputs_fingerprint": "30672e6e78ca5204",
+  "seconds": 1.62,
+  "engine_version": "84a903f1de",
+  "computed_at": "2026-10-04T06:01:06Z",
+  "inputs_fingerprint": "7cbd0ed2dcafcb4b",
   "warnings": []
  }
 }

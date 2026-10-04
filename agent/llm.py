@@ -1,7 +1,8 @@
 """The only place that talks to a language model. Owner: Mech A.
 
-    python -m agent.llm --check       # is the key found, is it safe, does one tiny call work? (never prints the key)
-    python -m agent.llm --models      # which models this key can use
+    python -m agent.llm --check         # is the key found, is it safe, does one tiny call work? (never prints the key)
+    python -m agent.llm --models        # which models this key can use
+    python -m agent.llm --install-hook  # block any git commit that contains an API key (run once per computer)
 
 Every AI feature (intake, explainer, SMS wording) goes through ask(). If there is no key, the
 network is down, the model refuses, the hourly limit is reached or the answer is malformed, ask()
@@ -53,6 +54,11 @@ ANTHROPIC_FALLBACK_BETA = "server-side-fallback-2026-07-01"
 
 class LLMError(RuntimeError):
     """No usable AI answer. Callers fall back to rules / templates. Never contains the key."""
+
+
+LEAKED = ("Google has disabled this key: it was found somewhere public ('reported as leaked'). It will never "
+          "work again. Delete it at https://aistudio.google.com/apikey, create a new one, put the new one "
+          "in .env, and don't paste it anywhere else.")
 
 
 def load_env_file(path=ENV_FILE):
@@ -213,6 +219,8 @@ def _call_gemini(system, user, schema, effort, max_tokens):
                                                   config=types.GenerateContentConfig(**cfg))
         except errors.ClientError as e:
             msg = f"{e.status or ''} {e.message or ''}".lower()
+            if "leaked" in msg:
+                raise LLMError(LEAKED) from None
             if "api key" in msg or "api_key" in msg or e.code in (401, 403):
                 raise LLMError("the API key was rejected (or is restricted)") from None
             if e.code == 429:
@@ -314,12 +322,52 @@ def list_models():
         print("  --models lists Gemini models; set GEMINI_API_KEY first")
         return
     from google import genai
+    from google.genai import errors
     client = genai.Client(api_key=_key_for("gemini")[1])
-    for m in client.models.list():
-        actions = getattr(m, "supported_actions", None) or []
-        if not actions or "generateContent" in actions:
-            print(" ", m.name.removeprefix("models/"))
+    try:
+        for m in client.models.list():
+            actions = getattr(m, "supported_actions", None) or []
+            if not actions or "generateContent" in actions:
+                print(" ", m.name.removeprefix("models/"))
+    except errors.APIError as e:
+        leaked = "leaked" in f"{e.message or ''}".lower()
+        print(f"\n  {LEAKED if leaked else f'Google refused: {e.code} {e.status}'}\n")
+
+
+HOOK = r"""#!/bin/sh
+# Shipless: refuse to commit an API key or the .env file (installed by: python -m agent.llm --install-hook)
+if git diff --cached -U0 | grep -E '^\+' | grep -qE 'AIza[0-9A-Za-z_-]{35}|sk-ant-[A-Za-z0-9_-]{20,}'; then
+  echo "Blocked by Shipless: this commit contains an API key. Keep keys only in .env (git-ignored)." >&2
+  exit 1
+fi
+if git diff --cached --name-only | grep -qE '(^|/)\.env$'; then
+  echo "Blocked by Shipless: .env holds the API key and must never be committed." >&2
+  exit 1
+fi
+"""
+
+
+def install_hook():
+    """A git pre-commit hook on THIS computer that blocks any commit containing an API key.
+    Every teammate runs it once in their own copy (hooks are not shared through git)."""
+    import subprocess
+    hooks = Path(subprocess.run(["git", "rev-parse", "--git-path", "hooks"], cwd=ROOT, capture_output=True,
+                                text=True).stdout.strip())
+    hook = (ROOT / hooks if not hooks.is_absolute() else hooks) / "pre-commit"
+    if hook.exists() and "Shipless" not in hook.read_text(encoding="utf-8", errors="ignore"):
+        print(f"  {hook} already exists (someone else's hook): not overwritten. Add the lines from "
+              f"agent/llm.py HOOK to it by hand.")
+        return
+    hook.parent.mkdir(parents=True, exist_ok=True)
+    hook.write_text(HOOK, encoding="utf-8", newline="\n")
+    hook.chmod(0o755)
+    print(f"  installed {hook}: commits containing an API key or .env are now blocked on this computer")
 
 
 if __name__ == "__main__":
-    list_models() if "--models" in sys.argv else check()
+    if "--install-hook" in sys.argv:
+        install_hook()
+    elif "--models" in sys.argv:
+        list_models()
+    else:
+        check()

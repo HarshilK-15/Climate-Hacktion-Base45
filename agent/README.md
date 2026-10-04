@@ -61,7 +61,15 @@ This matters if the app goes on a public ngrok or Render URL, where anyone can p
 
 **If it ever leaks** (committed, pasted or shown on screen): delete the key in Google AI Studio
 straight away and make a new one. Deleting the commit is not enough, because git history and forks
-keep it.
+keep it. If Google answers **"Your API key was reported as leaked"**, it has already found the key
+somewhere public and disabled it for good: make a new key, and find out where the old one was
+pasted so it doesn't happen again. **This repository is public.**
+
+**Block keys before they reach GitHub:**
+- **Every teammate, once:** run `python -m agent.llm --install-hook`. It installs a git hook on that
+  computer that refuses any commit containing a Google or Anthropic key, or the `.env` file.
+- **Repo owner:** on GitHub, open *Settings > Code security* and turn on **Secret scanning** and
+  **Push protection** (free for public repositories). GitHub then rejects a push that contains a key.
 
 **Model:** `gemini-3.5-flash` (stable; Gemini 2.5 shuts down on 16 Oct 2026). Change it with
 `SHIPLESS_MODEL`; see what your key can use with `python -m agent.llm --models`. Claude still works:
